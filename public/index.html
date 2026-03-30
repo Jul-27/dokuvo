@@ -2280,11 +2280,31 @@ body {
 }
 
 /* ── VORLAGEN ── */
+.templates-intro {
+  background: #161B22;
+  border: 1px solid #2C2C2E;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.templates-intro-icon {
+  color: #3B82F6;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.templates-intro-text {
+  font-size: 0.88rem;
+  color: #9CA3AF;
+  line-height: 1.55;
+}
 .templates-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  margin-top: 24px;
+  margin-top: 0;
 }
 .template-card {
   background: #1C1C1E;
@@ -2293,7 +2313,7 @@ body {
   padding: 20px 18px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   transition: border-color 0.18s, background 0.18s;
   cursor: default;
 }
@@ -2301,30 +2321,53 @@ body {
   border-color: #3B82F6;
   background: #1E2535;
 }
+.template-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.template-card-icon {
+  width: 34px;
+  height: 34px;
+  background: #252A35;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #60A5FA;
+  flex-shrink: 0;
+}
 .template-card-title {
-  font-size: 0.95rem;
+  font-size: 0.93rem;
   font-weight: 600;
   color: #F1F5F9;
+  line-height: 1.3;
 }
 .template-card-desc {
-  font-size: 0.82rem;
+  font-size: 0.81rem;
   color: #6B7280;
   flex: 1;
+  line-height: 1.55;
 }
 .template-card-btn {
   align-self: flex-start;
-  margin-top: 8px;
-  background: #3B82F6;
-  color: #fff;
-  border: none;
+  margin-top: 4px;
+  background: transparent;
+  color: #60A5FA;
+  border: 1px solid #1E3A5F;
   border-radius: 8px;
   padding: 6px 14px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  font-family: inherit;
 }
-.template-card-btn:hover { background: #2563EB; }
+.template-card-btn:hover {
+  background: #1E3A5F;
+  border-color: #3B82F6;
+  color: #93C5FD;
+}
 
 /* ── TAB INHALTE DESKTOP OPTIMIERUNG ── */
 #tab-history, #tab-premium, #tab-profile, #tab-about, #tab-templates, #tab-team {
@@ -2745,6 +2788,10 @@ body {
       <div class="tab-panel" id="tab-templates">
         <p class="section-title" data-i18n="templatesTitle">Vorlagen</p>
         <p class="section-subtitle" data-i18n="templatesSubtitle">Wähle eine Vorlage und passe sie an deine Situation an.</p>
+        <div class="templates-intro">
+          <div class="templates-intro-icon"><i data-lucide="lightbulb" style="width:18px;height:18px;"></i></div>
+          <div class="templates-intro-text">Wähle eine Vorlage als Ausgangspunkt. Dokuvo passt den Text an deine Situation an — ersetze einfach die Platzhalter in eckigen Klammern und stelle Rückfragen im Chat.</div>
+        </div>
         <div class="templates-grid" id="templatesGrid"></div>
       </div>
 
@@ -2947,7 +2994,7 @@ body {
         templates: 'Vorlagen',
         templatesTitle: 'Vorlagen',
         templatesSubtitle: 'Wähle eine Vorlage und passe sie an deine Situation an.',
-        templatesUse: 'Verwenden',
+        templatesUse: 'Als Vorlage nutzen',
         premium: 'Premium',
         aboutDokuvo: 'Über Dokuvo',
         chats: 'Chats',
@@ -3041,7 +3088,7 @@ body {
         templates: 'Templates',
         templatesTitle: 'Templates',
         templatesSubtitle: 'Choose a template and adapt it to your situation.',
-        templatesUse: 'Use',
+        templatesUse: 'Use as Template',
         premium: 'Premium',
         aboutDokuvo: 'About Dokuvo',
         chats: 'Chats',
@@ -3410,8 +3457,12 @@ body {
     const TEMPLATES = [
       {
         key: 'widerspruch',
+        icon: 'shield',
         title: { de: 'Widerspruch gegen Bescheid', en: 'Objection to Administrative Decision' },
-        desc:  { de: 'Mustertext für Einspruch bei Behörden', en: 'Template for formal objections to official decisions' },
+        desc:  {
+          de: 'Ein formeller Einspruch gegen einen Behördenbescheid. Nutze diese Vorlage, wenn du mit einer Entscheidung einer Behörde nicht einverstanden bist. Nach dem Klick wird der Mustertext ins Eingabefeld geladen — passe die Platzhalter an und lass Dokuvo dir beim Formulieren helfen.',
+          en: 'A formal objection to an official administrative decision. Use this when you disagree with a government agency\'s ruling. The template will load into the input field — fill in the placeholders and ask Dokuvo for help.'
+        },
         text:  {
           de: `Widerspruch gegen den Bescheid vom [DATUM], Aktenzeichen: [AKTENZEICHEN]
 
@@ -3447,8 +3498,12 @@ Yours sincerely,
       },
       {
         key: 'kuendigung',
+        icon: 'file-x',
         title: { de: 'Kündigung Vertrag', en: 'Contract Termination' },
-        desc:  { de: 'Mustertext für ordentliche Vertragskündigung', en: 'Template for ordinary contract termination' },
+        desc:  {
+          de: 'Ein Kündigungsschreiben für Verträge aller Art — Abo, Handy, Versicherung oder Mitgliedschaft. Verwende diese Vorlage, wenn du einen laufenden Vertrag fristgerecht beenden möchtest. Der Text wird ins Eingabefeld geladen; ergänze Vertragsnummer und Datum.',
+          en: 'A termination letter for any type of contract — subscription, phone, insurance, or membership. Use this when you want to end a contract within the notice period. Fill in contract number and date.'
+        },
         text:  {
           de: `Kündigung des Vertrages Nr. [VERTRAGSNUMMER] / Kundennummer: [KUNDENNUMMER]
 
@@ -3478,8 +3533,12 @@ Yours sincerely,
       },
       {
         key: 'vermieter',
+        icon: 'home',
         title: { de: 'Anfrage an Vermieter', en: 'Request to Landlord' },
-        desc:  { de: 'Mustertext für Mietrecht-Anfragen', en: 'Template for tenancy-related requests' },
+        desc:  {
+          de: 'Ein Anschreiben für mietrechtliche Anliegen — Mängel, Reparaturen oder Betriebskosten. Nutze diese Vorlage, wenn du deinen Vermieter schriftlich auf ein Problem aufmerksam machen willst. Beschreibe den Mangel und setze eine Frist für die Behebung.',
+          en: 'A letter for tenancy-related matters — defects, repairs, or utility bills. Use this to formally notify your landlord of an issue. Describe the problem and set a deadline for resolution.'
+        },
         text:  {
           de: `Anfrage bezüglich: [THEMA, z. B. Mängel in der Wohnung / Betriebskostenabrechnung]
 
@@ -3513,8 +3572,12 @@ Yours sincerely,
       },
       {
         key: 'reklamation',
+        icon: 'alert-circle',
         title: { de: 'Reklamation / Beschwerde', en: 'Complaint / Product Issue' },
-        desc:  { de: 'Mustertext für Produktbeschwerden und Reklamationen', en: 'Template for product complaints and returns' },
+        desc:  {
+          de: 'Ein Beschwerdeschreiben für fehlerhafte Produkte oder mangelhafte Dienstleistungen. Verwende diese Vorlage, wenn du eine Erstattung, einen Ersatz oder eine Reparatur forderst. Trage Bestellnummer und den genauen Mangel ein.',
+          en: 'A complaint letter for defective products or poor service. Use this when demanding a refund, replacement, or repair. Fill in the order number and describe the defect.'
+        },
         text:  {
           de: `Reklamation / Bestellung Nr. [BESTELLNUMMER] vom [DATUM]
 
@@ -3552,8 +3615,12 @@ Yours sincerely,
       },
       {
         key: 'fristsetzung',
+        icon: 'clock',
         title: { de: 'Fristsetzung', en: 'Setting a Deadline' },
-        desc:  { de: 'Mustertext für Fristsetzungsschreiben', en: 'Template for formal deadline notices' },
+        desc:  {
+          de: 'Ein Mahnschreiben mit konkreter Frist für ausstehende Zahlungen oder Leistungen. Nutze diese Vorlage, wenn Zusagen nicht erfüllt wurden und du jetzt eine letzte Frist setzen möchtest. Ohne Reaktion kannst du rechtliche Schritte einleiten.',
+          en: 'A formal notice with a concrete deadline for outstanding payments or obligations. Use this when commitments have not been met and you want to set a final deadline before taking legal action.'
+        },
         text:  {
           de: `Fristsetzung zur Erfüllung: [THEMA]
 
@@ -3587,8 +3654,12 @@ Yours sincerely,
       },
       {
         key: 'widerruf',
+        icon: 'rotate-ccw',
         title: { de: 'Widerruf', en: 'Cancellation (Right of Withdrawal)' },
-        desc:  { de: 'Mustertext für Widerruf innerhalb 14 Tage', en: 'Template for 14-day right of withdrawal' },
+        desc:  {
+          de: 'Ein Widerrufsschreiben für Käufe und Verträge innerhalb der gesetzlichen 14-Tage-Frist. Verwende diese Vorlage, wenn du eine Bestellung oder einen Fernabsatzvertrag rückgängig machen willst. Du hast Anspruch auf vollständige Rückerstattung.',
+          en: 'A cancellation letter for purchases and contracts within the legal 14-day withdrawal period. Use this to reverse an order or distance-selling contract. You are entitled to a full refund.'
+        },
         text:  {
           de: `Widerruf meiner Bestellung / meines Vertrages Nr. [NUMMER] vom [DATUM]
 
@@ -3646,19 +3717,46 @@ Yours sincerely,
     }
 
     async function erstelleTeam() {
-      const name = prompt('Teamname:');
-      if (!name || !name.trim()) return;
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      const user = session?.user;
-      if (!user) return;
-      const res = await fetch('/teams', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: user.id, name: name.trim() })
+      const overlay = document.createElement('div');
+      overlay.className = 'share-modal-overlay';
+      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+      overlay.innerHTML = `
+        <div class="share-modal">
+          <h3>Team erstellen</h3>
+          <p>Gib deinem Team einen Namen, um gemeinsam an Dokumenten zu arbeiten.</p>
+          <div style="margin-bottom:16px;">
+            <input type="text" class="share-link-input" id="teamNameInput" placeholder="z.B. Marketing, Rechtsabteilung …" maxlength="50" style="width:100%;border-radius:8px;">
+          </div>
+          <div class="share-modal-footer" style="gap:10px;">
+            <button class="share-close-btn" id="teamCreateCancelBtn">Abbrechen</button>
+            <button class="share-copy-btn" id="teamCreateConfirmBtn">Erstellen</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+      const input = overlay.querySelector('#teamNameInput');
+      input.focus();
+      overlay.querySelector('#teamCreateCancelBtn').onclick = () => overlay.remove();
+      overlay.querySelector('#teamCreateConfirmBtn').onclick = async () => {
+        const name = input.value.trim();
+        if (!name) return;
+        overlay.remove();
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const user = session?.user;
+        if (!user) return;
+        const res = await fetch('/teams', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: user.id, name })
+        });
+        const data = await res.json();
+        if (data.error) { alert(data.error); return; }
+        ladeTeams();
+      };
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') overlay.querySelector('#teamCreateConfirmBtn').click();
+        if (e.key === 'Escape') overlay.remove();
       });
-      const data = await res.json();
-      if (data.error) { alert(data.error); return; }
-      ladeTeams();
     }
 
     async function zeigeTeamDetail(teamId, teamName) {
@@ -3701,19 +3799,46 @@ Yours sincerely,
     }
 
     async function ladeTeamMitgliederEinladen(teamId) {
-      const email = prompt('E-Mail des einzuladenden Nutzers:');
-      if (!email || !email.trim()) return;
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      const user = session?.user;
-      const res = await fetch(`/teams/${teamId}/invite`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: user.id, email: email.trim() })
+      const overlay = document.createElement('div');
+      overlay.className = 'share-modal-overlay';
+      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+      overlay.innerHTML = `
+        <div class="share-modal">
+          <h3>Mitglied einladen</h3>
+          <p>Gib die E-Mail-Adresse der Person ein, die du ins Team einladen möchtest.</p>
+          <div style="margin-bottom:16px;">
+            <input type="email" class="share-link-input" id="inviteEmailInput" placeholder="name@beispiel.de" style="width:100%;border-radius:8px;">
+          </div>
+          <div class="share-modal-footer" style="gap:10px;">
+            <button class="share-close-btn" id="inviteCancelBtn">Abbrechen</button>
+            <button class="share-copy-btn" id="inviteConfirmBtn">Einladen</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+      const input = overlay.querySelector('#inviteEmailInput');
+      input.focus();
+      overlay.querySelector('#inviteCancelBtn').onclick = () => overlay.remove();
+      overlay.querySelector('#inviteConfirmBtn').onclick = async () => {
+        const email = input.value.trim();
+        if (!email) return;
+        overlay.remove();
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const user = session?.user;
+        const res = await fetch(`/teams/${teamId}/invite`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: user.id, email })
+        });
+        const data = await res.json();
+        if (data.error) { alert(data.error); return; }
+        alert(`${data.email} wurde eingeladen!`);
+        ladeTeamMitglieder(teamId);
+      };
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') overlay.querySelector('#inviteConfirmBtn').click();
+        if (e.key === 'Escape') overlay.remove();
       });
-      const data = await res.json();
-      if (data.error) { alert(data.error); return; }
-      alert(`${data.email} wurde eingeladen!`);
-      ladeTeamMitglieder(teamId);
     }
 
     async function ladeGeteilteSessionen(teamId) {
@@ -3743,27 +3868,47 @@ Yours sincerely,
       const { data: { session } } = await supabaseClient.auth.getSession();
       const user = session?.user;
       if (!user) return;
-      // Teams laden
       const res = await fetch(`/teams/${user.id}`, { headers: { 'x-user-id': user.id } });
       const teams = await res.json();
       if (!teams.length) { alert('Du bist noch in keinem Team. Erstelle zuerst ein Team.'); return; }
-      const teamNamen = teams.map((t, i) => `${i + 1}. ${t.name}`).join('\n');
-      const choice = prompt(`Mit welchem Team teilen?\n\n${teamNamen}\n\nNummer eingeben:`);
-      if (!choice) return;
-      const idx = parseInt(choice) - 1;
-      if (isNaN(idx) || idx < 0 || idx >= teams.length) { alert('Ungültige Auswahl.'); return; }
-      const team = teams[idx];
-      const note = prompt('Optionale Notiz (leer lassen zum Überspringen):') || '';
-      const shareRes = await fetch(`/teams/${team.id}/share`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: user.id, session_id: sessionId, note })
-      });
-      const data = await shareRes.json();
-      if (data.error) { alert(data.error); return; }
-      // Visuelles Feedback
-      const btn = event.target.closest('.session-share-btn');
-      if (btn) { btn.style.color = '#34D399'; setTimeout(() => { btn.style.color = ''; }, 1500); }
+
+      const overlay = document.createElement('div');
+      overlay.className = 'share-modal-overlay';
+      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+      overlay.innerHTML = `
+        <div class="share-modal">
+          <h3>Mit Team teilen</h3>
+          <p>Wähle das Team, mit dem du diesen Chat teilen möchtest.</p>
+          <div style="margin-bottom:12px;">
+            <select id="teamSelectInput" style="width:100%;background:#111214;border:1px solid #2A2D32;border-radius:8px;color:#E8EAED;padding:10px 12px;font-size:0.9rem;font-family:inherit;outline:none;cursor:pointer;">
+              ${teams.map(t => `<option value="${t.id}">${escapeHtml(t.name)}</option>`).join('')}
+            </select>
+          </div>
+          <div style="margin-bottom:16px;">
+            <input type="text" class="share-link-input" id="teamShareNoteInput" placeholder="Optionale Notiz …" style="width:100%;border-radius:8px;">
+          </div>
+          <div class="share-modal-footer" style="gap:10px;">
+            <button class="share-close-btn" id="teamShareCancelBtn">Abbrechen</button>
+            <button class="share-copy-btn" id="teamShareConfirmBtn">Teilen</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+      overlay.querySelector('#teamShareCancelBtn').onclick = () => overlay.remove();
+      overlay.querySelector('#teamShareConfirmBtn').onclick = async () => {
+        const teamId = overlay.querySelector('#teamSelectInput').value;
+        const note = overlay.querySelector('#teamShareNoteInput').value.trim();
+        overlay.remove();
+        const shareRes = await fetch(`/teams/${teamId}/share`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: user.id, session_id: sessionId, note })
+        });
+        const data = await shareRes.json();
+        if (data.error) { alert(data.error); return; }
+        const btn = event.target.closest('.session-share-btn');
+        if (btn) { btn.style.color = '#34D399'; setTimeout(() => { btn.style.color = ''; }, 1500); }
+      };
     }
 
     function renderTemplates() {
@@ -3772,11 +3917,17 @@ Yours sincerely,
       const lang = currentLang || 'de';
       grid.innerHTML = TEMPLATES.map(tpl => `
         <div class="template-card">
-          <div class="template-card-title">${tpl.title[lang] || tpl.title.de}</div>
+          <div class="template-card-header">
+            <div class="template-card-icon">
+              <i data-lucide="${tpl.icon}" style="width:17px;height:17px;"></i>
+            </div>
+            <div class="template-card-title">${tpl.title[lang] || tpl.title.de}</div>
+          </div>
           <div class="template-card-desc">${tpl.desc[lang] || tpl.desc.de}</div>
           <button class="template-card-btn" onclick="useTemplate('${tpl.key}')">${t('templatesUse')}</button>
         </div>
       `).join('');
+      lucide.createIcons();
     }
 
     function useTemplate(key) {
@@ -4493,8 +4644,9 @@ Yours sincerely,
 
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       voiceRecognition = new SpeechRecognition();
-      voiceRecognition.lang = document.documentElement.lang === 'en' ? 'en-US' : 'de-DE';
-      voiceRecognition.interimResults = false;
+      voiceRecognition.lang = navigator.language || 'de-DE';
+      voiceRecognition.continuous = false;
+      voiceRecognition.interimResults = true;
       voiceRecognition.maxAlternatives = 1;
 
       voiceRecognition.onstart = () => {
@@ -4503,14 +4655,28 @@ Yours sincerely,
       };
 
       voiceRecognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        input.value = (input.value ? input.value + ' ' : '') + transcript;
-        input.style.height = 'auto';
-        input.style.height = input.scrollHeight + 'px';
+        let finalTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          }
+        }
+        if (finalTranscript) {
+          const chatInput = document.getElementById('chatInput');
+          chatInput.value = (chatInput.value ? chatInput.value + ' ' : '') + finalTranscript;
+          chatInput.style.height = 'auto';
+          chatInput.style.height = chatInput.scrollHeight + 'px';
+        }
       };
 
       voiceRecognition.onerror = (event) => {
         console.error('Spracheingabe Fehler:', event.error);
+        isRecording = false;
+        btn.classList.remove('recording');
+        voiceRecognition = null;
+        if (event.error !== 'aborted' && event.error !== 'no-speech') {
+          alert('Spracheingabe Fehler: ' + event.error);
+        }
       };
 
       voiceRecognition.onend = () => {

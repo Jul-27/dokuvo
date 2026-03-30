@@ -67,7 +67,7 @@ test.describe('Chat & Fragen stellen', () => {
     await expect(page.locator('.feedback-row').first()).toBeVisible({ timeout: 40000 });
     const feedbackRow = page.locator('.feedback-row').first();
     const buttons = feedbackRow.locator('button');
-    await expect(buttons).toHaveCount(3, { timeout: 10000 });
+    await expect(buttons).toHaveCount(4, { timeout: 10000 });
   });
 
 });
