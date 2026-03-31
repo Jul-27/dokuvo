@@ -3794,11 +3794,11 @@ Yours sincerely,
       const isOwner = members.some(m => m.user_id === user.id && m.role === 'owner');
       inhalt.innerHTML = `<div style="font-size:12px;font-weight:600;color:#636366;margin-bottom:10px;">MITGLIEDER (${members.length})</div>` +
         members.map(m => {
-          const label = m.email || 'Kein Account';
+          const label = m.email || m.user_id || 'Unbekannt';
           const roleLabel = m.role === 'owner' ? 'Eigentümer' : 'Mitglied';
           const roleColor = m.role === 'owner' ? '#F59E0B' : '#3B82F6';
           const deleteBtn = (isOwner && m.role !== 'owner')
-            ? `<button onclick="entferneMitglied('${teamId}','${m.id}')" style="background:none;border:none;cursor:pointer;color:#48484A;padding:4px;border-radius:6px;display:flex;align-items:center;transition:color 0.2s;" onmouseover="this.style.color='#F87171'" onmouseout="this.style.color='#48484A'" title="Mitglied entfernen"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>`
+            ? `<button onclick="entferneMitglied(this)" data-team-id="${teamId}" data-member-id="${m.id}" data-label="${escapeHtml(label)}" style="background:none;border:none;cursor:pointer;color:#48484A;padding:4px;border-radius:6px;display:flex;align-items:center;transition:color 0.2s;" onmouseover="this.style.color='#F87171'" onmouseout="this.style.color='#48484A'" title="Mitglied entfernen"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>`
             : '';
           return `
             <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #2C2C2E;">
@@ -3812,17 +3812,36 @@ Yours sincerely,
         }).join('');
     }
 
-    async function entferneMitglied(teamId, memberId) {
-      if (!confirm('Mitglied aus dem Team entfernen?')) return;
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      const user = session?.user;
-      const res = await fetch(`/teams/${teamId}/members/${memberId}?user_id=${user.id}`, {
-        method: 'DELETE',
-        headers: { 'x-user-id': user.id }
-      });
-      const data = await res.json();
-      if (data.error) { alert(data.error); return; }
-      ladeTeamMitglieder(teamId);
+    function entferneMitglied(btn) {
+      const teamId = btn.dataset.teamId;
+      const memberId = btn.dataset.memberId;
+      const memberLabel = btn.dataset.label;
+      const overlay = document.createElement('div');
+      overlay.className = 'share-modal-overlay';
+      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+      overlay.innerHTML = `
+        <div class="share-modal">
+          <h3>Mitglied entfernen</h3>
+          <p>Möchtest du <strong>${escapeHtml(memberLabel)}</strong> wirklich aus dem Team entfernen?</p>
+          <div class="share-modal-footer" style="gap:10px;">
+            <button class="share-close-btn" id="removeCancelBtn">Abbrechen</button>
+            <button id="removeConfirmBtn" style="background:#EF4444;color:white;border:none;border-radius:8px;padding:9px 20px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;">Entfernen</button>
+          </div>
+        </div>`;
+      document.body.appendChild(overlay);
+      overlay.querySelector('#removeCancelBtn').onclick = () => overlay.remove();
+      overlay.querySelector('#removeConfirmBtn').onclick = async () => {
+        overlay.remove();
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const user = session?.user;
+        const res = await fetch(`/teams/${teamId}/members/${memberId}?user_id=${user.id}`, {
+          method: 'DELETE',
+          headers: { 'x-user-id': user.id }
+        });
+        const data = await res.json();
+        if (data.error) { alert(data.error); return; }
+        ladeTeamMitglieder(teamId);
+      };
     }
 
     async function ladeTeamMitgliederEinladen(teamId) {

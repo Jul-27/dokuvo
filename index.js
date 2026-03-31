@@ -1425,7 +1425,7 @@ app.post('/teams', verifyUser, async (req, res) => {
       .single();
     if (error) return res.status(500).json({ error: error.message });
 
-    await supabase.from('team_members').insert({ team_id: team.id, user_id, role: 'owner' });
+    await supabase.from('team_members').insert({ team_id: team.id, user_id, email: req.authUser.email, role: 'owner' });
     res.json(team);
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -1453,9 +1453,15 @@ app.post('/teams/:id/invite', verifyUser, async (req, res) => {
       .select('id').eq('team_id', req.params.id).eq('email', email).maybeSingle();
     if (existingByEmail) return res.status(409).json({ error: 'Diese E-Mail ist bereits eingeladen' });
 
-    // Mitglied eintragen (kein Supabase-Account erforderlich)
-    const { error: insertError } = await supabase.from('team_members')
-      .insert({ team_id: req.params.id, email, role: 'member' });
+    // Mitglied eintragen: user_id setzen wenn Supabase-Account existiert, sonst NULL
+    let inviteeUserId = null;
+    try {
+      const { data: inviteeData } = await supabase.auth.admin.getUserByEmail(email);
+      if (inviteeData?.user?.id) inviteeUserId = inviteeData.user.id;
+    } catch {}
+    const insertPayload = { team_id: req.params.id, email, role: 'member' };
+    if (inviteeUserId) insertPayload.user_id = inviteeUserId;
+    const { error: insertError } = await supabase.from('team_members').insert(insertPayload);
     if (insertError) return res.status(500).json({ error: insertError.message });
 
     // Team-Name für E-Mail laden
