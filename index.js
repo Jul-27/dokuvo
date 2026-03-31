@@ -1448,17 +1448,15 @@ app.post('/teams/:id/invite', verifyUser, async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: 'E-Mail fehlt' });
   try {
-    // User per E-Mail finden
-    const { data: users } = await supabase.auth.admin.listUsers();
-    const found = users?.users?.find(u => u.email === email);
-    if (!found) return res.status(404).json({ error: 'Kein Nutzer mit dieser E-Mail gefunden' });
+    // Prüfen ob schon per E-Mail eingeladen
+    const { data: existingByEmail } = await supabase.from('team_members')
+      .select('id').eq('team_id', req.params.id).eq('email', email).maybeSingle();
+    if (existingByEmail) return res.status(409).json({ error: 'Diese E-Mail ist bereits eingeladen' });
 
-    // Prüfen ob schon Mitglied
-    const { data: existing } = await supabase.from('team_members')
-      .select('id').eq('team_id', req.params.id).eq('user_id', found.id).single();
-    if (existing) return res.status(409).json({ error: 'Nutzer ist bereits Mitglied' });
-
-    await supabase.from('team_members').insert({ team_id: req.params.id, user_id: found.id, role: 'member' });
+    // Mitglied eintragen (kein Supabase-Account erforderlich)
+    const { error: insertError } = await supabase.from('team_members')
+      .insert({ team_id: req.params.id, email, role: 'member' });
+    if (insertError) return res.status(500).json({ error: insertError.message });
 
     // Team-Name für E-Mail laden
     const { data: teamData } = await supabase.from('teams').select('name').eq('id', req.params.id).single();
@@ -1469,16 +1467,16 @@ app.post('/teams/:id/invite', verifyUser, async (req, res) => {
       await axios.post('https://api.resend.com/emails', {
         from: 'Dokuvo <noreply@eli10.app>',
         to: email,
-        subject: 'Du wurdest zu einem Dokuvo-Team eingeladen',
+        subject: `Du wurdest zum Team "${teamName}" eingeladen`,
         html: `
           <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#1a1a1a;padding:32px 28px;">
             <h2 style="color:#3B82F6;margin-top:0;">Team-Einladung</h2>
             <p>Du wurdest eingeladen, dem Team <strong>${teamName}</strong> auf Dokuvo beizutreten.</p>
             <div style="background:#f4f4f5;border-left:3px solid #3B82F6;border-radius:8px;padding:16px 18px;margin:20px 0;">
               <div style="font-weight:600;font-size:1rem;">Team: ${teamName}</div>
-              <div style="color:#6b7280;font-size:0.9rem;margin-top:6px;">Melde dich bei Dokuvo an, um dem Team beizutreten.</div>
+              <div style="color:#6b7280;font-size:0.9rem;margin-top:6px;">Melde dich bei Dokuvo an, um dem Team beizutreten und gemeinsam Dokumente zu analysieren.</div>
             </div>
-            <a href="https://dokuvo.app" style="display:inline-block;background:#3B82F6;color:white;text-decoration:none;border-radius:8px;padding:12px 24px;font-weight:600;margin-top:8px;">Zu Dokuvo</a>
+            <a href="https://eli10-app-olxw.vercel.app/app" style="display:inline-block;background:#3B82F6;color:white;text-decoration:none;border-radius:8px;padding:12px 24px;font-weight:600;margin-top:8px;">Jetzt zu Dokuvo</a>
             <p style="color:#6b7280;font-size:0.85rem;margin-top:24px;">Diese Einladung wurde über Dokuvo versendet.</p>
           </div>
         `
@@ -1490,10 +1488,37 @@ app.post('/teams/:id/invite', verifyUser, async (req, res) => {
       });
     } catch (mailErr) {
       console.error('Einladungs-E-Mail Fehler:', mailErr.message);
-      // DB-Eintrag ist gemacht, E-Mail-Fehler nicht an den Client weitergeben
     }
 
-    res.json({ success: true, email });
+    res.json({ success: true, email, message: 'Einladung gesendet' });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// Team-Mitglieder laden
+app.get('/teams/:id/members', verifyUser, async (req, res) => {
+  try {
+    const { data, error } = await supabase.from('team_members')
+      .select('id, user_id, email, role, created_at')
+      .eq('team_id', req.params.id)
+      .order('created_at', { ascending: true });
+    if (error) return res.status(500).json({ error: error.message });
+    res.json(data || []);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// Team-Mitglied entfernen
+app.delete('/teams/:id/members/:memberId', verifyUser, async (req, res) => {
+  try {
+    // Nur Owner darf entfernen
+    const userId = req.authUser.id;
+    const { data: ownerCheck } = await supabase.from('team_members')
+      .select('id').eq('team_id', req.params.id).eq('user_id', userId).eq('role', 'owner').maybeSingle();
+    if (!ownerCheck) return res.status(403).json({ error: 'Nur der Eigentümer kann Mitglieder entfernen' });
+
+    const { error } = await supabase.from('team_members')
+      .delete().eq('id', req.params.memberId).eq('team_id', req.params.id);
+    if (error) return res.status(500).json({ error: error.message });
+    res.json({ success: true });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
