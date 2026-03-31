@@ -3822,7 +3822,9 @@ Yours sincerely,
       overlay.querySelector('#inviteConfirmBtn').onclick = async () => {
         const email = input.value.trim();
         if (!email) return;
-        overlay.remove();
+        const confirmBtn = overlay.querySelector('#inviteConfirmBtn');
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Wird eingeladen…';
         const { data: { session } } = await supabaseClient.auth.getSession();
         const user = session?.user;
         const res = await fetch(`/teams/${teamId}/invite`, {
@@ -3831,8 +3833,26 @@ Yours sincerely,
           body: JSON.stringify({ user_id: user.id, email })
         });
         const data = await res.json();
-        if (data.error) { alert(data.error); return; }
-        alert(`${data.email} wurde eingeladen!`);
+        if (data.error) {
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = 'Einladen';
+          const modal = overlay.querySelector('.share-modal');
+          let errEl = modal.querySelector('.invite-error-msg');
+          if (!errEl) { errEl = document.createElement('p'); errEl.className = 'invite-error-msg'; errEl.style.cssText = 'color:#F87171;font-size:0.82rem;margin:0 0 12px;'; modal.insertBefore(errEl, modal.querySelector('.share-modal-footer')); }
+          errEl.textContent = data.error;
+          return;
+        }
+        // Erfolg im Modal anzeigen
+        const modal = overlay.querySelector('.share-modal');
+        modal.innerHTML = `
+          <div style="text-align:center;padding:12px 0 4px;">
+            <div style="width:48px;height:48px;border-radius:50%;background:rgba(52,211,153,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h3 style="color:#E8EAED;font-size:1.05rem;font-weight:700;margin-bottom:8px;">Einladung gesendet</h3>
+            <p style="color:#7A7F88;font-size:0.85rem;margin-bottom:20px;">${escapeHtml(data.email)} wurde eingeladen.</p>
+            <button class="share-copy-btn" onclick="this.closest('.share-modal-overlay').remove()" style="width:100%;">Schließen</button>
+          </div>`;
         ladeTeamMitglieder(teamId);
       };
       input.addEventListener('keydown', (e) => {
@@ -3898,16 +3918,37 @@ Yours sincerely,
       overlay.querySelector('#teamShareConfirmBtn').onclick = async () => {
         const teamId = overlay.querySelector('#teamSelectInput').value;
         const note = overlay.querySelector('#teamShareNoteInput').value.trim();
-        overlay.remove();
+        const confirmBtn = overlay.querySelector('#teamShareConfirmBtn');
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Wird geteilt…';
         const shareRes = await fetch(`/teams/${teamId}/share`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user_id: user.id, session_id: sessionId, note })
         });
         const data = await shareRes.json();
-        if (data.error) { alert(data.error); return; }
+        if (data.error) {
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = 'Teilen';
+          const modal = overlay.querySelector('.share-modal');
+          let errEl = modal.querySelector('.share-error-msg');
+          if (!errEl) { errEl = document.createElement('p'); errEl.className = 'share-error-msg'; errEl.style.cssText = 'color:#F87171;font-size:0.82rem;margin:0 0 12px;'; modal.insertBefore(errEl, modal.querySelector('.share-modal-footer')); }
+          errEl.textContent = data.error;
+          return;
+        }
+        const selectedTeamName = overlay.querySelector('#teamSelectInput').options[overlay.querySelector('#teamSelectInput').selectedIndex]?.text || 'Team';
+        const modal = overlay.querySelector('.share-modal');
+        modal.innerHTML = `
+          <div style="text-align:center;padding:12px 0 4px;">
+            <div style="width:48px;height:48px;border-radius:50%;background:rgba(52,211,153,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h3 style="color:#E8EAED;font-size:1.05rem;font-weight:700;margin-bottom:8px;">Erfolgreich geteilt</h3>
+            <p style="color:#7A7F88;font-size:0.85rem;margin-bottom:20px;">Dieser Chat wurde mit <strong style="color:#E8EAED;">${escapeHtml(selectedTeamName)}</strong> geteilt.</p>
+            <button class="share-copy-btn" onclick="this.closest('.share-modal-overlay').remove()" style="width:100%;">Schließen</button>
+          </div>`;
         const btn = event.target.closest('.session-share-btn');
-        if (btn) { btn.style.color = '#34D399'; setTimeout(() => { btn.style.color = ''; }, 1500); }
+        if (btn) { btn.style.color = '#34D399'; setTimeout(() => { btn.style.color = ''; }, 2000); }
       };
     }
 
@@ -4625,67 +4666,56 @@ Yours sincerely,
       document.getElementById('limitBanner').classList.add('visible');
     }
 
-    let voiceRecognition = null;
-    let isRecording = false;
-
     function toggleVoiceInput() {
-      const btn = document.getElementById('micBtn');
-      const input = document.getElementById('chatInput');
-
-      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        alert('Spracheingabe wird von diesem Browser nicht unterstützt.');
-        return;
-      }
-
-      if (isRecording) {
-        voiceRecognition.stop();
-        return;
-      }
-
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      voiceRecognition = new SpeechRecognition();
-      voiceRecognition.lang = navigator.language || 'de-DE';
-      voiceRecognition.continuous = false;
-      voiceRecognition.interimResults = true;
-      voiceRecognition.maxAlternatives = 1;
+      if (!SpeechRecognition) {
+        alert('Spracherkennung wird von diesem Browser nicht unterstützt. Bitte verwende Chrome.');
+        return;
+      }
 
-      voiceRecognition.onstart = () => {
-        isRecording = true;
-        btn.classList.add('recording');
+      const micBtn = document.getElementById('micBtn');
+
+      // Falls bereits aufnahme läuft, stoppen
+      if (window._recognition && window._recognitionActive) {
+        window._recognition.stop();
+        window._recognitionActive = false;
+        micBtn.classList.remove('recording');
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'de-DE';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      window._recognition = recognition;
+      window._recognitionActive = true;
+      micBtn.classList.add('recording');
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        const chatInput = document.getElementById('chatInput');
+        chatInput.value += (chatInput.value ? ' ' : '') + transcript;
+        chatInput.focus();
+        chatInput.dispatchEvent(new Event('input', { bubbles: true }));
       };
 
-      voiceRecognition.onresult = (event) => {
-        let finalTranscript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          if (event.results[i].isFinal) {
-            finalTranscript += event.results[i][0].transcript;
-          }
+      recognition.onend = function() {
+        window._recognitionActive = false;
+        micBtn.classList.remove('recording');
+      };
+
+      recognition.onerror = function(event) {
+        console.error('Spracherkennung Fehler:', event.error);
+        window._recognitionActive = false;
+        micBtn.classList.remove('recording');
+        if (event.error === 'not-allowed') {
+          alert('Mikrofon-Zugriff wurde verweigert. Bitte erlaube den Zugriff in den Browser-Einstellungen.');
         }
-        if (finalTranscript) {
-          const chatInput = document.getElementById('chatInput');
-          chatInput.value = (chatInput.value ? chatInput.value + ' ' : '') + finalTranscript;
-          chatInput.style.height = 'auto';
-          chatInput.style.height = chatInput.scrollHeight + 'px';
-        }
       };
 
-      voiceRecognition.onerror = (event) => {
-        console.error('Spracheingabe Fehler:', event.error);
-        isRecording = false;
-        btn.classList.remove('recording');
-        voiceRecognition = null;
-        if (event.error !== 'aborted' && event.error !== 'no-speech') {
-          alert('Spracheingabe Fehler: ' + event.error);
-        }
-      };
-
-      voiceRecognition.onend = () => {
-        isRecording = false;
-        btn.classList.remove('recording');
-        voiceRecognition = null;
-      };
-
-      voiceRecognition.start();
+      recognition.start();
     }
 
     async function sendChatMessage(vorgefertigterText) {
