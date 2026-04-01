@@ -1470,7 +1470,7 @@ app.post('/teams/:id/invite', verifyUser, async (req, res) => {
 
     // Einladungs-E-Mail senden
     try {
-      await axios.post('https://api.resend.com/emails', {
+      const emailResult = await axios.post('https://api.resend.com/emails', {
         from: 'Dokuvo <noreply@eli10.app>',
         to: email,
         subject: `Du wurdest zum Team "${teamName}" eingeladen`,
@@ -1492,8 +1492,10 @@ app.post('/teams/:id/invite', verifyUser, async (req, res) => {
           'Content-Type': 'application/json'
         }
       });
+      console.log('Resend Result:', JSON.stringify(emailResult.data));
     } catch (mailErr) {
       console.error('Einladungs-E-Mail Fehler:', mailErr.message);
+      if (mailErr.response) console.error('Resend Error Details:', JSON.stringify(mailErr.response.data));
     }
 
     res.json({ success: true, email, message: 'Einladung gesendet' });
