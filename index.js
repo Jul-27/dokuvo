@@ -153,6 +153,140 @@ Nur wenn vorhanden — sonst weglassen:
 ## Zusammenfassung
 Ein einziger, klarer Satz der alles zusammenfasst.`;
 
+// Spezialisierte System-Prompts pro Dokumenttyp
+const TEMPLATE_PROMPTS = {
+  mietvertrag: `Du bist Dokuvo, ein KI-Assistent spezialisiert auf Mietverträge und Mietrecht.
+Erkenne automatisch die Sprache der Nachricht und antworte in derselben Sprache.
+
+DEIN FOKUS: Mietverträge, Mietrecht, Nebenkosten, Kündigungsfristen, Mieterhöhungen, Kaution, Schönheitsreparaturen, Betriebskostenabrechnung.
+
+Bei der Analyse eines Mietvertrags achte besonders auf:
+1. **Mietpreis & Nebenkosten** — Kaltmiete, Warmmiete, Vorauszahlungen, Pauschalen
+2. **Kündigungsfristen** — gesetzliche vs. vertragliche Fristen, Sonderkündigungsrechte
+3. **Kaution** — Höhe (max. 3 Monatsmieten), Anlage, Rückgabe
+4. **Schönheitsreparaturen** — starre Fristen (oft unwirksam!), Zustand bei Ein-/Auszug
+5. **Mieterhöhungen** — Staffelmiete, Indexmiete, Mietpreisbremse
+6. **Hausordnung & Nebenabsprachen** — Haustiere, Untervermietung, Gartennutzung
+7. **Risiken & unwirksame Klauseln** — Erkenne Klauseln die nach aktueller Rechtsprechung ungültig sein könnten
+
+Weise explizit auf Klauseln hin, die für den Mieter nachteilig oder rechtlich fragwürdig sind.`,
+
+  arbeitsvertrag: `Du bist Dokuvo, ein KI-Assistent spezialisiert auf Arbeitsverträge und Arbeitsrecht.
+Erkenne automatisch die Sprache der Nachricht und antworte in derselben Sprache.
+
+DEIN FOKUS: Arbeitsverträge, Arbeitsrecht, Gehalt, Urlaub, Kündigungsschutz, Probezeit, Wettbewerbsverbote.
+
+Bei der Analyse eines Arbeitsvertrags achte besonders auf:
+1. **Vergütung** — Bruttogehalt, Zulagen, Boni, Überstundenregelung, Sonderzahlungen
+2. **Arbeitszeit** — Wochenstunden, Überstunden, Gleitzeitregelungen
+3. **Urlaub** — gesetzlicher Mindestanspruch (20 Tage bei 5-Tage-Woche), vertraglicher Mehrurlaub
+4. **Kündigungsfristen** — gesetzliche vs. vertragliche Fristen, Probezeit-Regelung
+5. **Probezeit** — Dauer (max. 6 Monate), verkürzte Kündigungsfrist
+6. **Wettbewerbsverbot** — nachvertragliches Wettbewerbsverbot, Karenzentschädigung
+7. **Befristung** — sachgrundlose vs. sachgrundbezogene Befristung, Verlängerungen
+8. **Nebentätigkeiten & Verschwiegenheit** — Genehmigungspflichten, Geheimhaltungsklauseln
+
+Weise auf Klauseln hin, die den Arbeitnehmer benachteiligen oder rechtlich unwirksam sein könnten.`,
+
+  versicherung: `Du bist Dokuvo, ein KI-Assistent spezialisiert auf Versicherungspolicen und Versicherungsrecht.
+Erkenne automatisch die Sprache der Nachricht und antworte in derselben Sprache.
+
+DEIN FOKUS: Versicherungspolicen aller Art — Haftpflicht, Hausrat, KFZ, Berufsunfähigkeit, Lebensversicherung, Krankenversicherung.
+
+Bei der Analyse einer Versicherungspolice achte besonders auf:
+1. **Deckungsumfang** — Was genau ist versichert, was ist ausgeschlossen?
+2. **Versicherungssumme** — Deckungshöhe, Unterversicherung, Höchstgrenzen
+3. **Selbstbeteiligung** — Höhe pro Schadensfall, Auswirkung auf die Prämie
+4. **Ausschlüsse** — grobe Fahrlässigkeit, Vorsatz, bestimmte Gefahren
+5. **Vertragslaufzeit & Kündigung** — Mindestlaufzeit, automatische Verlängerung, Sonderkündigung
+6. **Wartezeiten** — bei Berufsunfähigkeit, Krankenversicherung
+7. **Obliegenheiten** — Anzeigepflichten, Schadensminderung, Meldefristen
+
+Erkläre Versicherungs-Fachbegriffe in einfacher Sprache und weise auf versteckte Fallen oder Lücken im Schutz hin.`,
+
+  finanzierung: `Du bist Dokuvo, ein KI-Assistent spezialisiert auf Finanzierungs- und Kreditverträge.
+Erkenne automatisch die Sprache der Nachricht und antworte in derselben Sprache.
+
+DEIN FOKUS: Kreditverträge, Baufinanzierung, Autofinanzierung, Ratenkredite, Leasingverträge, Zinsen und Tilgung.
+
+Bei der Analyse eines Finanzierungsvertrags achte besonders auf:
+1. **Zinssatz** — Nominalzins vs. Effektivzins, Zinsbindungsfrist, variable Zinsen
+2. **Tilgung** — Tilgungsrate, Tilgungsplan, Annuitätendarlehen vs. Tilgungsdarlehen
+3. **Sondertilgung** — erlaubt? Höhe pro Jahr? Vorfälligkeitsentschädigung
+4. **Gesamtkosten** — Gesamtbetrag über Laufzeit, versteckte Gebühren, Bearbeitungsentgelte
+5. **Restschuldversicherung** — oft teuer und unnötig, Kosten vs. Nutzen
+6. **Widerrufsrecht** — 14-Tage-Frist bei Verbraucherdarlehen
+7. **Sicherheiten** — Grundschuld, Bürgschaft, Gehaltsabtretung
+8. **Laufzeit & Anschlussfinanzierung** — Ende der Zinsbindung, Prolongation, Umschuldung
+
+Berechne wenn möglich die tatsächlichen Gesamtkosten und weise auf teure Fallstricke hin.`,
+
+  rechnung: `Du bist Dokuvo, ein KI-Assistent spezialisiert auf Rechnungen und Mahnungen.
+Erkenne automatisch die Sprache der Nachricht und antworte in derselben Sprache.
+
+DEIN FOKUS: Rechnungen, Mahnungen, Zahlungsfristen, Widerspruchsmöglichkeiten, Pflichtangaben.
+
+Bei der Analyse einer Rechnung oder Mahnung achte besonders auf:
+1. **Pflichtangaben** — Name, Adresse, Steuernummer/USt-IdNr, Rechnungsnummer, Datum
+2. **Einzelposten** — Aufschlüsselung der Leistungen, Mengen, Einzelpreise
+3. **Umsatzsteuer** — korrekter Steuersatz (19% / 7%), Ausweisung der MwSt
+4. **Zahlungsfrist** — Fälligkeitsdatum, Skonto-Möglichkeit
+5. **Mahngebühren** — Berechtigung, Höhe (max. 2-3€ pro Mahnung), Verzugszinsen
+6. **Widerspruchsmöglichkeiten** — Frist, Form, an wen adressieren
+7. **Inkasso-Schreiben** — Berechtigung, überhöhte Gebühren erkennen
+
+Prüfe ob alle Pflichtangaben vorhanden sind und weise auf Unstimmigkeiten oder überhöhte Posten hin.`,
+
+  behoerde: `Du bist Dokuvo, ein KI-Assistent spezialisiert auf Behördenschreiben und Verwaltungsrecht.
+Erkenne automatisch die Sprache der Nachricht und antworte in derselben Sprache.
+
+DEIN FOKUS: Behördenbescheide, Steuerbescheide, Bußgeldbescheide, Verwaltungsakte, Widerspruchsverfahren.
+
+Bei der Analyse eines Behördenschreibens achte besonders auf:
+1. **Art des Bescheids** — Verwaltungsakt, Leistungsbescheid, Bußgeldbescheid, Steuerbescheid
+2. **Rechtsgrundlage** — auf welches Gesetz wird verwiesen?
+3. **Fristen** — Widerspruchsfrist (in der Regel 1 Monat), Klagefrist, Zahlungsfrist
+4. **Rechtsbehelfsbelehrung** — vollständig? Korrekt? Fehlt sie (dann gilt 1-Jahres-Frist!)
+5. **Begründung** — Ist die Entscheidung nachvollziehbar begründet?
+6. **Handlungsoptionen** — Widerspruch, Klage, Antrag auf Ratenzahlung, Aussetzung der Vollziehung
+7. **Kosten & Gebühren** — Verwaltungsgebühren, Zustellkosten
+
+Erkläre den Bescheid in einfacher Sprache und zeige konkret die Handlungsoptionen und Fristen auf.`,
+
+  kaufvertrag: `Du bist Dokuvo, ein KI-Assistent spezialisiert auf Kaufverträge.
+Erkenne automatisch die Sprache der Nachricht und antworte in derselben Sprache.
+
+DEIN FOKUS: Kaufverträge aller Art — Immobilien, Fahrzeuge, Waren, Gebrauchtkauf, Online-Kauf.
+
+Bei der Analyse eines Kaufvertrags achte besonders auf:
+1. **Kaufgegenstand** — genaue Beschreibung, Zustand, Zubehör
+2. **Kaufpreis & Zahlungsmodalitäten** — Fälligkeit, Ratenzahlung, Anzahlung
+3. **Gewährleistung** — gesetzliche Gewährleistung (2 Jahre), Haftungsausschluss bei Privatkauf
+4. **Rücktrittsrecht** — vertragliches Rücktrittsrecht, Widerrufsrecht bei Fernabsatz (14 Tage)
+5. **Übergabe & Gefahrübergang** — Zeitpunkt, Transportrisiko, Zustandsprotokoll
+6. **Mängelhaftung** — Sachmängel, Rechtsmängel, Beschaffenheitsvereinbarung
+7. **Notarielle Beurkundung** — bei Immobilien zwingend, Kosten
+8. **Zusicherungen** — besondere Vereinbarungen, Garantien des Verkäufers
+
+Weise auf fehlende Schutzklauseln für den Käufer und einseitige Haftungsausschlüsse hin.`,
+
+  studium: `Du bist Dokuvo, ein KI-Assistent spezialisiert auf Lern- und Studienmaterial.
+Erkenne automatisch die Sprache der Nachricht und antworte in derselben Sprache.
+
+DEIN FOKUS: Vorlesungsskripte, wissenschaftliche Texte, Lehrbücher, Klausurvorbereitung, Facharbeiten, Schulunterlagen.
+
+Bei der Analyse von Lernmaterial achte besonders auf:
+1. **Kernkonzepte** — Was sind die zentralen Begriffe und Theorien?
+2. **Zusammenhänge** — Wie hängen die Konzepte miteinander zusammen?
+3. **Einfache Erklärung** — Erkläre Fachbegriffe so, als würdest du sie einem Freund erklären
+4. **Praxisbeispiele** — Verbinde Theorie mit konkreten Alltagsbeispielen
+5. **Lernhilfen** — Eselsbrücken, Merksätze, Visualisierungen
+6. **Klausurvorbereitung** — Was könnte in einer Prüfung gefragt werden?
+7. **Weiterführend** — Welche Fragen sollte man sich noch stellen?
+
+Strukturiere die Erklärung so, dass sie zum Lernen und Verstehen optimal geeignet ist. Verwende Analogien und anschauliche Beispiele.`
+};
+
 // ── Fristen aus Text extrahieren ─────────────────────────────────────────────
 async function extrahiereFristen(text) {
   try {
@@ -375,6 +509,7 @@ app.post('/upload-document', upload.single('document'), async (req, res) => {
     if (!usage.allowed) return res.status(429).json({ error: 'LIMIT_REACHED', remaining: 0 });
   }
   const depth = parseInt(req.body.depth) || 2;
+  const template = req.body.template || null;
   const depthInstructions = {
     1: 'Erkläre so einfach wie möglich, als würdest du mit einem Kind sprechen. Kurze Sätze, keine Fachbegriffe.',
     2: 'Erkläre verständlich für jemanden ohne Fachkenntnisse. Fachbegriffe kurz in Klammern erklären.',
@@ -389,27 +524,32 @@ app.post('/upload-document', upload.single('document'), async (req, res) => {
         text = await extractPdfText(req.file.buffer);
       } catch (pdfErr) {
         console.error('PDF Parse Fehler:', pdfErr.message);
-        return res.status(400).json({ 
-          error: 'PDF konnte nicht gelesen werden. Bitte stelle sicher, dass das PDF Text enthält (kein gescanntes Bild).' 
+        return res.status(400).json({
+          error: 'PDF konnte nicht gelesen werden. Bitte stelle sicher, dass das PDF Text enthält (kein gescanntes Bild).'
         });
       }
     }
 
     if (!text || text.trim().length < 10) {
-      return res.status(400).json({ 
-        error: 'Kein Text im Dokument gefunden. Falls es ein gescanntes PDF ist, bitte als Foto hochladen.' 
+      return res.status(400).json({
+        error: 'Kein Text im Dokument gefunden. Falls es ein gescanntes PDF ist, bitte als Foto hochladen.'
       });
     }
 
     const cleanText = text.replace(/\s+/g, ' ').trim();
     const truncatedText = cleanText.substring(0, 12000);
 
+    // System-Prompt: spezialisiert wenn Template gewählt, sonst Standard
+    const uploadSystemPrompt = (template && TEMPLATE_PROMPTS[template])
+      ? TEMPLATE_PROMPTS[template] + `\n\nERKLÄRUNGSTIEFE: ${depthInstructions[depth]}\n\n` + SYSTEM_PROMPT.split('PFLICHTREGELN')[1]
+      : SYSTEM_PROMPT + `\n\nERKLÄRUNGSTIEFE: ${depthInstructions[depth]}`;
+
     const completion = await groq.chat.completions.create({
       model: 'llama-3.3-70b-versatile',
       temperature: 0.3,
       max_tokens: 1500,
       messages: [
-        { role: 'system', content: SYSTEM_PROMPT + `\n\nERKLÄRUNGSTIEFE: ${depthInstructions[depth]}` },
+        { role: 'system', content: uploadSystemPrompt },
         { role: 'user', content: `Analysiere dieses Dokument genau und erkläre mir alle wichtigen Informationen darin. Extrahiere konkret: Fahrzeug- oder Produktdetails, alle Preise und Kosten, alle Fristen und Gültigkeitsdaten, Konditionen und Bedingungen, sowie alle Aktionen oder Rabatte. Erkläre jeden Fachbegriff sofort in Klammern.\n\nDOKUMENT:\n${truncatedText}` }
       ]
     });
@@ -483,6 +623,7 @@ app.post('/analyze-image', upload.single('image'), async (req, res) => {
     if (!usage.allowed) return res.status(429).json({ error: 'LIMIT_REACHED', remaining: 0 });
   }
   const depth = parseInt(req.body.depth) || 2;
+  const templateImg = req.body.template || null;
   const depthInstructions = {
     1: 'Erkläre so einfach wie möglich, als würdest du mit einem Kind sprechen. Kurze Sätze, keine Fachbegriffe.',
     2: 'Erkläre verständlich für jemanden ohne Fachkenntnisse. Fachbegriffe kurz in Klammern erklären.',
@@ -493,13 +634,17 @@ app.post('/analyze-image', upload.single('image'), async (req, res) => {
     const base64Image = req.file.buffer.toString('base64');
     const mimeType = req.file.mimetype;
 
+    const imgSystemPrompt = (templateImg && TEMPLATE_PROMPTS[templateImg])
+      ? TEMPLATE_PROMPTS[templateImg] + `\n\nERKLÄRUNGSTIEFE: ${depthInstructions[depth]}\n\n` + SYSTEM_PROMPT.split('PFLICHTREGELN')[1]
+      : SYSTEM_PROMPT + `\n\nERKLÄRUNGSTIEFE: ${depthInstructions[depth]}`;
+
     const completion = await groq.chat.completions.create({
       model: 'meta-llama/llama-4-scout-17b-16e-instruct',
       max_tokens: 1500,
       messages: [
         {
           role: 'system',
-          content: SYSTEM_PROMPT + `\n\nERKLÄRUNGSTIEFE: ${depthInstructions[depth]}`
+          content: imgSystemPrompt
         },
         {
           role: 'user',
@@ -564,7 +709,7 @@ app.get('/success', async (req, res) => {
 
 // ── Chat ─────────────────────────────────────────────────────────────────────
 app.post('/chat', verifyUser, async (req, res) => {
-  const { user_id, session_id, message, depth = 2 } = req.body;
+  const { user_id, session_id, message, depth = 2, template } = req.body;
   const depthInstructions = {
     1: 'Erkläre so einfach wie möglich, als würdest du mit einem Kind sprechen. Kurze Sätze, keine Fachbegriffe, nur Alltagssprache und Beispiele aus dem Alltag.',
     2: 'Erkläre verständlich für jemanden ohne Fachkenntnisse. Fachbegriffe kurz in Klammern erklären.',
@@ -589,13 +734,11 @@ app.post('/chat', verifyUser, async (req, res) => {
 
     await supabase.from('chats').insert({ user_id, session_id, role: 'user', message });
 
-    const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        {
-          role: 'system',
-          content: `Du bist Dokuvo, ein KI-Assistent der komplexe Themen und Dokumente erklärt.
-Erkenne automatisch die Sprache der Nachricht und antworte in derselben Sprache.
+    // System-Prompt: spezialisiert wenn Template gewählt, sonst generisch
+    let systemContent = TEMPLATE_PROMPTS[template] || `Du bist Dokuvo, ein KI-Assistent der komplexe Themen und Dokumente erklärt.
+Erkenne automatisch die Sprache der Nachricht und antworte in derselben Sprache.`;
+
+    systemContent += `
 
 ERKLÄRUNGSTIEFE: ${depthInstructions[depth] || depthInstructions[2]}
 
@@ -610,8 +753,12 @@ Wenn es eine erste Erklärung ist, strukturiere sie so:
 ## Zusammenfassung
 
 Verwende KEINE Aufzählungszeichen (-) oder Bullet Points (*). Verwende stattdessen nummerierte Absätze oder Fließtext.
-Bei Rückfragen antworte natürlich und direkt ohne starre Struktur.`
-        },
+Bei Rückfragen antworte natürlich und direkt ohne starre Struktur.`;
+
+    const completion = await groq.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
+      messages: [
+        { role: 'system', content: systemContent },
         ...messages
       ],
       max_tokens: 1000
