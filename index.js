@@ -1321,7 +1321,7 @@ app.get('/folders/:folder_id/chats/:user_id', verifyUser, async (req, res) => {
 async function sendReminderEmail(email, title, due_date, description) {
   const datumFormatiert = new Date(due_date + 'T12:00:00').toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
   await axios.post('https://api.resend.com/emails', {
-    from: 'Dokuvo <noreply@eli10.app>',
+    from: 'Dokuvo <onboarding@resend.dev>',
     to: email,
     subject: `Erinnerung: ${title}`,
     html: `
@@ -1471,7 +1471,7 @@ app.post('/teams/:id/invite', verifyUser, async (req, res) => {
     // Einladungs-E-Mail senden
     try {
       const emailResult = await axios.post('https://api.resend.com/emails', {
-        from: 'Dokuvo <noreply@eli10.app>',
+        from: 'Dokuvo <onboarding@resend.dev>',
         to: email,
         subject: `Du wurdest zum Team "${teamName}" eingeladen`,
         html: `
