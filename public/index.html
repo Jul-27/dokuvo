@@ -3705,13 +3705,16 @@ Yours sincerely,
         return;
       }
       container.innerHTML = teams.map(t => `
-        <div onclick="zeigeTeamDetail('${t.id}', '${escapeHtml(t.name)}')" style="background:#1C1C1E;border:1px solid #2C2C2E;border-radius:12px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color 0.15s;" onmouseover="this.style.borderColor='#3B82F6'" onmouseout="this.style.borderColor='#2C2C2E'">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          <div>
-            <div style="font-size:14px;font-weight:600;color:#F1F5F9;">${escapeHtml(t.name)}</div>
-            <div style="font-size:11px;color:#636366;margin-top:2px;">${t.role === 'owner' ? 'Eigentümer' : 'Mitglied'}</div>
+        <div style="background:#1C1C1E;border:1px solid #2C2C2E;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;transition:border-color 0.15s;cursor:pointer;" onmouseover="this.style.borderColor='#3B82F6'" onmouseout="this.style.borderColor='#2C2C2E'">
+          <div onclick="zeigeTeamDetail('${t.id}', '${escapeHtml(t.name)}')" style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#F1F5F9;">${escapeHtml(t.name)}</div>
+              <div style="font-size:11px;color:#636366;margin-top:2px;">${t.role === 'owner' ? 'Eigentümer' : 'Mitglied'}</div>
+            </div>
           </div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;"><polyline points="9 18 15 12 9 6"/></svg>
+          ${t.role === 'owner' ? `<button onclick="event.stopPropagation();loescheTeam('${t.id}','${escapeHtml(t.name)}')" style="background:none;border:none;cursor:pointer;color:#48484A;padding:6px;border-radius:6px;display:flex;align-items:center;transition:color 0.2s;flex-shrink:0;" onmouseover="this.style.color='#F87171'" onmouseout="this.style.color='#48484A'" title="Team löschen"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>` : ''}
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;" onclick="zeigeTeamDetail('${t.id}', '${escapeHtml(t.name)}')"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
       `).join('');
     }
@@ -3929,6 +3932,49 @@ Yours sincerely,
           </div>`).join('');
     }
 
+    async function loescheTeam(teamId, teamName) {
+      const overlay = document.createElement('div');
+      overlay.className = 'share-modal-overlay';
+      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+      overlay.innerHTML = `
+        <div class="share-modal" style="text-align:center;">
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(248,113,113,0.10);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </div>
+          <h3 style="color:#E8EAED;font-size:1.1rem;font-weight:700;margin-bottom:8px;">Team löschen</h3>
+          <p style="color:#7A7F88;font-size:0.88rem;margin-bottom:22px;line-height:1.5;">Möchtest du das Team '${escapeHtml(teamName)}' wirklich löschen? Alle Mitglieder und geteilten Dokumente werden entfernt. Diese Aktion kann nicht rückgängig gemacht werden.</p>
+          <div class="share-modal-footer" style="gap:10px;">
+            <button class="share-close-btn" id="teamDeleteCancelBtn">Abbrechen</button>
+            <button id="teamDeleteConfirmBtn" style="background:#DC2626;color:white;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.2s;" onmouseover="this.style.background='#B91C1C'" onmouseout="this.style.background='#DC2626'">Endgültig löschen</button>
+          </div>
+        </div>`;
+      document.body.appendChild(overlay);
+      overlay.querySelector('#teamDeleteCancelBtn').onclick = () => overlay.remove();
+      overlay.querySelector('#teamDeleteConfirmBtn').onclick = async () => {
+        const btn = overlay.querySelector('#teamDeleteConfirmBtn');
+        btn.textContent = 'Löscht...';
+        btn.disabled = true;
+        try {
+          const { data: { session } } = await supabaseClient.auth.getSession();
+          const user = session?.user;
+          if (!user) return;
+          const res = await fetch(`/teams/${teamId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json', 'x-user-id': user.id },
+            body: JSON.stringify({ user_id: user.id })
+          });
+          const result = await res.json();
+          if (result.error) { alert(result.error); return; }
+          overlay.remove();
+          ladeTeams();
+        } catch (err) {
+          alert('Fehler beim Löschen');
+          btn.textContent = 'Endgültig löschen';
+          btn.disabled = false;
+        }
+      };
+    }
+
     async function teileSessionMitTeam(sessionId, event) {
       event.stopPropagation();
       const { data: { session } } = await supabaseClient.auth.getSession();
@@ -4058,6 +4104,25 @@ Yours sincerely,
 
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session) zeigeApp(session.user.email);
+
+      // ── Team beigetreten? ──
+      const joinedParam = new URLSearchParams(window.location.search).get('joined');
+      if (joinedParam) {
+        history.replaceState(null, '', window.location.pathname);
+        const overlay = document.createElement('div');
+        overlay.className = 'share-modal-overlay';
+        overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+        overlay.innerHTML = `
+          <div class="share-modal" style="text-align:center;">
+            <div style="width:56px;height:56px;border-radius:50%;background:rgba(59,130,246,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3 style="color:#E8EAED;font-size:1.1rem;font-weight:700;margin-bottom:8px;">Team beigetreten!</h3>
+            <p style="color:#7A7F88;font-size:0.88rem;margin-bottom:22px;">Du bist jetzt Mitglied im Team '${decodeURIComponent(joinedParam).replace(/'/g, '&#39;').replace(/</g, '&lt;')}'.</p>
+            <button class="share-copy-btn" onclick="this.closest('.share-modal-overlay').remove()" style="width:100%;">Los geht's</button>
+          </div>`;
+        document.body.appendChild(overlay);
+      }
 
       // ── Drag & Drop für Dateien ──
       const chatMain = document.querySelector('.chat-main');

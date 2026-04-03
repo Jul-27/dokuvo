@@ -1482,7 +1482,7 @@ app.post('/teams/:id/invite', verifyUser, async (req, res) => {
               <div style="font-weight:600;font-size:1rem;">Team: ${teamName}</div>
               <div style="color:#6b7280;font-size:0.9rem;margin-top:6px;">Melde dich bei Dokuvo an, um dem Team beizutreten und gemeinsam Dokumente zu analysieren.</div>
             </div>
-            <a href="https://eli10-app-olxw.vercel.app/app" style="display:inline-block;background:#3B82F6;color:white;text-decoration:none;border-radius:8px;padding:12px 24px;font-weight:600;margin-top:8px;">Jetzt zu Dokuvo</a>
+            <a href="https://eli10-app-olxw.vercel.app/join-team/${req.params.id}/${encodeURIComponent(email)}" style="display:inline-block;background:#3B82F6;color:white;text-decoration:none;border-radius:8px;padding:12px 24px;font-weight:600;margin-top:8px;">Team beitreten</a>
             <p style="color:#6b7280;font-size:0.85rem;margin-top:24px;">Diese Einladung wurde über Dokuvo versendet.</p>
           </div>
         `
@@ -1568,6 +1568,58 @@ app.get('/teams/:id/shared', verifyUser, async (req, res) => {
 
     const result = (data || []).map(d => ({ ...d, title: titleMap[d.session_id] || d.session_id }));
     res.json(result);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// Team beitreten via E-Mail-Link (öffentlich, kein Auth)
+app.get('/join-team/:teamId/:email', async (req, res) => {
+  try {
+    const email = decodeURIComponent(req.params.email);
+    const { data: member } = await supabase.from('team_members')
+      .select('id, teams(name)')
+      .eq('team_id', req.params.teamId)
+      .eq('email', email)
+      .maybeSingle();
+    if (!member) {
+      return res.status(404).send(`
+        <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Einladung ungültig</title>
+        <style>body{font-family:system-ui,sans-serif;background:#111214;color:#E8EAED;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;}
+        .card{background:#1A1C1F;border:1px solid #2A2D32;border-radius:16px;padding:40px;max-width:420px;text-align:center;}
+        h2{color:#F87171;margin-top:0;}p{color:#7A7F88;line-height:1.6;}
+        a{display:inline-block;margin-top:16px;background:#3B82F6;color:white;text-decoration:none;border-radius:8px;padding:12px 24px;font-weight:600;}</style></head>
+        <body><div class="card"><h2>Einladung ungültig</h2><p>Diese Einladung ist ungültig oder abgelaufen. Bitte fordere eine neue Einladung an.</p>
+        <a href="https://eli10-app-olxw.vercel.app/app">Zur App</a></div></body></html>`);
+    }
+
+    // user_id zuweisen falls der User inzwischen einen Account hat
+    if (!member.user_id) {
+      try {
+        const { data: userData } = await supabase.auth.admin.getUserByEmail(email);
+        if (userData?.user?.id) {
+          await supabase.from('team_members').update({ user_id: userData.user.id }).eq('id', member.id);
+        }
+      } catch {}
+    }
+
+    const teamName = member.teams?.name || 'dem Team';
+    res.redirect(`https://eli10-app-olxw.vercel.app/app?joined=${encodeURIComponent(teamName)}`);
+  } catch (err) { res.status(500).send('Serverfehler'); }
+});
+
+// Team löschen (nur Owner)
+app.delete('/teams/:id', verifyUser, async (req, res) => {
+  try {
+    const userId = req.authUser.id;
+    const { data: team } = await supabase.from('teams')
+      .select('owner_id').eq('id', req.params.id).single();
+    if (!team) return res.status(404).json({ error: 'Team nicht gefunden' });
+    if (team.owner_id !== userId) return res.status(403).json({ error: 'Nur der Eigentümer kann das Team löschen' });
+
+    // team_members und team_shares werden per CASCADE gelöscht
+    const { error } = await supabase.from('teams').delete().eq('id', req.params.id);
+    if (error) return res.status(500).json({ error: error.message });
+    res.json({ success: true });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
