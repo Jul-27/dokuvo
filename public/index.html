@@ -933,26 +933,46 @@ body {
 
 /* ── Sidebar Toggle Button ── */
 .sidebar-toggle-btn {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #636366;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+  padding: 0;
+}
+.sidebar-toggle-btn:hover { background: #1A1C1F; color: #E8EAED; border-color: #2A2D32; }
+.sidebar-toggle-btn svg { display: block; }
+
+.sidebar-open-btn {
   display: none;
-  position: fixed;
-  top: 10px;
+  position: absolute;
+  top: 12px;
   left: 12px;
-  z-index: 201;
-  background: rgba(17,18,20,0.9);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  z-index: 10;
+  background: rgba(17,18,20,0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid #2A2D32;
   border-radius: 8px;
-  color: #E8EAED;
-  width: 38px;
-  height: 38px;
+  color: #636366;
+  width: 36px;
+  height: 36px;
   cursor: pointer;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s, border-color 0.15s;
+  padding: 0;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
-.sidebar-toggle-btn:hover { background: #1A1C1F; border-color: #3B82F6; }
-.sidebar-toggle-btn svg { display: block; }
+.sidebar-open-btn:hover { background: #1A1C1F; color: #E8EAED; border-color: #3B82F6; }
+.sidebar-open-btn svg { display: block; }
+.sidebar-open-btn.visible { display: flex; }
 
 .sidebar-overlay {
   display: none;
@@ -972,7 +992,13 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: transform 0.25s ease, opacity 0.25s ease;
+  transition: margin-left 0.25s ease, opacity 0.2s ease;
+}
+/* Desktop: eingeklappt via negative margin */
+.chat-sidebar.sidebar-hidden {
+  margin-left: -280px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 
@@ -2185,7 +2211,6 @@ body {
 /* ── MOBILE: Tab-Bar wieder einblenden ── */
 @media (max-width: 768px) {
   .app-header { display: block !important; }
-  .sidebar-toggle-btn { display: flex; }
   .erklaeren-layout { height: calc(100vh - 52px - 56px); }
   .chat-messages { padding: 12px 14px; }
   .chat-input-area { padding: 8px 12px 12px; }
@@ -2193,20 +2218,26 @@ body {
   .chat-bubble.assistant { max-width: 100%; }
   .depth-slider-row { padding: 4px 2px 6px; gap: 6px; }
   .mobile-hidden { display: none !important; }
+  .sidebar-open-btn { display: flex; }
 }
 
-/* Sidebar collapse bei schmalen Fenstern */
-@media (max-width: 900px) {
-  .sidebar-toggle-btn { display: flex; }
+/* Sidebar auf Mobile: fixed overlay */
+@media (max-width: 768px) {
   .chat-sidebar {
     position: fixed;
     top: 0; left: 0; bottom: 0;
     z-index: 200;
+    margin-left: 0;
     transform: translateX(-100%);
     opacity: 0;
     pointer-events: none;
+    transition: transform 0.25s ease, opacity 0.2s ease;
   }
-  .chat-sidebar.open {
+  .chat-sidebar.sidebar-hidden {
+    margin-left: 0;
+    transform: translateX(-100%);
+  }
+  .chat-sidebar.sidebar-open {
     transform: translateX(0);
     opacity: 1;
     pointer-events: auto;
@@ -2454,12 +2485,17 @@ body {
 #tab-premium > *,
 #tab-profile > *,
 #tab-about > *,
-#tab-templates > *,
+#tab-templates > *:not(.templates-grid),
 #tab-team > * {
   max-width: 680px;
   margin-left: auto;
   margin-right: auto;
   display: block;
+}
+#tab-templates > .templates-grid {
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Abstände zwischen Sektionen */
@@ -2707,9 +2743,6 @@ body {
 
 <!-- CONTENT -->
 <div class="app-content">
-  <button class="sidebar-toggle-btn" id="sidebarToggleBtn" onclick="toggleSidebar()">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-  </button>
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
   <div class="erklaeren-layout">
@@ -2721,9 +2754,14 @@ body {
             <span id="sidebarCount">5</span> heute
           </span>
         </div>
-        <button class="new-chat-btn" onclick="neuerChat()">
-          <i data-lucide="plus" style="width:15px;height:15px;"></i> Neuer Chat
-        </button>
+        <div style="display:flex;gap:8px;">
+          <button class="new-chat-btn" onclick="neuerChat()" style="flex:1;">
+            <i data-lucide="plus" style="width:15px;height:15px;"></i> Neuer Chat
+          </button>
+          <button class="sidebar-toggle-btn" id="sidebarCollapseBtn" onclick="toggleSidebar()" title="Sidebar einklappen">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><polyline points="15 9 12 12 15 15"/></svg>
+          </button>
+        </div>
       </div>
       <div class="sidebar-nav">
         <button class="nav-item active" id="nav-home" onclick="switchTab('home')">
@@ -2770,6 +2808,9 @@ body {
 
     <!-- Rechte Seite: alle Tabs -->
     <div class="chat-main">
+      <button class="sidebar-open-btn" id="sidebarOpenBtn" onclick="toggleSidebar()" title="Sidebar öffnen">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><polyline points="12 9 15 12 12 15"/></svg>
+      </button>
 
       <!-- HOME TAB -->
       <div class="tab-panel active" id="tab-home">
@@ -4034,12 +4075,11 @@ body {
       if (tabName === 'templates') renderTemplates();
       if (tabName === 'team') ladeTeams();
       // Sidebar schließen auf Mobile nach Tab-Wechsel
-      if (window.innerWidth <= 900) closeSidebar();
+      if (window.innerWidth <= 768) closeSidebar();
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
       lucide.createIcons();
-      checkSidebarCollapse();
 
       // Sprache auf Auth-Screen anwenden
       applyLanguage();
@@ -4721,23 +4761,40 @@ body {
     // ── Sidebar Toggle ──
     function toggleSidebar() {
       const sidebar = document.getElementById('chatSidebar');
+      const openBtn = document.getElementById('sidebarOpenBtn');
       const overlay = document.getElementById('sidebarOverlay');
-      if (sidebar.classList.contains('open')) {
-        closeSidebar();
+      const isMobile = window.innerWidth <= 768;
+
+      if (isMobile) {
+        // Mobile: overlay toggle
+        if (sidebar.classList.contains('sidebar-open')) {
+          sidebar.classList.remove('sidebar-open');
+          overlay.classList.remove('active');
+        } else {
+          sidebar.classList.add('sidebar-open');
+          overlay.classList.add('active');
+        }
       } else {
-        sidebar.classList.add('open');
-        overlay.classList.add('active');
+        // Desktop: inline toggle
+        if (sidebar.classList.contains('sidebar-hidden')) {
+          sidebar.classList.remove('sidebar-hidden');
+          openBtn.classList.remove('visible');
+        } else {
+          sidebar.classList.add('sidebar-hidden');
+          openBtn.classList.add('visible');
+        }
       }
     }
     function closeSidebar() {
-      document.getElementById('chatSidebar').classList.remove('open');
+      const sidebar = document.getElementById('chatSidebar');
+      sidebar.classList.remove('sidebar-open');
       document.getElementById('sidebarOverlay').classList.remove('active');
     }
-    function checkSidebarCollapse() {
-      // Bei Resize über 900px: Overlay entfernen
-      if (window.innerWidth > 900) closeSidebar();
-    }
-    window.addEventListener('resize', checkSidebarCollapse);
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        closeSidebar(); // Clean up mobile overlay on resize to desktop
+      }
+    });
 
     function zeigeLimitBanner() {
       document.getElementById('limitBanner').classList.add('visible');
