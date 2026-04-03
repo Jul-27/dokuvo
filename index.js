@@ -1433,12 +1433,42 @@ app.post('/teams', verifyUser, async (req, res) => {
 // Teams des Users laden
 app.get('/teams/:user_id', verifyUser, async (req, res) => {
   try {
-    const { data, error } = await supabase
+    const userId = req.params.user_id;
+    const userEmail = req.authUser.email;
+
+    // Teams laden über user_id
+    const { data: byId, error: e1 } = await supabase
       .from('team_members')
-      .select('role, teams(id, name, owner_id, created_at)')
-      .eq('user_id', req.params.user_id);
-    if (error) return res.status(500).json({ error: error.message });
-    const teams = (data || []).map(d => ({ ...d.teams, role: d.role }));
+      .select('id, role, user_id, teams(id, name, owner_id, created_at)')
+      .eq('user_id', userId);
+    if (e1) return res.status(500).json({ error: e1.message });
+
+    // Auch Teams laden wo nur die E-Mail eingetragen ist (user_id noch NULL)
+    let byEmail = [];
+    if (userEmail) {
+      const { data: emailData } = await supabase
+        .from('team_members')
+        .select('id, role, user_id, teams(id, name, owner_id, created_at)')
+        .eq('email', userEmail)
+        .is('user_id', null);
+      if (emailData?.length) {
+        byEmail = emailData;
+        // user_id nachträglich setzen für zukünftige Abfragen
+        const memberIds = emailData.map(m => m.id);
+        await supabase.from('team_members').update({ user_id: userId }).in('id', memberIds);
+      }
+    }
+
+    // Deduplizieren nach team_id
+    const allMembers = [...(byId || []), ...byEmail];
+    const seen = new Set();
+    const teams = [];
+    for (const d of allMembers) {
+      if (d.teams && !seen.has(d.teams.id)) {
+        seen.add(d.teams.id);
+        teams.push({ ...d.teams, role: d.role });
+      }
+    }
     res.json(teams);
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -1576,7 +1606,7 @@ app.get('/join-team/:teamId/:email', async (req, res) => {
   try {
     const email = decodeURIComponent(req.params.email);
     const { data: member } = await supabase.from('team_members')
-      .select('id, teams(name)')
+      .select('id, user_id, teams(name)')
       .eq('team_id', req.params.teamId)
       .eq('email', email)
       .maybeSingle();
