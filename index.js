@@ -969,12 +969,42 @@ app.post('/chat/rename', verifyUser, async (req, res) => {
 app.get('/chat/:user_id/:session_id', verifyUser, async (req, res) => {
   const { user_id, session_id } = req.params;
   try {
-    const { data } = await supabase
+    // Erst versuchen, eigene Nachrichten zu laden
+    let { data } = await supabase
       .from('chats')
       .select('role, message, created_at')
       .eq('user_id', user_id)
       .eq('session_id', session_id)
       .order('created_at', { ascending: true });
+
+    // Falls keine eigenen Nachrichten: prüfen ob über Team geteilt
+    if (!data || data.length === 0) {
+      const { data: share } = await supabase
+        .from('team_shares')
+        .select('shared_by, team_id')
+        .eq('session_id', session_id)
+        .limit(1)
+        .maybeSingle();
+      if (share) {
+        // Prüfen ob der User Mitglied des Teams ist
+        const { data: membership } = await supabase
+          .from('team_members')
+          .select('id')
+          .eq('team_id', share.team_id)
+          .eq('user_id', user_id)
+          .maybeSingle();
+        if (membership) {
+          const { data: sharedData } = await supabase
+            .from('chats')
+            .select('role, message, created_at')
+            .eq('user_id', share.shared_by)
+            .eq('session_id', session_id)
+            .order('created_at', { ascending: true });
+          data = sharedData || [];
+        }
+      }
+    }
+
     res.json(data || []);
   } catch (err) {
     res.status(500).json({ error: 'Fehler beim Laden' });
