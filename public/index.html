@@ -974,35 +974,67 @@ body {
 .sidebar-open-btn svg { display: block; }
 .sidebar-open-btn.visible { display: flex; }
 
-/* ── Persistent Topbar (sichtbar wenn Sidebar eingeklappt, nur Desktop) ── */
+/* ── Persistent Topbar (sichtbar wenn Sidebar eingeklappt) ── */
 .persistent-topbar {
   display: none;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px 16px;
-  background: #0D0D0D;
-  border-bottom: 1px solid #1E1E1E;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
   z-index: 10;
-  position: relative;
 }
 .persistent-topbar.visible {
   display: flex;
 }
-.persistent-topbar-row {
+.persistent-topbar-toggle {
+  display: flex;
+  flex-shrink: 0;
+  background: rgba(17,18,20,0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid #2A2D32;
+  border-radius: 8px;
+  color: #636366;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.persistent-topbar-toggle:hover {
+  background: #1A1C1F;
+  color: #E8EAED;
+  border-color: #3B82F6;
+}
+.persistent-topbar-toggle svg { display: block; }
+.persistent-topbar-box {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex: 1;
+  min-width: 0;
+  background: #0D0D0D;
+  border: 1px solid #1E1E1E;
+  border-radius: 10px;
+  padding: 8px 14px;
+  height: 40px;
 }
 .persistent-topbar-logo {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #F1F5F9;
   cursor: pointer;
   white-space: nowrap;
   transition: opacity 0.15s;
+}
+.persistent-topbar-logo img {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 .persistent-topbar-logo:hover {
   opacity: 0.8;
@@ -1023,25 +1055,6 @@ body {
   padding: 6px 14px !important;
   font-size: 0.8rem !important;
   white-space: nowrap;
-}
-.persistent-topbar-toggle {
-  display: flex;
-  background: none;
-  border: 1px solid #2A2D32;
-  border-radius: 8px;
-  color: #636366;
-  width: 36px;
-  height: 36px;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
-}
-.persistent-topbar-toggle:hover {
-  background: #1A1C1F;
-  color: #E8EAED;
-  border-color: #3B82F6;
 }
 
 .sidebar-overlay {
@@ -2894,7 +2907,10 @@ body {
     <!-- Rechte Seite: alle Tabs -->
     <div class="chat-main">
       <div class="persistent-topbar" id="persistentTopbar">
-        <div class="persistent-topbar-row">
+        <button class="persistent-topbar-toggle" id="sidebarOpenBtn" onclick="toggleSidebar()" title="Sidebar öffnen">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><polyline points="12 9 15 12 12 15"/></svg>
+        </button>
+        <div class="persistent-topbar-box">
           <div class="persistent-topbar-logo" onclick="switchTab('home')" title="Zum Erklären-Tab">
             <img src="data:image/png;base64,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" style="width:20px;height:20px;vertical-align:middle;"> Dokuvo
         </div>
@@ -2903,11 +2919,6 @@ body {
           </span>
           <button class="new-chat-btn persistent-topbar-new" onclick="neuerChat()">
             <i data-lucide="plus" style="width:15px;height:15px;"></i> Neu
-          </button>
-        </div>
-        <div class="persistent-topbar-row">
-          <button class="persistent-topbar-toggle" id="sidebarOpenBtn" onclick="toggleSidebar()" title="Sidebar öffnen">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><polyline points="12 9 15 12 12 15"/></svg>
           </button>
         </div>
       </div>
