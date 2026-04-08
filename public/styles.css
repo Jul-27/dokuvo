@@ -301,15 +301,15 @@ body {
       z-index: 9999;
       box-shadow: 0 0 0 4000px rgba(0,0,0,0.55);
       border-radius: 12px;
-      border: 2px solid #3B82F6;
+      border: 2px solid var(--accent-light);
       pointer-events: none;
       transition: all 0.4s ease;
     }
     .tour-tooltip {
       position: absolute;
       z-index: 10000;
-      background: #1A1C1F;
-      border: 1px solid #3B82F6;
+      background: var(--bg-elevated);
+      border: 1px solid var(--accent-border);
       border-radius: 14px;
       padding: 20px 24px;
       max-width: 320px;
@@ -318,13 +318,13 @@ body {
       transition: all 0.4s ease;
     }
     .tour-tooltip h4 {
-      color: #E8EAED;
+      color: var(--text-primary);
       font-size: 1rem;
       font-weight: 700;
       margin-bottom: 8px;
     }
     .tour-tooltip p {
-      color: #9CA3AF;
+      color: var(--text-secondary);
       font-size: 0.85rem;
       line-height: 1.6;
       margin-bottom: 16px;
@@ -336,7 +336,7 @@ body {
       gap: 10px;
     }
     .tour-step-indicator {
-      color: #6B7280;
+      color: var(--text-secondary);
       font-size: 0.75rem;
     }
     .tour-btn-group { display: flex; gap: 8px; }
@@ -351,15 +351,15 @@ body {
     }
     .tour-btn-skip {
       background: transparent;
-      color: #6B7280;
-      border: 1px solid #374151;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-default);
     }
-    .tour-btn-skip:hover { background: #1F2937; color: #9CA3AF; }
+    .tour-btn-skip:hover { background: var(--bg-overlay); color: var(--text-secondary); }
     .tour-btn-next {
-      background: #3B82F6;
+      background: var(--accent);
       color: white;
     }
-    .tour-btn-next:hover { background: #2563EB; }
+    .tour-btn-next:hover { background: var(--accent); }
     .tour-arrow {
       position: absolute;
       width: 12px;
@@ -377,8 +377,8 @@ body {
 
     /* ── HEADER ── */
     .app-header {
-      background: var(--white);
-      border-bottom: 1px solid var(--gray-200);
+      background: var(--bg-base);
+      border-bottom: 1px solid var(--border-subtle);
       padding: 16px 20px 0;
       position: sticky;
       top: 0;
@@ -398,7 +398,7 @@ body {
       gap: 8px;
       font-size: 1.3rem;
       font-weight: 700;
-      color: var(--primary);
+      color: var(--text-primary);
     }
 
     .header-badge {
@@ -2276,25 +2276,25 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
 }
 .share-modal {
-  background: #1A1C1F;
-  border: 1px solid #2A2D32;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
   border-radius: 16px;
   padding: 28px 32px;
   max-width: 480px;
   width: 90%;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+  box-shadow: var(--shadow-lg);
 }
 .share-modal h3 {
-  color: #E8EAED;
+  color: var(--text-primary);
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 6px;
 }
 .share-modal p {
-  color: #7A7F88;
+  color: var(--text-secondary);
   font-size: 0.85rem;
   margin-bottom: 20px;
 }
@@ -2305,17 +2305,17 @@ body {
 }
 .share-link-input {
   flex: 1;
-  background: #111214;
-  border: 1px solid #2A2D32;
+  background: var(--bg-base);
+  border: 1px solid var(--border-default);
   border-radius: 8px;
   padding: 10px 14px;
-  color: #E8EAED;
+  color: var(--text-primary);
   font-size: 0.85rem;
   outline: none;
 }
-.share-link-input:focus { border-color: #3B82F6; }
+.share-link-input:focus { border-color: var(--accent-light); }
 .share-copy-btn {
-  background: #3B82F6;
+  background: var(--accent-light);
   color: white;
   border: none;
   border-radius: 8px;
@@ -2326,23 +2326,23 @@ body {
   white-space: nowrap;
   transition: all 0.2s;
 }
-.share-copy-btn:hover { background: #2563EB; }
-.share-copy-btn.copied { background: #34D399; }
+.share-copy-btn:hover { background: var(--accent); }
+.share-copy-btn.copied { background: var(--success); }
 .share-modal-footer {
   display: flex;
   justify-content: flex-end;
 }
 .share-close-btn {
   background: transparent;
-  color: #7A7F88;
-  border: 1px solid #2A2D32;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-default);
   border-radius: 8px;
   padding: 8px 20px;
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s;
 }
-.share-close-btn:hover { background: #1F2937; color: #9CA3AF; }
+.share-close-btn:hover { background: var(--bg-overlay); color: var(--text-secondary); }
 
 /* Folgefragen-Chips */
 .followup-container {
@@ -2508,8 +2508,8 @@ body {
   left: 0;
   right: 0;
   height: 56px;
-  background: #0D0D0D;
-  border-top: 1px solid #1E1E1E;
+  background: var(--bg-base);
+  border-top: 1px solid var(--border-subtle);
   z-index: 200;
   padding: 0;
 }
@@ -2529,7 +2529,7 @@ body {
   gap: 3px;
   background: none;
   border: none;
-  color: #48484A;
+  color: var(--text-muted);
   cursor: pointer;
   font-size: 10px;
   font-weight: 500;
@@ -2538,15 +2538,15 @@ body {
   font-family: inherit;
 }
 
-.mobile-nav-item.active { color: #3B82F6; }
+.mobile-nav-item.active { color: var(--accent-light); }
 .mobile-nav-item:active { opacity: 0.7; }
 
 /* ── MOBILE HEADER ── */
 .app-header {
-  background: rgba(13,13,13,0.95);
+  background: rgba(6, 11, 24, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid #1E1E1E;
+  border-bottom: 1px solid var(--border-subtle);
   padding: 0 16px;
   height: 52px;
   display: none;
@@ -2560,7 +2560,7 @@ body {
   gap: 8px;
   font-size: 1.1rem;
   font-weight: 700;
-  color: #F1F5F9;
+  color: var(--text-primary);
 }
 
 .header-top {
