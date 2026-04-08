@@ -458,24 +458,25 @@ body {
     /* ── HOME TAB ── */
     .section-title {
       font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--primary);
+      font-weight: 800;
+      color: var(--text-primary);
       margin-bottom: 4px;
+      letter-spacing: -0.02em;
     }
 
     .section-subtitle {
-      color: var(--gray-400);
+      color: var(--text-secondary);
       font-size: 0.9rem;
       margin-bottom: 24px;
     }
 
     .input-card {
-  background: #1C1C1E;
+  background: var(--bg-elevated);
   border-radius: var(--radius-lg);
   padding: 20px;
   box-shadow: var(--shadow-sm);
   margin-bottom: 16px;
-  border: 1.5px solid #2C2C2E;
+  border: 1.5px solid var(--border-default);
 }
 
     .upload-buttons {
@@ -687,7 +688,7 @@ body {
     .profile-avatar {
       width: 64px;
       height: 64px;
-      background: var(--accent-light);
+      background: linear-gradient(135deg, var(--accent-light), var(--accent));
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -698,21 +699,21 @@ body {
 
     .profile-email {
       font-size: 0.9rem;
-      color: var(--gray-600);
+      color: var(--text-secondary);
       margin-bottom: 4px;
     }
 
     .profile-plan {
       font-size: 0.85rem;
       font-weight: 600;
-      color: var(--accent);
+      color: var(--accent-lighter);
     }
 
     .settings-card {
-      background: var(--white);
+      background: var(--bg-elevated);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-sm);
-      border: 1.5px solid var(--gray-200);
+      border: 1.5px solid var(--border-default);
       overflow: hidden;
       margin-bottom: 16px;
     }
@@ -722,13 +723,13 @@ body {
       align-items: center;
       justify-content: space-between;
       padding: 16px 20px;
-      border-bottom: 1px solid var(--gray-200);
+      border-bottom: 1px solid var(--border-subtle);
       cursor: pointer;
       transition: background 0.2s;
     }
 
     .settings-item:last-child { border-bottom: none; }
-    .settings-item:hover { background: var(--gray-50); }
+    .settings-item:hover { background: var(--bg-overlay); }
 
     .settings-item-left {
       display: flex;
@@ -739,7 +740,7 @@ body {
     .settings-icon {
       width: 36px;
       height: 36px;
-      background: var(--gray-100);
+      background: var(--bg-surface);
       border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
@@ -750,17 +751,17 @@ body {
     .settings-label {
       font-size: 0.95rem;
       font-weight: 500;
-      color: var(--primary);
+      color: var(--text-primary);
     }
 
-    .settings-arrow { color: var(--gray-400); font-size: 0.8rem; }
+    .settings-arrow { color: var(--text-muted); font-size: 0.8rem; }
 
     .btn-logout {
       width: 100%;
       padding: 14px;
-      background: var(--white);
+      background: var(--bg-elevated);
       color: var(--danger);
-      border: 1.5px solid #FCA5A5;
+      border: 1.5px solid rgba(239,68,68,0.3);
       border-radius: var(--radius-md);
       font-size: 1rem;
       font-weight: 600;
@@ -768,11 +769,11 @@ body {
       transition: all 0.2s;
     }
 
-    .btn-logout:hover { background: #FEF2F2; }
+    .btn-logout:hover { background: var(--danger-surface); }
 
     /* ── PREMIUM TAB ── */
     .premium-hero {
-      background: linear-gradient(135deg, #1E40AF, #2563EB);
+      background: linear-gradient(135deg, #1D4ED8, var(--accent));
       border-radius: var(--radius-xl);
       padding: 32px 24px;
       text-align: center;
@@ -821,11 +822,11 @@ body {
     .btn-premium:hover { opacity: 0.9; }
 
     .premium-features {
-      background: var(--white);
+      background: var(--bg-elevated);
       border-radius: var(--radius-lg);
       padding: 20px;
       box-shadow: var(--shadow-sm);
-      border: 1.5px solid var(--gray-200);
+      border: 1.5px solid var(--border-default);
     }
 
     .premium-feature-item {
@@ -833,9 +834,9 @@ body {
       align-items: center;
       gap: 12px;
       padding: 12px 0;
-      border-bottom: 1px solid var(--gray-200);
+      border-bottom: 1px solid var(--border-subtle);
       font-size: 0.9rem;
-      color: var(--gray-800);
+      color: var(--text-secondary);
     }
 
     .premium-feature-item:last-child { border-bottom: none; }
@@ -843,22 +844,22 @@ body {
     .feature-check {
       width: 24px;
       height: 24px;
-      background: #064E3B;
+      background: var(--success-surface);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      color: #34D399;
+      color: var(--success);
     }
 
     /* ── ÜBER TAB ── */
     .about-card {
-      background: var(--white);
+      background: var(--bg-elevated);
       border-radius: var(--radius-lg);
       padding: 24px 20px;
       box-shadow: var(--shadow-sm);
-      border: 1.5px solid var(--gray-200);
+      border: 1.5px solid var(--border-default);
       margin-bottom: 16px;
     }
 
@@ -866,12 +867,12 @@ body {
       font-size: 1rem;
       font-weight: 600;
       margin-bottom: 8px;
-      color: var(--primary);
+      color: var(--text-primary);
     }
 
     .about-card p {
       font-size: 0.9rem;
-      color: var(--gray-600);
+      color: var(--text-secondary);
       line-height: 1.7;
     }
 
@@ -879,7 +880,7 @@ body {
     .disclaimer {
       text-align: center;
       font-size: 0.75rem;
-      color: var(--gray-400);
+      color: var(--text-muted);
       padding: 16px 20px;
     }
 
@@ -888,16 +889,16 @@ body {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      background: var(--gray-100);
+      background: var(--bg-overlay);
       border-radius: 20px;
       padding: 4px 10px;
       font-size: 0.8rem;
-      color: var(--gray-600);
+      color: var(--text-secondary);
       font-weight: 500;
     }
 
     .remaining-badge.premium {
-      background: #DCFCE7;
+      background: var(--success-surface);
       color: var(--success);
     }
 
@@ -2613,10 +2614,10 @@ body {
   .fristen-block { padding: 10px 12px; }
 }
 
-/* ── VORLAGEN ── */
+/* ══ VORLAGEN ══ */
 .templates-intro {
-  background: #161B22;
-  border: 1px solid #2C2C2E;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
   border-radius: 12px;
   padding: 16px 20px;
   margin-bottom: 24px;
@@ -2625,13 +2626,13 @@ body {
   gap: 12px;
 }
 .templates-intro-icon {
-  color: #3B82F6;
+  color: var(--accent-light);
   flex-shrink: 0;
   margin-top: 2px;
 }
 .templates-intro-text {
   font-size: 0.88rem;
-  color: #9CA3AF;
+  color: var(--text-secondary);
   line-height: 1.55;
 }
 .templates-grid {
@@ -2641,8 +2642,8 @@ body {
   margin-top: 4px;
 }
 .template-card {
-  background: #1C1C1E;
-  border: 1.5px solid #2C2C2E;
+  background: var(--bg-elevated);
+  border: 1.5px solid var(--border-default);
   border-radius: 14px;
   padding: 20px 18px;
   display: flex;
@@ -2652,8 +2653,8 @@ body {
   cursor: default;
 }
 .template-card:hover {
-  border-color: #3B82F6;
-  background: #1E2535;
+  border-color: var(--accent-light);
+  background: var(--bg-overlay);
 }
 .template-card-header {
   display: flex;
@@ -2663,23 +2664,23 @@ body {
 .template-card-icon {
   width: 34px;
   height: 34px;
-  background: #252A35;
+  background: var(--accent-surface);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #60A5FA;
+  color: var(--accent-lighter);
   flex-shrink: 0;
 }
 .template-card-title {
   font-size: 0.93rem;
   font-weight: 600;
-  color: #F1F5F9;
+  color: var(--text-primary);
   line-height: 1.3;
 }
 .template-card-desc {
   font-size: 0.81rem;
-  color: #6B7280;
+  color: var(--text-secondary);
   flex: 1;
   line-height: 1.55;
 }
@@ -2687,8 +2688,8 @@ body {
   align-self: flex-start;
   margin-top: 4px;
   background: transparent;
-  color: #60A5FA;
-  border: 1px solid #1E3A5F;
+  color: var(--accent-lighter);
+  border: 1px solid var(--accent-border);
   border-radius: 8px;
   padding: 6px 14px;
   font-size: 0.8rem;
@@ -2698,9 +2699,9 @@ body {
   font-family: inherit;
 }
 .template-card-btn:hover {
-  background: #1E3A5F;
-  border-color: #3B82F6;
-  color: #93C5FD;
+  background: var(--accent-surface);
+  border-color: var(--accent-light);
+  color: var(--accent-lighter);
 }
 
 /* ── TAB INHALTE DESKTOP OPTIMIERUNG ── */
