@@ -94,37 +94,24 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── LEGACY STYLES (to be refactored) ── */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
+/* ── LEGACY VARIABLE ALIASES (bridge to new tokens) ── */
     :root {
-  --primary: #F1F5F9;
-  --accent: #3B82F6;
-  --accent-light: #1E3A5F;
-  --success: #34D399;
-  --warning: #FBBF24;
-  --danger: #F87171;
-  --gray-50: #0D0D0D;
-  --gray-100: #1C1C1E;
-  --gray-200: #2C2C2E;
-  --gray-400: #636366;
-  --gray-600: #AEAEB2;
-  --gray-800: #E5E7EB;
-  --white: #1C1C1E;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.5);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.6);
+  --primary: var(--text-primary);
+  --gray-50: var(--bg-base);
+  --gray-100: var(--bg-elevated);
+  --gray-200: var(--border-default);
+  --gray-400: var(--text-muted);
+  --gray-600: var(--text-secondary);
+  --gray-800: var(--text-primary);
+  --white: var(--bg-elevated);
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(160deg, #0D0D0D 0%, #1A1A1A 50%, #111111 100%);
+  font-family: var(--font-family);
+  background: linear-gradient(160deg, var(--bg-base) 0%, var(--bg-surface) 50%, var(--bg-base) 100%);
   min-height: 100vh;
-  color: var(--primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
 }
 
 /* ══ AUTH SCREEN ══ */
@@ -528,28 +515,26 @@ body {
     .text-area {
   width: 100%;
   height: 140px;
-  border: 1.5px solid #3A3A3C;
+  border: 1.5px solid var(--border-default);
   border-radius: var(--radius-md);
   padding: 14px;
   font-size: 0.95rem;
   resize: none;
   outline: none;
   font-family: inherit;
-  color: #F1F5F9;
-  background: #111111;
+  color: var(--text-primary);
+  background: var(--bg-base);
   transition: border 0.2s;
 }
 
 .text-area::placeholder {
-  color: #48484A;
+  color: var(--text-muted);
 }
 
 .text-area:focus {
   border-color: var(--accent);
-  background: #161616;
+  background: var(--bg-surface);
 }
-
-    .text-area:focus { border-color: var(--accent); }
 
     .btn-explain {
       width: 100%;
@@ -2724,7 +2709,7 @@ body {
 #tab-profile::-webkit-scrollbar-thumb,
 #tab-about::-webkit-scrollbar-thumb,
 #tab-templates::-webkit-scrollbar-thumb,
-#tab-team::-webkit-scrollbar-thumb { background: #2C2C2E; border-radius: 4px; }
+#tab-team::-webkit-scrollbar-thumb { background: var(--bg-overlay); border-radius: 4px; }
 #tab-history::-webkit-scrollbar-track,
 #tab-premium::-webkit-scrollbar-track,
 #tab-profile::-webkit-scrollbar-track,
@@ -2789,7 +2774,7 @@ body {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #3B82F6, #2563EB);
+  background: linear-gradient(135deg, var(--accent-light), var(--accent));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2816,25 +2801,25 @@ body {
 .profile-section-title {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #F1F5F9;
+  color: var(--text-primary);
   margin-bottom: 4px;
 }
 
 .profile-email-display {
   font-size: 0.85rem;
-  color: #636366;
+  color: var(--text-muted);
   margin-bottom: 4px;
 }
 
 .profile-plan-display {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #3B82F6;
+  color: var(--accent-light);
 }
 
 .profile-card {
-  background: #1C1C1E;
-  border: 1.5px solid #2C2C2E;
+  background: var(--bg-elevated);
+  border: 1.5px solid var(--border-default);
   border-radius: 14px;
   padding: 20px;
   margin-bottom: 16px;
@@ -2843,7 +2828,7 @@ body {
   margin-right: auto;
 }
 
-.danger-card { border-color: rgba(248,113,113,0.2); }
+.danger-card { border-color: rgba(239,68,68,0.2); }
 
 .profile-card-title {
   display: flex;
@@ -2851,31 +2836,31 @@ body {
   gap: 8px;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #F1F5F9;
+  color: var(--text-primary);
   margin-bottom: 14px;
 }
 
 .profile-input {
   width: 100%;
   padding: 10px 14px;
-  background: #111111;
-  border: 1.5px solid #2C2C2E;
+  background: var(--bg-base);
+  border: 1.5px solid var(--border-default);
   border-radius: 10px;
-  color: #F1F5F9;
+  color: var(--text-primary);
   font-size: 0.9rem;
   outline: none;
   font-family: inherit;
   transition: border-color 0.2s;
 }
 
-.profile-input:focus { border-color: #3B82F6; }
-.profile-input::placeholder { color: #48484A; }
+.profile-input:focus { border-color: var(--accent-light); }
+.profile-input::placeholder { color: var(--text-muted); }
 
 .profile-save-btn {
   margin-top: 12px;
   padding: 9px 20px;
-  background: #2C2C2E;
-  color: #F1F5F9;
+  background: var(--bg-overlay);
+  color: var(--text-primary);
   border: none;
   border-radius: 8px;
   font-size: 0.85rem;
@@ -2885,7 +2870,7 @@ body {
   width: 100%;
 }
 
-.profile-save-btn:hover { background: #3C3C3E; }
+.profile-save-btn:hover { background: var(--border-default); }
 
 .profile-msg {
   font-size: 0.8rem;
@@ -2893,29 +2878,29 @@ body {
   min-height: 18px;
 }
 
-.profile-msg.success { color: #34D399; }
-.profile-msg.error { color: #F87171; }
+.profile-msg.success { color: var(--success); }
+.profile-msg.error { color: var(--danger); }
 
 .profile-info-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid #2C2C2E;
+  border-bottom: 1px solid var(--border-default);
   font-size: 0.875rem;
 }
 
 .profile-info-row:last-of-type { border-bottom: none; }
 
-.profile-info-label { color: #636366; }
-.profile-info-value { color: #F1F5F9; font-weight: 500; }
+.profile-info-label { color: var(--text-muted); }
+.profile-info-value { color: var(--text-primary); font-weight: 500; }
 
 .profile-delete-btn {
   width: 100%;
   padding: 10px;
-  background: rgba(248,113,113,0.1);
-  color: #F87171;
-  border: 1.5px solid rgba(248,113,113,0.3);
+  background: var(--danger-surface);
+  color: var(--danger);
+  border: 1.5px solid var(--danger-border);
   border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
@@ -2923,7 +2908,7 @@ body {
   transition: all 0.2s;
 }
 
-.profile-delete-btn:hover { background: rgba(248,113,113,0.2); }
+.profile-delete-btn:hover { background: rgba(239,68,68,0.15); }
 
 @media (max-width: 768px) {
   .profile-card { margin-left: 0; margin-right: 0; max-width: 100%; }
