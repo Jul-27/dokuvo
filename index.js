@@ -83,6 +83,9 @@ app.get('/app', (req, res) => {
   res.send(fs.readFileSync(htmlPath, 'utf8'));
 });
 
+// Statische Dateien (CSS, Bilder etc.) aus public/ ausliefern
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Stripe Webhook
 app.post('/webhook', async (req, res) => {
   const sig = req.headers['stripe-signature'];
