@@ -598,7 +598,7 @@ body {
     }
 
 .result-text {
-  color: #D1D1D6;
+  color: var(--text-secondary);
   line-height: 1.75;
   font-size: 0.9rem;
 }
@@ -905,7 +905,7 @@ body {
 .result-text h2 {
   font-size: 0.78rem;
   font-weight: 600;
-  color: #AEAEB2;
+  color: var(--text-secondary);
   margin: 20px 0 8px;
   text-transform: uppercase;
   letter-spacing: 0.07em;
@@ -941,11 +941,11 @@ body {
 .result-text ol li {
   padding: 9px 12px 9px 38px;
   position: relative;
-  color: #C7C7CC;
+  color: var(--text-secondary);
   font-size: 0.875rem;
   line-height: 1.6;
-  background: #1A1A1A;
-  border-radius: 8px;
+  background: var(--bg-base);
+  border-radius: var(--radius-sm);
   counter-increment: item;
   border: none;
 }
@@ -958,8 +958,8 @@ body {
   transform: translateY(-50%);
   width: 18px;
   height: 18px;
-  background: #2C2C2E;
-  color: #AEAEB2;
+  background: var(--bg-overlay);
+  color: var(--text-secondary);
   border-radius: 5px;
   font-size: 0.7rem;
   font-weight: 600;
@@ -971,11 +971,11 @@ body {
 .result-text ul li {
   padding: 9px 12px 9px 28px;
   position: relative;
-  color: #C7C7CC;
+  color: var(--text-secondary);
   font-size: 0.875rem;
   line-height: 1.6;
-  background: #1A1A1A;
-  border-radius: 8px;
+  background: var(--bg-base);
+  border-radius: var(--radius-sm);
   border: none;
 }
 
@@ -987,12 +987,12 @@ body {
   transform: translateY(-50%);
   width: 5px;
   height: 5px;
-  background: #48484A;
+  background: var(--text-muted);
   border-radius: 50%;
 }
 
 .result-text strong {
-  color: #F1F5F9;
+  color: var(--text-primary);
   font-weight: 600;
   background: none;
   padding: 0;
@@ -1000,7 +1000,7 @@ body {
 }
 
 .result-text p {
-  color: #C7C7CC;
+  color: var(--text-secondary);
   font-size: 0.875rem;
   line-height: 1.75;
   margin: 0 0 12px;
@@ -2241,18 +2241,18 @@ body {
   gap: 6px;
   margin-top: 10px;
   padding-top: 8px;
-  border-top: 1px solid #1C1C1E;
+  border-top: 1px solid var(--border-subtle);
 }
 .feedback-label {
   font-size: 11px;
-  color: #3C3C3E;
+  color: var(--text-dim);
   margin-right: 2px;
 }
 .feedback-btn {
   background: none;
-  border: 1px solid #2C2C2E;
-  border-radius: 8px;
-  color: #48484A;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
   cursor: pointer;
   padding: 5px 8px;
   display: flex;
@@ -2260,10 +2260,11 @@ body {
   gap: 5px;
   font-size: 12px;
   transition: all 0.15s;
+  font-family: var(--font-family);
 }
-.feedback-btn:hover { border-color: #48484A; color: #AEAEB2; }
-.feedback-btn.active-up { border-color: #34D399; color: #34D399; background: rgba(52,211,153,0.08); }
-.feedback-btn.active-down { border-color: #F87171; color: #F87171; background: rgba(248,113,113,0.08); }
+.feedback-btn:hover { border-color: var(--text-muted); color: var(--text-secondary); }
+.feedback-btn.active-up { border-color: var(--success); color: var(--success); background: var(--success-surface); }
+.feedback-btn.active-down { border-color: var(--danger); color: var(--danger); background: var(--danger-surface); }
 
 /* ── Share Modal ── */
 .share-modal-overlay {
@@ -2352,26 +2353,27 @@ body {
 }
 .followup-chip {
   background: transparent;
-  border: 1px solid #3A3A3C;
-  border-radius: 20px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
   padding: 6px 14px;
   font-size: 13px;
-  color: #AEAEB2;
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.15s;
   text-align: left;
   line-height: 1.4;
+  font-family: var(--font-family);
 }
 .followup-chip:hover {
-  border-color: #3B82F6;
-  color: #F1F5F9;
-  background: rgba(59,130,246,0.08);
+  border-color: var(--accent-light);
+  color: var(--text-primary);
+  background: var(--accent-surface);
 }
 
 /* Typing dots animation */
 .typing-dots span {
   display: inline-block;
-  color: #48484A;
+  color: var(--text-muted);
   font-size: 1.4rem;
   animation: typingBounce 1.2s infinite;
 }
@@ -2386,7 +2388,7 @@ body {
 .input-hint {
   text-align: center;
   font-size: 0.72rem;
-  color: #3C3C3E;
+  color: var(--text-dim);
   margin-top: 10px;
 }
 
