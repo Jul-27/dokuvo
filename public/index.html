@@ -309,18 +309,47 @@
             </div>
           </div>
         </div>
-        <div class="premium-hero">
-          <h2>Dokuvo Premium</h2>
-          <p>Unbegrenzte Erklärungen, alle Features, keine Limits.</p>
-          <div class="premium-price">9.99€ <span>/ Monat</span></div>
-          <button class="btn-premium" onclick="upgrade()"><i data-lucide="zap" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:6px;"></i>Jetzt upgraden</button>
-        </div>
-        <div class="premium-features">
-          <div class="premium-feature-item"><div class="feature-check"><i data-lucide="check" style="width:14px;height:14px;"></i></div>Unbegrenzte Erklärungen täglich</div>
-          <div class="premium-feature-item"><div class="feature-check"><i data-lucide="check" style="width:14px;height:14px;"></i></div>PDF Dokumente hochladen</div>
-          <div class="premium-feature-item"><div class="feature-check"><i data-lucide="check" style="width:14px;height:14px;"></i></div>Fotos von Dokumenten analysieren</div>
-          <div class="premium-feature-item"><div class="feature-check"><i data-lucide="check" style="width:14px;height:14px;"></i></div>Vollständiger Verlauf</div>
-          <div class="premium-feature-item"><div class="feature-check"><i data-lucide="check" style="width:14px;height:14px;"></i></div>Prioritäts-Support</div>
+        <div class="premium-page">
+          <div class="premium-hero">
+            <div class="premium-hero-icon">&#9733;</div>
+            <h2>Hol mehr aus deinen Dokumenten</h2>
+            <p>Unbegrenzte Analysen, tiefere Einblicke und Team-Collaboration.</p>
+          </div>
+          <div class="plans-row">
+            <div class="plan-card">
+              <div class="plan-name">Free</div>
+              <div class="plan-price">0€</div>
+              <div class="plan-period">Kostenlos, für immer</div>
+              <ul class="plan-features">
+                <li><span class="plan-check">✓</span> 5 Analysen pro Tag</li>
+                <li><span class="plan-check">✓</span> Standard-Zusammenfassung</li>
+                <li><span class="plan-check">✓</span> Chat mit Folgefragen</li>
+                <li><span class="plan-cross">✗</span> Tiefenanalyse</li>
+                <li><span class="plan-cross">✗</span> Dokumentvergleich</li>
+                <li><span class="plan-cross">✗</span> Prioritäts-Verarbeitung</li>
+                <li><span class="plan-cross">✗</span> Team-Features</li>
+              </ul>
+              <button class="plan-btn plan-btn-current">Aktueller Plan</button>
+            </div>
+            <div class="plan-card plan-card-premium">
+              <div class="plan-name" style="color:var(--premium-gold);">Premium</div>
+              <div class="plan-price">9,99€ <span>/ Monat</span></div>
+              <div class="plan-period">Jederzeit kündbar</div>
+              <ul class="plan-features">
+                <li><span class="plan-gold">✓</span> Unbegrenzte Analysen</li>
+                <li><span class="plan-gold">✓</span> Ausführliche Zusammenfassung</li>
+                <li><span class="plan-gold">✓</span> Chat mit Folgefragen</li>
+                <li><span class="plan-gold">✓</span> Tiefenanalyse</li>
+                <li><span class="plan-gold">✓</span> Dokumentvergleich</li>
+                <li><span class="plan-gold">✓</span> Prioritäts-Verarbeitung</li>
+                <li><span class="plan-gold">✓</span> Team & Sharing</li>
+              </ul>
+              <button class="plan-btn plan-btn-upgrade" onclick="upgrade()">Jetzt upgraden</button>
+            </div>
+          </div>
+          <div class="premium-footer-info">
+            Sichere Zahlung via Stripe · Jederzeit kündbar · <a href="#">FAQ</a>
+          </div>
         </div>
       </div>
 
