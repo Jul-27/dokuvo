@@ -3043,3 +3043,30 @@ body {
   border-color: var(--accent-light);
 }
 
+/* ── Theme Toggle Button ── */
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin: 4px 12px;
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.theme-toggle-btn:hover {
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  border-color: var(--border-strong);
+}
+
+.theme-icon {
+  width: 16px;
+  height: 16px;
+}
+
