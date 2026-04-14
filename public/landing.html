@@ -221,6 +221,12 @@
   </footer>
 
   <script>
+    // Sync theme from app
+    (function() {
+      var saved = localStorage.getItem('dokuvo-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+
     // Nav scroll effect
     window.addEventListener('scroll', function() {
       document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 20);
