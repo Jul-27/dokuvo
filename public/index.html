@@ -356,69 +356,91 @@
       <!-- PROFIL TAB -->
       <div class="tab-panel" id="tab-profile">
 
-        <!-- Profilbild & Name -->
-        <div class="profile-section">
-          <div class="profile-avatar-upload" onclick="document.getElementById('avatarInput').click()">
-            <img id="profileAvatarImg" src="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
-            <div id="profileAvatarInitial" style="font-size:1.8rem;font-weight:700;color:white;">?</div>
-            <div class="avatar-overlay">
-              <i data-lucide="camera" style="width:20px;height:20px;"></i>
+        <div class="settings-page">
+          <div class="settings-title">Einstellungen</div>
+
+          <!-- Konto -->
+          <div class="settings-section">
+            <div class="settings-section-label">Konto</div>
+            <div class="settings-card">
+              <div class="settings-row">
+                <div class="profile-avatar-upload" onclick="document.getElementById('avatarInput').click()">
+                  <img id="profileAvatarImg" src="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                  <div id="profileAvatarInitial" style="font-size:1.2rem;font-weight:700;color:white;">?</div>
+                  <div class="avatar-overlay">
+                    <i data-lucide="camera" style="width:16px;height:16px;"></i>
+                  </div>
+                </div>
+                <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="avatarHochladen()">
+                <div style="flex:1;">
+                  <div style="font-size:0.95rem;font-weight:600;color:var(--text-primary);" id="profileEmailDisplay">—</div>
+                  <div style="font-size:0.75rem;color:var(--text-muted);" id="profilePlanDisplay">—</div>
+                </div>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-label">Anzeigename</div>
+                <div class="settings-row-value">
+                  <input type="text" id="displayNameInput" class="settings-inline-input" placeholder="Dein Name (optional)">
+                </div>
+                <button class="settings-row-action" onclick="speichereAnzeigename()">Speichern</button>
+              </div>
+              <div id="displayNameMsg" class="profile-msg" style="padding:0 20px 8px;"></div>
             </div>
           </div>
-          <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="avatarHochladen()">
-          <div style="flex:1;">
-            <div class="profile-section-title">Mein Profil</div>
-            <div class="profile-email-display" id="profileEmailDisplay">—</div>
-            <div class="profile-plan-display" id="profilePlanDisplay">—</div>
+
+          <!-- Sicherheit -->
+          <div class="settings-section">
+            <div class="settings-section-label">Sicherheit</div>
+            <div class="settings-card">
+              <div class="settings-row">
+                <div class="settings-row-label">Neues Passwort</div>
+                <div class="settings-row-value">
+                  <input type="password" id="newPasswordInput" class="settings-inline-input" placeholder="Min. 6 Zeichen">
+                </div>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-label">Wiederholen</div>
+                <div class="settings-row-value">
+                  <input type="password" id="newPasswordConfirm" class="settings-inline-input" placeholder="Passwort bestätigen">
+                </div>
+                <button class="settings-row-action" onclick="aenderePasswort()">Ändern</button>
+              </div>
+              <div id="passwordMsg" class="profile-msg" style="padding:0 20px 8px;"></div>
+            </div>
+          </div>
+
+          <!-- Abonnement -->
+          <div class="settings-section">
+            <div class="settings-section-label">Abonnement</div>
+            <div class="settings-card">
+              <div class="settings-row">
+                <div class="settings-row-label">Aktueller Plan</div>
+                <div class="settings-row-value" id="profilePlanInfo">—</div>
+                <button class="settings-row-action" id="profileUpgradeBtn" onclick="switchTab('premium')" style="display:none;">Upgraden</button>
+              </div>
+              <div class="settings-row" id="premiumSinceRow" style="display:none;">
+                <div class="settings-row-label">Aktiv seit</div>
+                <div class="settings-row-value" id="profilePremiumSince">—</div>
+              </div>
+              <div class="settings-row" id="nextPaymentRow" style="display:none;">
+                <div class="settings-row-label">Nächste Zahlung</div>
+                <div class="settings-row-value" id="profileNextPayment">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Account verwalten -->
+          <div class="settings-section">
+            <div class="settings-section-label settings-label-danger">Account verwalten</div>
+            <div class="settings-card settings-card-danger">
+              <div class="settings-row">
+                <div class="settings-row-label">Account löschen</div>
+                <div class="settings-row-value" style="font-size:0.75rem;color:var(--text-muted);">Alle Daten werden unwiderruflich gelöscht</div>
+                <button class="settings-row-action settings-action-danger" onclick="accountLoeschen()">Löschen</button>
+              </div>
+            </div>
           </div>
         </div>
-
-        <!-- Anzeigename -->
-        <div class="profile-card">
-          <div class="profile-card-title"><i data-lucide="user" style="width:15px;height:15px;color:#3B82F6;"></i> Anzeigename</div>
-          <input type="text" id="displayNameInput" class="profile-input" placeholder="Dein Name (optional)">
-          <button class="profile-save-btn" onclick="speichereAnzeigename()">Speichern</button>
-          <div id="displayNameMsg" class="profile-msg"></div>
-        </div>
-
-        <!-- Passwort ändern -->
-        <div class="profile-card">
-          <div class="profile-card-title"><i data-lucide="lock" style="width:15px;height:15px;color:#3B82F6;"></i> Passwort ändern</div>
-          <input type="password" id="newPasswordInput" class="profile-input" placeholder="Neues Passwort (min. 6 Zeichen)">
-          <input type="password" id="newPasswordConfirm" class="profile-input" placeholder="Passwort wiederholen" style="margin-top:8px;">
-          <button class="profile-save-btn" onclick="aenderePasswort()">Passwort ändern</button>
-          <div id="passwordMsg" class="profile-msg"></div>
-        </div>
-
-        <!-- Abo -->
-        <div class="profile-card">
-          <div class="profile-card-title"><i data-lucide="zap" style="width:15px;height:15px;color:#3B82F6;"></i> Mein Abo</div>
-          <div class="profile-info-row">
-            <span class="profile-info-label">Plan</span>
-            <span class="profile-info-value" id="profilePlanInfo">—</span>
-          </div>
-          <div class="profile-info-row" id="premiumSinceRow" style="display:none;">
-            <span class="profile-info-label">Aktiv seit</span>
-            <span class="profile-info-value" id="profilePremiumSince">—</span>
-          </div>
-          <div class="profile-info-row" id="nextPaymentRow" style="display:none;">
-            <span class="profile-info-label">Nächste Zahlung</span>
-            <span class="profile-info-value" id="profileNextPayment">—</span>
-          </div>
-          <button class="profile-save-btn" id="profileUpgradeBtn" onclick="switchTab('premium')" style="display:none;background:#3B82F6;">
-            <i data-lucide="zap" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i> Auf Premium upgraden
-          </button>
-        </div>
-
-        <!-- Account löschen -->
-        <div class="profile-card danger-card">
-          <div class="profile-card-title"><i data-lucide="alert-triangle" style="width:15px;height:15px;color:#F87171;"></i> <span style="color:#F87171;">Account löschen</span></div>
-          <p style="font-size:0.85rem;color:#636366;margin-bottom:12px;">Das Löschen deines Accounts ist permanent und kann nicht rückgängig gemacht werden.</p>
-          <button class="profile-delete-btn" onclick="accountLoeschen()">Account dauerhaft löschen</button>
-        </div>
-
-        <!-- Abmelden -->
-        <button class="btn-logout" onclick="logout()" style="margin-top:8px;">Abmelden</button>
 
       </div>
 
