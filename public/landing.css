@@ -595,3 +595,53 @@ body {
   .cta-box { padding: 48px 24px; }
   .comparison, .features, .how, .usecases, .cta-section { padding: 80px 20px; }
 }
+
+/* ══ LIGHT MODE ══ */
+[data-theme="light"] {
+  --bg-base: #FFFFFF;
+  --bg-surface: #F8FAFC;
+  --bg-elevated: #FFFFFF;
+  --bg-overlay: #F1F5F9;
+  --border-subtle: rgba(15, 23, 42, 0.06);
+  --border-default: rgba(15, 23, 42, 0.10);
+  --border-strong: rgba(15, 23, 42, 0.18);
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --accent-glow: rgba(37, 99, 235, 0.10);
+  --success: #059669;
+  --orange: #EA580C;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] body {
+  background: var(--bg-base);
+}
+
+[data-theme="light"] .nav {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="light"] .hero em {
+  color: var(--accent-light);
+}
+
+[data-theme="light"] .compare-card.old {
+  background: var(--bg-surface);
+  border-color: var(--border-default);
+}
+
+[data-theme="light"] .compare-card.new {
+  background: var(--bg-surface);
+}
+
+[data-theme="light"] .feature-card {
+  background: var(--bg-surface);
+  border-color: var(--border-default);
+}
+
+[data-theme="light"] .footer {
+  border-top-color: var(--border-default);
+}
