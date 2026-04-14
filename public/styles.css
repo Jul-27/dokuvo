@@ -2915,3 +2915,65 @@ body {
   .profile-section { margin-left: 0; margin-right: 0; max-width: 100%; }
 }
 
+/* ══════════════════════════════════════════
+   LIGHT MODE
+   Activated via [data-theme="light"] on <html>
+   ══════════════════════════════════════════ */
+
+[data-theme="light"] {
+  /* Backgrounds */
+  --bg-base: #FFFFFF;
+  --bg-surface: #F8FAFC;
+  --bg-elevated: #FFFFFF;
+  --bg-overlay: #F1F5F9;
+
+  /* Borders — neutral slate instead of blue-tinted */
+  --border-subtle: rgba(15, 23, 42, 0.06);
+  --border-default: rgba(15, 23, 42, 0.10);
+  --border-strong: rgba(15, 23, 42, 0.18);
+
+  /* Text — inverted */
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --text-dim: #CBD5E1;
+
+  /* Accent — same hues work on light bg */
+  --accent: #2563EB;
+  --accent-light: #3B82F6;
+  --accent-lighter: #60A5FA;
+  --accent-glow: rgba(37, 99, 235, 0.10);
+  --accent-surface: rgba(37, 99, 235, 0.04);
+  --accent-border: rgba(37, 99, 235, 0.12);
+
+  /* Semantic — darker for contrast on white */
+  --danger: #DC2626;
+  --danger-surface: rgba(220, 38, 38, 0.06);
+  --danger-border: rgba(220, 38, 38, 0.12);
+  --warning: #D97706;
+  --warning-surface: rgba(217, 119, 6, 0.06);
+  --warning-border: rgba(217, 119, 6, 0.10);
+  --success: #059669;
+  --success-surface: rgba(5, 150, 105, 0.06);
+  --success-border: rgba(5, 150, 105, 0.10);
+  --info: #2563EB;
+  --purple: #7C3AED;
+  --purple-surface: rgba(124, 58, 237, 0.06);
+  --purple-border: rgba(124, 58, 237, 0.10);
+  --cyan: #0891B2;
+  --cyan-surface: rgba(8, 145, 178, 0.06);
+  --cyan-border: rgba(8, 145, 178, 0.10);
+  --orange: #EA580C;
+  --orange-surface: rgba(234, 88, 12, 0.06);
+  --orange-border: rgba(234, 88, 12, 0.10);
+  --indigo: #4F46E5;
+  --indigo-surface: rgba(79, 70, 229, 0.06);
+  --indigo-border: rgba(79, 70, 229, 0.10);
+
+  /* Shadows — much lighter */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 24px rgba(37, 99, 235, 0.06);
+}
+
