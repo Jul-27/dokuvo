@@ -1589,6 +1589,173 @@ body {
 }
 .sidebar-user-plan.premium { color: var(--success); }
 
+/* ── Sidebar Legal Links ── */
+.sidebar-legal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 12px 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.sidebar-legal a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.sidebar-legal a:hover {
+  color: var(--text-secondary);
+  text-decoration: underline;
+}
+
+.sidebar-legal span {
+  color: var(--text-dim);
+  font-size: 10px;
+}
+
+/* ── Profile Popover ── */
+.sidebar-footer {
+  position: relative;
+}
+
+.profile-popover {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 8px;
+  right: 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+}
+
+.profile-popover.open {
+  display: block;
+}
+
+.popover-user-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px;
+}
+
+.popover-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-light), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: white;
+  overflow: hidden;
+}
+
+[data-theme="light"] .popover-avatar {
+  background: linear-gradient(135deg, #DBEAFE, #C7D2FE);
+  color: var(--accent);
+}
+
+.popover-user-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.popover-user-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.popover-user-email {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.popover-plan-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-top: 4px;
+  background: var(--bg-overlay);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+.popover-plan-badge.premium {
+  background: var(--success-surface);
+  color: var(--success);
+  border-color: var(--success-border);
+}
+
+.popover-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 4px 8px;
+}
+
+.popover-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+
+.popover-item:hover {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.popover-item svg {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.popover-item:hover svg {
+  color: var(--text-secondary);
+}
+
+.popover-logout {
+  color: var(--danger);
+}
+
+.popover-logout svg {
+  color: var(--danger);
+}
+
+.popover-logout:hover {
+  background: var(--danger-surface);
+  color: var(--danger);
+}
+
 /* ══ CHAT MAIN ══ */
 .chat-main {
   flex: 1;
