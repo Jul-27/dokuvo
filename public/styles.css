@@ -2977,3 +2977,69 @@ body {
   --shadow-glow: 0 0 24px rgba(37, 99, 235, 0.06);
 }
 
+/* ── Light Mode: Component Overrides ── */
+
+/* Body: no gradient, clean white */
+[data-theme="light"] body {
+  background: var(--bg-base);
+}
+
+/* Auth: soft blue tint instead of dark gradient */
+[data-theme="light"] #authScreen {
+  background: linear-gradient(160deg, #F8FAFC 0%, #EFF6FF 50%, #F8FAFC 100%);
+}
+
+[data-theme="light"] #authScreen::before {
+  background: radial-gradient(ellipse, rgba(37, 99, 235, 0.06), transparent 70%);
+}
+
+/* Chat main: adjust grid pattern for light bg */
+[data-theme="light"] .chat-main::before {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+}
+
+/* Drop overlay */
+[data-theme="light"] #dropOverlay {
+  background: rgba(37, 99, 235, 0.04);
+}
+
+/* Sidebar avatar: lighter gradient */
+[data-theme="light"] .sidebar-avatar {
+  background: linear-gradient(135deg, #DBEAFE, #C7D2FE);
+  color: var(--accent);
+}
+
+/* Loading spinner */
+[data-theme="light"] .loading-spinner {
+  border-color: var(--border-default);
+  border-top-color: var(--accent);
+}
+
+/* Scrollbar */
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: var(--bg-surface);
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+}
+
+/* Persistent topbar */
+[data-theme="light"] .persistent-topbar {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* Mobile bottom nav */
+[data-theme="light"] .mobile-bottom-nav {
+  background: var(--bg-base);
+  border-top: 1px solid var(--border-default);
+}
+
+/* Lang button active: keep white text on blue */
+[data-theme="light"] .lang-btn.active {
+  background: var(--accent-light);
+  color: white;
+  border-color: var(--accent-light);
+}
+
