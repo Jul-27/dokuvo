@@ -707,6 +707,29 @@
       tourSteps[4].text = t('tourStep5Text');
     }
 
+    // ── Theme Toggle ──
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('dokuvo-theme', next);
+      document.getElementById('themeIconSun').style.display = next === 'dark' ? '' : 'none';
+      document.getElementById('themeIconMoon').style.display = next === 'light' ? '' : 'none';
+    }
+
+    // Apply saved theme on load
+    (function initTheme() {
+      const saved = localStorage.getItem('dokuvo-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+      const sunIcon = document.getElementById('themeIconSun');
+      const moonIcon = document.getElementById('themeIconMoon');
+      if (sunIcon && moonIcon) {
+        sunIcon.style.display = saved === 'dark' ? '' : 'none';
+        moonIcon.style.display = saved === 'light' ? '' : 'none';
+      }
+    })();
+
     function switchAuthTab(mode) {
       currentAuthMode = mode;
       document.querySelectorAll('.auth-tab').forEach((t, i) => {
