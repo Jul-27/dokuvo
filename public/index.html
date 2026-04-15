@@ -1236,21 +1236,41 @@
       const { data: { session } } = await supabaseClient.auth.getSession();
       const user = session?.user;
       if (!user) return;
+      const overview = document.getElementById('teamsOverview');
       const detailEl = document.getElementById('teamDetail');
-      detailEl.style.display = 'block';
+      overview.style.display = 'none';
+      detailEl.style.display = '';
+      const initial = teamName.charAt(0).toUpperCase();
       detailEl.innerHTML = `
-        <div style="background:#1C1C1E;border:1px solid #2C2C2E;border-radius:14px;padding:20px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-            <button onclick="document.getElementById('teamDetail').style.display='none'" style="background:none;border:none;color:#636366;cursor:pointer;padding:4px;"><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='15 18 9 12 15 6'/></svg></button>
-            <h3 style="font-size:15px;font-weight:600;color:#F1F5F9;">${escapeHtml(teamName)}</h3>
+        <button class="team-detail-back" onclick="ladeTeams()">
+          <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Alle Teams
+        </button>
+        <div class="team-detail-header">
+          <div class="team-detail-icon">${initial}</div>
+          <div>
+            <div class="team-detail-title">${escapeHtml(teamName)}</div>
           </div>
-          <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
-            <button onclick="ladeTeamMitglieder('${teamId}')" style="background:#2C2C2E;color:#AEAEB2;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Mitglieder</button>
-            <button onclick="ladeGeteilteSessionen('${teamId}')" style="background:#2C2C2E;color:#AEAEB2;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Geteilte Dokumente</button>
-            <button onclick="ladeTeamMitgliederEinladen('${teamId}')" style="background:#3B82F6;color:white;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">+ Mitglied einladen</button>
+        </div>
+        <div class="team-detail-subtitle" id="teamDetailSubtitle">Lädt...</div>
+        <div id="teamMembersCard">
+          <div class="team-card">
+            <div class="team-card-header">
+              <span class="team-card-label">Mitglieder</span>
+            </div>
+            <div class="teams-loading" style="padding:20px;">Lädt...</div>
           </div>
-          <div id="teamDetailInhalt" style="color:#48484A;font-size:13px;">Wähle eine Aktion.</div>
+        </div>
+        <div id="teamDocsCard">
+          <div class="team-card">
+            <div class="team-card-header">
+              <span class="team-card-label">Geteilte Dokumente</span>
+            </div>
+            <div class="teams-loading" style="padding:20px;">Lädt...</div>
+          </div>
         </div>`;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      ladeTeamMitglieder(teamId);
+      ladeGeteilteSessionen(teamId);
     }
 
     async function ladeTeamMitglieder(teamId) {
