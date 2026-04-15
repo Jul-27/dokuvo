@@ -913,6 +913,32 @@ body {
       text-underline-offset: 2px;
     }
 
+    /* ── PREMIUM ACTIVE BOX ── */
+    .premium-active-box {
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border-default);
+      border-radius: 16px;
+      padding: 28px 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .premium-active-details {
+      background: var(--bg-base);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: left;
+    }
+
+    .premium-active-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
     /* ── ÜBER TAB ── */
     .about-page {
       padding: 36px 40px;
