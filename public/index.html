@@ -1336,7 +1336,7 @@
           <p>Möchtest du <strong>${escapeHtml(memberLabel)}</strong> wirklich aus dem Team entfernen?</p>
           <div class="share-modal-footer" style="gap:10px;">
             <button class="share-close-btn" id="removeCancelBtn">Abbrechen</button>
-            <button id="removeConfirmBtn" style="background:#EF4444;color:white;border:none;border-radius:8px;padding:9px 20px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;">Entfernen</button>
+            <button id="removeConfirmBtn" style="background:var(--danger);color:white;border:none;border-radius:8px;padding:9px 20px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;">Entfernen</button>
           </div>
         </div>`;
       document.body.appendChild(overlay);
@@ -1404,10 +1404,10 @@
         modal.innerHTML = `
           <div style="text-align:center;padding:12px 0 4px;">
             <div style="width:48px;height:48px;border-radius:50%;background:rgba(52,211,153,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
-            <h3 style="color:#E8EAED;font-size:1.05rem;font-weight:700;margin-bottom:8px;">Einladung gesendet</h3>
-            <p style="color:#7A7F88;font-size:0.85rem;margin-bottom:20px;">${escapeHtml(data.email)} wurde eingeladen.</p>
+            <h3 style="color:var(--text-primary);font-size:1.05rem;font-weight:700;margin-bottom:8px;">Einladung gesendet</h3>
+            <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:20px;">${escapeHtml(data.email)} wurde eingeladen.</p>
             <button class="share-copy-btn" onclick="this.closest('.share-modal-overlay').remove()" style="width:100%;">Schließen</button>
           </div>`;
         ladeTeamMitglieder(teamId);
@@ -1467,13 +1467,13 @@
       overlay.innerHTML = `
         <div class="share-modal" style="text-align:center;">
           <div style="width:56px;height:56px;border-radius:50%;background:rgba(248,113,113,0.10);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
           </div>
-          <h3 style="color:#E8EAED;font-size:1.1rem;font-weight:700;margin-bottom:8px;">Team löschen</h3>
-          <p style="color:#7A7F88;font-size:0.88rem;margin-bottom:22px;line-height:1.5;">Möchtest du das Team '${escapeHtml(teamName)}' wirklich löschen? Alle Mitglieder und geteilten Dokumente werden entfernt. Diese Aktion kann nicht rückgängig gemacht werden.</p>
+          <h3 style="color:var(--text-primary);font-size:1.1rem;font-weight:700;margin-bottom:8px;">Team löschen</h3>
+          <p style="color:var(--text-secondary);font-size:0.88rem;margin-bottom:22px;line-height:1.5;">Möchtest du das Team '${escapeHtml(teamName)}' wirklich löschen? Alle Mitglieder und geteilten Dokumente werden entfernt. Diese Aktion kann nicht rückgängig gemacht werden.</p>
           <div class="share-modal-footer" style="gap:10px;">
             <button class="share-close-btn" id="teamDeleteCancelBtn">Abbrechen</button>
-            <button id="teamDeleteConfirmBtn" style="background:#DC2626;color:white;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.2s;" onmouseover="this.style.background='#B91C1C'" onmouseout="this.style.background='#DC2626'">Endgültig löschen</button>
+            <button id="teamDeleteConfirmBtn" style="background:var(--danger);color:white;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Endgültig löschen</button>
           </div>
         </div>`;
       document.body.appendChild(overlay);
@@ -1561,7 +1561,7 @@
         modal.innerHTML = `
           <div style="text-align:center;padding:12px 0 4px;">
             <div style="width:48px;height:48px;border-radius:50%;background:rgba(52,211,153,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <h3 style="color:#E8EAED;font-size:1.05rem;font-weight:700;margin-bottom:8px;">Erfolgreich geteilt</h3>
             <p style="color:#7A7F88;font-size:0.85rem;margin-bottom:20px;">Dieser Chat wurde mit <strong style="color:#E8EAED;">${escapeHtml(selectedTeamName)}</strong> geteilt.</p>
