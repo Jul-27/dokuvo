@@ -1152,27 +1152,41 @@
       const user = session?.user;
       if (!user) return;
       const container = document.getElementById('teamListe');
-      container.innerHTML = '<div style="color:#48484A;font-size:13px;">Lädt...</div>';
+      const overview = document.getElementById('teamsOverview');
+      const detail = document.getElementById('teamDetail');
+      overview.style.display = '';
+      detail.style.display = 'none';
+      container.innerHTML = '<div class="teams-loading">Lädt...</div>';
       const res = await fetch(`/teams/${user.id}`, { headers: { 'x-user-id': user.id } });
       const teams = await res.json();
-      document.getElementById('teamDetail').style.display = 'none';
       if (!teams.length) {
-        container.innerHTML = '<div style="color:#48484A;font-size:13px;">Noch kein Team. Erstelle dein erstes Team!</div>';
+        container.innerHTML = `
+          <div class="teams-empty">
+            <div class="teams-empty-icon">👥</div>
+            <p>Noch kein Team. Erstelle dein erstes Team!</p>
+          </div>`;
         return;
       }
-      container.innerHTML = teams.map(t => `
-        <div style="background:#1C1C1E;border:1px solid #2C2C2E;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;transition:border-color 0.15s;cursor:pointer;" onmouseover="this.style.borderColor='#3B82F6'" onmouseout="this.style.borderColor='#2C2C2E'">
-          <div onclick="zeigeTeamDetail('${t.id}', '${escapeHtml(t.name)}')" style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            <div>
-              <div style="font-size:14px;font-weight:600;color:#F1F5F9;">${escapeHtml(t.name)}</div>
-              <div style="font-size:11px;color:#636366;margin-top:2px;">${t.role === 'owner' ? 'Eigentümer' : 'Mitglied'}</div>
+      container.innerHTML = teams.map(t => {
+        const initial = t.name.charAt(0).toUpperCase();
+        const roleLabel = t.role === 'owner' ? 'Owner' : 'Mitglied';
+        return `
+          <div class="team-overview-card" onclick="zeigeTeamDetail('${t.id}', '${escapeHtml(t.name)}')">
+            ${t.role === 'owner' ? `<button class="team-card-delete" onclick="event.stopPropagation();loescheTeam('${t.id}','${escapeHtml(t.name)}')" title="Team löschen"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>` : ''}
+            <div class="team-overview-card-header">
+              <div class="team-overview-icon">${initial}</div>
+              <div>
+                <div class="team-overview-name">${escapeHtml(t.name)}</div>
+                <div class="team-overview-role">${roleLabel}</div>
+              </div>
             </div>
-          </div>
-          ${t.role === 'owner' ? `<button onclick="event.stopPropagation();loescheTeam('${t.id}','${escapeHtml(t.name)}')" style="background:none;border:none;cursor:pointer;color:#48484A;padding:6px;border-radius:6px;display:flex;align-items:center;transition:color 0.2s;flex-shrink:0;" onmouseover="this.style.color='#F87171'" onmouseout="this.style.color='#48484A'" title="Team löschen"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>` : ''}
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;" onclick="zeigeTeamDetail('${t.id}', '${escapeHtml(t.name)}')"><polyline points="9 18 15 12 9 6"/></svg>
-        </div>
-      `).join('');
+            <div class="team-overview-stats">
+              <div class="team-stat"><span class="team-stat-num">${t.member_count || '—'}</span> Mitglieder</div>
+              <div class="team-stat"><span class="team-stat-num">${t.shared_count || '—'}</span> Dokumente</div>
+            </div>
+          </div>`;
+      }).join('');
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     async function erstelleTeam() {
