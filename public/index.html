@@ -588,8 +588,8 @@
         limitTitle: 'Tageslimit erreicht',
         limitText: 'Du hast heute alle 5 kostenlosen Erklärungen verbraucht.<br>Morgen stehen dir wieder 5 zur Verfügung.',
         limitUpgrade: 'Jetzt auf Premium upgraden',
-        // Profile
-        myProfile: 'Mein Profil',
+        // Profile / Settings
+        myProfile: 'Einstellungen',
         displayName: 'Anzeigename',
         displayNamePlaceholder: 'Dein Name (optional)',
         save: 'Speichern',
@@ -677,7 +677,7 @@
         limitTitle: 'Daily limit reached',
         limitText: 'You have used all 5 free explanations today.<br>5 more will be available tomorrow.',
         limitUpgrade: 'Upgrade to Premium now',
-        myProfile: 'My Profile',
+        myProfile: 'Settings',
         displayName: 'Display Name',
         displayNamePlaceholder: 'Your name (optional)',
         save: 'Save',
@@ -794,9 +794,9 @@
       const limitBtn = document.querySelector('.limit-upgrade-btn');
       if (limitBtn) limitBtn.textContent = t('limitUpgrade');
 
-      // Profile section title
-      const profileTitle = document.querySelector('.profile-section-title');
-      if (profileTitle) profileTitle.textContent = t('myProfile');
+      // Settings page title
+      const settingsTitle = document.querySelector('.settings-title');
+      if (settingsTitle) settingsTitle.textContent = t('myProfile');
 
       // Re-render icons after innerHTML changes
       if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -1681,8 +1681,7 @@
 
       if (data.isPremium) {
         document.getElementById('premiumActiveBox').style.display = 'block';
-        document.querySelector('.premium-hero').style.display = 'none';
-        document.querySelector('.premium-features').style.display = 'none';
+        document.querySelector('.premium-page').style.display = 'none';
         if (data.premiumSince) {
           const date = new Date(data.premiumSince).toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric' });
           document.getElementById('premiumSinceDate').textContent = date;
