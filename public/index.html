@@ -1419,25 +1419,45 @@
     }
 
     async function ladeGeteilteSessionen(teamId) {
-      const inhalt = document.getElementById('teamDetailInhalt');
-      inhalt.innerHTML = '<div style="color:#48484A;font-size:13px;">Lädt...</div>';
+      const container = document.getElementById('teamDocsCard');
       const { data: { session } } = await supabaseClient.auth.getSession();
       const user = session?.user;
       const res = await fetch(`/teams/${teamId}/shared?user_id=${user.id}`, { headers: { 'x-user-id': user.id } });
       const shares = await res.json();
       if (!shares.length) {
-        inhalt.innerHTML = '<div style="color:#48484A;font-size:13px;">Noch keine geteilten Dokumente.</div>';
+        container.innerHTML = `
+          <div class="team-card">
+            <div class="team-card-header">
+              <span class="team-card-label">Geteilte Dokumente</span>
+            </div>
+            <div style="padding:20px;color:var(--text-muted);font-size:13px;">Noch keine geteilten Dokumente.</div>
+          </div>`;
+        const subtitle = document.getElementById('teamDetailSubtitle');
+        if (subtitle && !subtitle.textContent.includes('Dokument')) {
+          subtitle.textContent += ' · 0 Dokumente';
+        }
         return;
       }
-      inhalt.innerHTML = `<div style="font-size:12px;font-weight:600;color:#636366;margin-bottom:10px;">GETEILTE DOKUMENTE (${shares.length})</div>` +
-        shares.map(s => `
-          <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #2C2C2E;cursor:pointer;" onclick="ladeSession('${s.session_id}')">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:13px;color:#F1F5F9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(s.title)}</div>
-              ${s.note ? `<div style="font-size:11px;color:#636366;margin-top:2px;">${escapeHtml(s.note)}</div>` : ''}
-            </div>
-          </div>`).join('');
+      const subtitle = document.getElementById('teamDetailSubtitle');
+      if (subtitle && !subtitle.textContent.includes('Dokument')) {
+        subtitle.textContent += ` · ${shares.length} Dokument${shares.length !== 1 ? 'e' : ''}`;
+      }
+      container.innerHTML = `
+        <div class="team-card">
+          <div class="team-card-header">
+            <span class="team-card-label">Geteilte Dokumente (${shares.length})</span>
+          </div>
+          ${shares.map(s => `
+            <div class="shared-doc-row" onclick="ladeSession('${s.session_id}')">
+              <span class="shared-doc-icon"><i data-lucide="file-text" style="width:14px;height:14px;"></i></span>
+              <div style="flex:1;min-width:0;">
+                <div class="shared-doc-name">${escapeHtml(s.title)}</div>
+                ${s.note ? `<div class="shared-doc-note">${escapeHtml(s.note)}</div>` : ''}
+              </div>
+              <span class="shared-doc-date">${s.shared_at ? new Date(s.shared_at).toLocaleDateString('de-DE') : ''}</span>
+            </div>`).join('')}
+        </div>`;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     async function loescheTeam(teamId, teamName) {
