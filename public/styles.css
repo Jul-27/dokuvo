@@ -3775,6 +3775,20 @@ body {
   /* Fristen und Chips auf Mobile */
   .followup-chip { font-size: 12px; padding: 5px 11px; }
   .fristen-block { padding: 10px 12px; }
+
+  /* Touch targets: min 44px */
+  .session-item-row { min-height: 44px; }
+  .new-chat-btn { min-height: 44px; }
+  .report-tab { min-height: 36px; }
+
+  /* Smooth scrolling */
+  .chat-messages, .report-view, .session-list {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Active states für Touch-Feedback */
+  .session-item-row:active { background: var(--bg-elevated); }
+  .action-card:active { transform: scale(0.98); }
 }
 
 /* ── SMALL PHONE (≤480px) ── */
