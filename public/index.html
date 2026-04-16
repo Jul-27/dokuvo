@@ -527,21 +527,18 @@
   <!-- MOBILE BOTTOM NAV -->
   <nav class="mobile-bottom-nav">
     <div class="mobile-bottom-nav-inner">
-      <button class="mobile-nav-item active" id="mobile-nav-home" onclick="switchTab('home')">
-        <i data-lucide="wand-2" style="width:20px;height:20px;"></i>
-        Erklären
+      <button class="mobile-nav-item" id="mobile-nav-profile" onclick="switchTab('profile')">
+        <i data-lucide="settings" style="width:20px;height:20px;"></i>
+        <span data-i18n="nav-profile">Einstellungen</span>
       </button>
       <button class="mobile-nav-item" id="mobile-nav-premium" onclick="switchTab('premium')">
         <i data-lucide="zap" style="width:20px;height:20px;"></i>
         Premium
       </button>
-      <button class="mobile-nav-item" id="mobile-nav-profile" onclick="switchTab('profile')">
-        <i data-lucide="user" style="width:20px;height:20px;"></i>
-        Profil
-      </button>
-      <button class="mobile-nav-item" id="mobile-nav-about" onclick="switchTab('about')">
-        <i data-lucide="info" style="width:20px;height:20px;"></i>
-        Über
+      <button class="mobile-nav-item" id="mobile-nav-theme" onclick="toggleTheme()">
+        <i data-lucide="sun" style="width:20px;height:20px;" class="theme-icon-light"></i>
+        <i data-lucide="moon" style="width:20px;height:20px;" class="theme-icon-dark"></i>
+        <span data-i18n="nav-theme">Modus</span>
       </button>
     </div>
   </nav>

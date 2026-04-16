@@ -3656,6 +3656,7 @@ body {
 
 .mobile-nav-item.active { color: var(--accent-light); }
 .mobile-nav-item:active { opacity: 0.7; }
+.theme-icon-dark { display: none; }
 
 /* ── MOBILE HEADER ── */
 .app-header {
@@ -3692,6 +3693,11 @@ body {
   .app-header { display: flex !important; }
   .mobile-bottom-nav { display: block; }
   .erklaeren-layout { height: calc(100vh - 52px - 56px); }
+
+  /* Theme toggle icons in bottom nav */
+  .mobile-nav-item .theme-icon-dark { display: none; }
+  [data-theme="light"] .mobile-nav-item .theme-icon-light { display: none; }
+  [data-theme="light"] .mobile-nav-item .theme-icon-dark { display: block; }
 
   /* Input area auf Mobile kompakter */
   .chat-input-area { padding: 8px 8px 10px; }
