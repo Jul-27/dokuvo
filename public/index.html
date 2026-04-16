@@ -2388,6 +2388,32 @@
       document.getElementById('chatInput').focus();
     }
 
+    function rendereAnalyseInChat(data, followUps) {
+      const messagesEl = document.getElementById('chatMessages');
+      const bubble = document.createElement('div');
+      bubble.className = 'chat-bubble assistant';
+      const div = document.createElement('div');
+      div.className = 'result-text';
+      div.innerHTML = marked.parse(data.explanation || '');
+      bubble.appendChild(div);
+      messagesEl.appendChild(bubble);
+      if (followUps && followUps.length > 0) {
+        const chipContainer = document.createElement('div');
+        chipContainer.className = 'followup-container';
+        followUps.forEach(frage => {
+          const chip = document.createElement('button');
+          chip.className = 'followup-chip';
+          chip.textContent = frage;
+          chip.onclick = () => { chipContainer.remove(); sendChatMessage(frage); };
+          chipContainer.appendChild(chip);
+        });
+        bubble.appendChild(chipContainer);
+      }
+      zeigeFristenBlock(data.fristen || [], bubble);
+      zeigeAnalyseBlocks(data, bubble);
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
     // ── Alle Analyse-Blöcke rendern ──
     function zeigeAnalyseBlocks(data, container) {
       zeigeRisikoBlock(data.risiken, container);
@@ -2961,6 +2987,7 @@
           { user_id: user.id, session_id: currentSessionId, role: 'user', message: `📄 ${file.name}` },
           { user_id: user.id, session_id: currentSessionId, role: 'assistant', message: buildMessageWithAnalyse(data.explanation, data) }
         ]);
+        rendereAnalyseInChat(data, data.followUps);
         zeigeReportView(data, file.name);
         if (isNewSession) { await ladeChatSessions(); aktualisiereAktiveSession(); }
         aktualisiereZaehlerNachAktion();
@@ -3006,6 +3033,7 @@
           { user_id: user.id, session_id: currentSessionId, role: 'user', message: '📸 Foto analysiert' },
           { user_id: user.id, session_id: currentSessionId, role: 'assistant', message: buildMessageWithAnalyse(data.explanation, data) }
         ]);
+        rendereAnalyseInChat(data, data.followUps);
         zeigeReportView(data, 'Foto-Analyse');
         if (isNewSession) { await ladeChatSessions(); aktualisiereAktiveSession(); }
         aktualisiereZaehlerNachAktion();
