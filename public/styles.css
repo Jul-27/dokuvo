@@ -3580,6 +3580,19 @@ body {
 .tab-panel.active { display: block; }
 
 
+/* ── TABLET (768px - 1024px) ── */
+@media (max-width: 1024px) {
+  .chat-sidebar {
+    width: 240px;
+    min-width: 240px;
+  }
+  .chat-sidebar.sidebar-hidden {
+    margin-left: -240px;
+  }
+  .report-view { padding: 24px 20px; }
+  .home-screen { padding: 36px 20px; }
+}
+
 /* ── MOBILE: Tab-Bar wieder einblenden ── */
 @media (max-width: 768px) {
   .app-header { display: block !important; }
