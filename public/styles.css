@@ -2813,10 +2813,16 @@ body {
 }
 
 @media (max-width: 768px) {
-  .report-view { padding: 20px 16px; }
-  .report-tabs { gap: 4px; }
+  .report-view { padding: 16px 12px; }
+  .report-tabs { gap: 4px; -webkit-overflow-scrolling: touch; }
   .report-tab { padding: 6px 12px; font-size: 0.72rem; }
   .report-key-facts { flex-direction: column; gap: 6px; }
+  .report-header { margin-bottom: 16px; }
+  .report-title { font-size: 1.1rem; gap: 8px; }
+  .report-overview { padding: 14px; margin-bottom: 16px; }
+  .report-tab-content { padding: 14px; margin-bottom: 16px; }
+  .report-explanation { padding: 14px; margin-bottom: 16px; font-size: 0.84rem; }
+  .report-chat-btn { padding: 8px 16px; font-size: 0.8rem; }
 }
 
 /* ══ CHAT MESSAGES ══ */
@@ -3724,6 +3730,9 @@ body {
   .chat-input-row { padding: 8px 10px; border-radius: 14px; max-width: 100%; box-sizing: border-box; overflow: hidden; }
   .chat-textarea { font-size: 16px; min-width: 0; } /* Verhindert iOS zoom */
   .chat-input-wrapper { max-width: 100%; overflow: hidden; }
+
+  /* Analyse blocks kompakter auf Mobile */
+  .analyse-block { padding: 12px; margin-bottom: 12px; }
 
   /* Tabs auf Mobile ohne Extra-Padding */
   #tab-history, #tab-premium, #tab-profile, #tab-about, #tab-templates, #tab-team {
