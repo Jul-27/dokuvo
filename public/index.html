@@ -1670,6 +1670,7 @@
       // Chat zurücksetzen
       document.getElementById('chatMessages').style.display = 'none';
       document.getElementById('chatMessages').innerHTML = '';
+      document.getElementById('reportView').style.display = 'none';
       const chatEmpty = document.getElementById('chatEmpty');
       chatEmpty.style.display = 'flex';
 
@@ -2556,6 +2557,7 @@
       currentTemplate = null;
       document.getElementById('chatMessages').style.display = 'none';
       document.getElementById('chatMessages').innerHTML = '';
+      document.getElementById('reportView').style.display = 'none';
       document.getElementById('chatEmpty').style.display = 'flex';
       document.getElementById('chatInput').value = '';
       document.getElementById('limitBanner').classList.remove('visible');
@@ -2690,6 +2692,7 @@
 
       document.getElementById('chatEmpty').style.display = 'none';
       document.getElementById('chatMessages').style.display = 'flex';
+      document.getElementById('reportView').style.display = 'none';
 
       addBubble('user', message);
       input.value = '';
@@ -3114,6 +3117,7 @@
 
       document.getElementById('chatEmpty').style.display = 'none';
       document.getElementById('chatMessages').style.display = 'flex';
+      document.getElementById('reportView').style.display = 'none';
 
       addBubble('user', `📄 ${vergleichDatei1.name} vs. 📄 ${vergleichDatei2.name}`);
 
