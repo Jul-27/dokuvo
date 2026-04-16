@@ -3337,6 +3337,36 @@
       switchTab('home');
       document.getElementById('chatEmpty').style.display = 'none';
       const chatMessages = document.getElementById('chatMessages');
+      const reportView = document.getElementById('reportView');
+
+      // Hybrid Navigation: Detect session type and show report if document session
+      const firstUserMsg = messages.find(m => m.role === 'user');
+      const isDocSession = firstUserMsg && (firstUserMsg.message.startsWith('📄') || firstUserMsg.message.startsWith('📸'));
+
+      if (isDocSession) {
+        const lastAssistant = [...messages].reverse().find(m => m.role === 'assistant');
+        if (lastAssistant) {
+          const analyseMatch = lastAssistant.message.match(/<!--ANALYSE:([\s\S]*?):ANALYSE-->/);
+          if (analyseMatch) {
+            try {
+              const analyseData = JSON.parse(analyseMatch[1]);
+              const displayText = lastAssistant.message.replace(/<!--ANALYSE:[\s\S]*?:ANALYSE-->/, '').trim();
+              analyseData.explanation = displayText;
+              const fileName = firstUserMsg.message.replace(/^📄\s*/, '').replace(/^📸\s*/, '');
+              // Also render chat bubbles in background for "Rückfrage stellen"
+              chatMessages.innerHTML = '';
+              messages.forEach(m => addBubble(m.role, m.message));
+              chatMessages.style.display = 'none';
+              zeigeReportView(analyseData, fileName);
+              aktualisiereAktiveSession();
+              return;
+            } catch (e) { /* fall through to chat view */ }
+          }
+        }
+      }
+
+      // Default: show chat view
+      reportView.style.display = 'none';
       chatMessages.style.display = 'flex';
       chatMessages.innerHTML = '';
       messages.forEach(m => addBubble(m.role, m.message));
