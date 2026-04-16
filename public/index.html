@@ -2859,6 +2859,13 @@
     let vergleichDatei1 = null;
     let vergleichDatei2 = null;
 
+    function starteTemplateAnalyse(typ) {
+      // Öffne den PDF-Upload, aber setze vorher den Template-Kontext
+      // damit die Analyse weiß, welcher Dokumenttyp erwartet wird
+      window._templateContext = typ;
+      document.getElementById('pdfInput').click();
+    }
+
     function starteVergleich() {
       // Modal erstellen
       const overlay = document.createElement('div');
