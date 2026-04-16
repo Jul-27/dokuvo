@@ -2446,62 +2446,153 @@ body {
 .drop-overlay-content p { font-size: 1.2rem; font-weight: 600; margin-top: 12px; color: var(--accent-lighter); }
 .drop-overlay-content span { font-size: 0.85rem; color: var(--text-secondary); }
 
+/* ── HOME SCREEN / ACTION CARDS ── */
 .chat-empty {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  color: var(--text-secondary);
-  padding: 40px;
+  padding: 40px 24px;
   text-align: center;
-  position: relative;
-  z-index: 1;
 }
 
-.chat-empty-icon {
-  width: 64px;
-  height: 64px;
-  background: linear-gradient(135deg, var(--accent-glow), rgba(37,99,235,0.05));
-  border: 1px solid var(--accent-border);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 8px;
+.home-screen {
+  max-width: 520px;
+  width: 100%;
 }
 
-.chat-empty h2 {
+.home-screen h2 {
   color: var(--text-primary);
   font-size: 1.5rem;
   font-weight: 800;
-  margin: 0;
+  margin: 0 0 6px;
   letter-spacing: -0.03em;
 }
 
-.chat-empty p { font-size: 0.9rem; margin: 0; color: var(--text-muted); }
-
-.quick-actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; justify-content: center; }
-
-.quick-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 18px;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-xl);
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: all 0.2s;
+.home-screen p {
+  font-size: 0.9rem;
+  margin: 0 0 28px;
+  color: var(--text-muted);
 }
 
-.quick-btn:hover {
-  background: var(--bg-overlay);
+.action-cards-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.action-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 20px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  text-align: center;
+}
+
+.action-card:hover {
+  border-color: var(--accent-light);
+  background: var(--bg-elevated);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.action-card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent-glow), rgba(37,99,235,0.08));
+  border: 1px solid var(--accent-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.action-card-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.action-card-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.template-shortcuts {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.template-chip {
+  padding: 7px 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.template-chip:hover {
   border-color: var(--accent-light);
   color: var(--text-primary);
+  background: var(--bg-overlay);
+}
+
+.home-usage-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.home-usage-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.home-usage-separator {
+  color: var(--border-default);
+}
+
+.home-upgrade-link {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 500;
+}
+
+.home-upgrade-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .action-cards-row { flex-direction: column; gap: 12px; }
+  .action-card { padding: 20px 16px; }
+  .home-screen h2 { font-size: 1.25rem; }
 }
 
 /* ══ CHAT MESSAGES ══ */
