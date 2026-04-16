@@ -1398,6 +1398,36 @@ body {
       color: var(--danger);
     }
 
+    .member-invite-toggle {
+      background: none;
+      border: 1px solid var(--border-default);
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 4px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .member-invite-toggle:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .member-invite-toggle.active {
+      color: var(--success);
+      border-color: var(--success);
+      background: rgba(52, 211, 153, 0.1);
+    }
+
+    .member-badge-invite {
+      font-size: 10px;
+      color: var(--success);
+      margin-top: 2px;
+    }
+
     .shared-doc-row {
       padding: 10px 20px;
       display: flex;

@@ -1182,8 +1182,8 @@
               </div>
             </div>
             <div class="team-overview-stats">
-              <div class="team-stat"><span class="team-stat-num">${t.member_count || '—'}</span> Mitglieder</div>
-              <div class="team-stat"><span class="team-stat-num">${t.shared_count || '—'}</span> Dokumente</div>
+              <div class="team-stat"><span class="team-stat-num">${t.member_count != null ? t.member_count : '—'}</span> Mitglieder</div>
+              <div class="team-stat"><span class="team-stat-num">${t.shared_count != null ? t.shared_count : '—'}</span> Dokumente</div>
             </div>
           </div>`;
       }).join('');
@@ -1285,20 +1285,22 @@
           <div class="team-card">
             <div class="team-card-header">
               <span class="team-card-label">Mitglieder</span>
-              <button class="team-card-action" onclick="ladeTeamMitgliederEinladen('${teamId}')">+ Einladen</button>
             </div>
             <div style="padding:20px;color:var(--text-muted);font-size:13px;">Keine Mitglieder.</div>
           </div>`;
         return;
       }
-      const isOwner = members.some(m => m.user_id === user.id && m.role === 'owner');
+      const currentMember = members.find(m => m.user_id === user.id);
+      const isOwner = currentMember?.role === 'owner';
+      const canInvite = isOwner || currentMember?.can_invite;
       const subtitle = document.getElementById('teamDetailSubtitle');
       if (subtitle) subtitle.textContent = `${members.length} Mitglieder`;
+      const inviteBtn = canInvite ? `<button class="team-card-action" onclick="ladeTeamMitgliederEinladen('${teamId}')">+ Einladen</button>` : '';
       container.innerHTML = `
         <div class="team-card">
           <div class="team-card-header">
             <span class="team-card-label">Mitglieder (${members.length})</span>
-            <button class="team-card-action" onclick="ladeTeamMitgliederEinladen('${teamId}')">+ Einladen</button>
+            ${inviteBtn}
           </div>
           ${members.map(m => {
             const label = m.email || m.user_id || 'Unbekannt';
@@ -1310,13 +1312,18 @@
             const deleteBtn = (isOwner && m.role !== 'owner')
               ? `<button class="member-remove-btn" onclick="event.stopPropagation();entferneMitglied(this)" data-team-id="${teamId}" data-member-id="${m.id}" data-label="${escapeHtml(label)}" title="Mitglied entfernen"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>`
               : '';
+            const inviteToggle = (isOwner && m.role !== 'owner' && !isPending)
+              ? `<button class="member-invite-toggle ${m.can_invite ? 'active' : ''}" onclick="event.stopPropagation();toggleCanInvite('${teamId}','${m.id}',${!m.can_invite})" title="${m.can_invite ? 'Einladerecht entziehen' : 'Darf einladen'}"><i data-lucide="user-plus" style="width:13px;height:13px;"></i></button>`
+              : '';
             return `
               <div class="member-row">
                 <div class="member-avatar${isYou ? ' avatar-you' : ''}${isPending ? ' avatar-pending' : ''}">${initial}</div>
                 <div class="member-info">
                   <div class="member-name${isPending ? ' member-pending' : ''}">${escapeHtml(label)}${isYou ? ' (Du)' : ''}</div>
+                  ${m.can_invite && !isOwner ? '<div class="member-badge-invite">Darf einladen</div>' : ''}
                 </div>
                 <span class="member-role ${roleClass}">${roleLabel}</span>
+                ${inviteToggle}
                 ${deleteBtn}
               </div>`;
           }).join('')}
@@ -1354,6 +1361,20 @@
         if (data.error) { alert(data.error); return; }
         ladeTeamMitglieder(teamId);
       };
+    }
+
+    async function toggleCanInvite(teamId, memberId, canInvite) {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      const user = session?.user;
+      if (!user) return;
+      const res = await fetch(`/teams/${teamId}/members/${memberId}/can-invite`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'x-user-id': user.id },
+        body: JSON.stringify({ user_id: user.id, can_invite: canInvite })
+      });
+      const data = await res.json();
+      if (data.error) { alert(data.error); return; }
+      ladeTeamMitglieder(teamId);
     }
 
     async function ladeTeamMitgliederEinladen(teamId) {

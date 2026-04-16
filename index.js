@@ -1649,7 +1649,26 @@ app.get('/teams/:user_id', verifyUser, async (req, res) => {
         teams.push({ ...d.teams, role: d.role });
       }
     }
-    res.json(teams);
+
+    // Member- und Shared-Counts für jedes Team laden (per-team count queries)
+    const countResults = await Promise.all(teams.map(async t => {
+      const [memberRes, sharedRes] = await Promise.all([
+        supabase.from('team_members').select('*', { count: 'exact', head: true }).eq('team_id', t.id),
+        supabase.from('team_shares').select('*', { count: 'exact', head: true }).eq('team_id', t.id)
+      ]);
+      return { id: t.id, member_count: memberRes.count || 0, shared_count: sharedRes.count || 0 };
+    }));
+
+    const countMap = {};
+    for (const c of countResults) countMap[c.id] = c;
+
+    const teamsWithCounts = teams.map(t => ({
+      ...t,
+      member_count: countMap[t.id]?.member_count ?? 0,
+      shared_count: countMap[t.id]?.shared_count ?? 0
+    }));
+
+    res.json(teamsWithCounts);
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
@@ -1658,6 +1677,15 @@ app.post('/teams/:id/invite', verifyUser, async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: 'E-Mail fehlt' });
   try {
+    // Prüfen ob der Einladende berechtigt ist (Owner oder can_invite)
+    const inviterId = req.authUser.id;
+    const { data: inviter } = await supabase.from('team_members')
+      .select('id, role, can_invite').eq('team_id', req.params.id).eq('user_id', inviterId).maybeSingle();
+    if (!inviter) return res.status(403).json({ error: 'Du bist kein Mitglied dieses Teams' });
+    if (inviter.role !== 'owner' && !inviter.can_invite) {
+      return res.status(403).json({ error: 'Du hast keine Berechtigung, Mitglieder einzuladen' });
+    }
+
     // Prüfen ob schon per E-Mail eingeladen
     const { data: existingByEmail } = await supabase.from('team_members')
       .select('id').eq('team_id', req.params.id).eq('email', email).maybeSingle();
@@ -1716,7 +1744,7 @@ app.post('/teams/:id/invite', verifyUser, async (req, res) => {
 app.get('/teams/:id/members', verifyUser, async (req, res) => {
   try {
     const { data, error } = await supabase.from('team_members')
-      .select('id, user_id, email, role, created_at')
+      .select('id, user_id, email, role, can_invite, created_at')
       .eq('team_id', req.params.id)
       .order('created_at', { ascending: true });
     if (error) return res.status(500).json({ error: error.message });
@@ -1737,6 +1765,23 @@ app.delete('/teams/:id/members/:memberId', verifyUser, async (req, res) => {
       .delete().eq('id', req.params.memberId).eq('team_id', req.params.id);
     if (error) return res.status(500).json({ error: error.message });
     res.json({ success: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// Einladeberechtigung eines Mitglieds togglen (nur Owner)
+app.patch('/teams/:id/members/:memberId/can-invite', verifyUser, async (req, res) => {
+  try {
+    const userId = req.authUser.id;
+    const { data: ownerCheck } = await supabase.from('team_members')
+      .select('id').eq('team_id', req.params.id).eq('user_id', userId).eq('role', 'owner').maybeSingle();
+    if (!ownerCheck) return res.status(403).json({ error: 'Nur der Owner kann Berechtigungen ändern' });
+
+    const { can_invite } = req.body;
+    const { error } = await supabase.from('team_members')
+      .update({ can_invite: !!can_invite })
+      .eq('id', req.params.memberId).eq('team_id', req.params.id);
+    if (error) return res.status(500).json({ error: error.message });
+    res.json({ success: true, can_invite: !!can_invite });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
