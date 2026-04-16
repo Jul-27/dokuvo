@@ -1862,6 +1862,11 @@
         mBadge.textContent = isPremium ? '∞' : remaining;
         mBadge.className = isPremium ? 'remaining-badge premium' : 'remaining-badge';
       }
+      // Home screen usage bar sync
+      const homeUsage = document.getElementById('homeUsageCount');
+      const homeBar = document.getElementById('homeUsageBar');
+      if (homeUsage) homeUsage.textContent = isPremium ? '∞' : remaining;
+      if (homeBar) homeBar.style.display = isPremium ? 'none' : '';
     }
 
     // Zähler nach jeder Aktion (Upload, Foto, Chat) aktualisieren
