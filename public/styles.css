@@ -3777,6 +3777,23 @@ body {
   .fristen-block { padding: 10px 12px; }
 }
 
+/* ── SMALL PHONE (≤480px) ── */
+@media (max-width: 480px) {
+  .app-header { padding: 0 10px; height: 48px; }
+  .header-logo { font-size: 1rem; gap: 6px; }
+  .remaining-badge { font-size: 0.7rem; padding: 3px 8px; }
+  .mobile-bottom-nav { height: 50px; }
+  .mobile-nav-item { font-size: 9px; gap: 2px; }
+  .report-view { padding: 12px 10px; }
+  .report-title { font-size: 1rem; }
+  .report-tab { padding: 5px 10px; font-size: 0.68rem; }
+  .chat-messages { padding: 8px 8px; }
+  .chat-input-row { padding: 6px 8px; border-radius: 12px; }
+  .home-screen { padding: 24px 12px; }
+  .home-screen h2 { font-size: 1.1rem; }
+  .action-card { padding: 16px 12px; }
+}
+
 /* ══ VORLAGEN ══ */
 .templates-intro {
   background: var(--bg-elevated);
