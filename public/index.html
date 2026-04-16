@@ -2239,6 +2239,154 @@
       container.appendChild(block);
     }
 
+    // ── Report View (Phase 6) ──
+    const TAB_CONFIG = [
+      { key: 'risiken', label: 'Risiken', icon: 'alert-triangle', color: 'var(--warning)' },
+      { key: 'zusammenfassung', label: 'Zusammenfassung', icon: 'file-text', color: 'var(--purple, #A78BFA)' },
+      { key: 'fristen', label: 'Fristen', icon: 'calendar-clock', color: 'var(--accent-light)' },
+      { key: 'checkliste', label: 'Checkliste', icon: 'check-square', color: 'var(--orange, #F97316)' },
+      { key: 'handlungen', label: 'Handlungen', icon: 'list-checks', color: 'var(--success)' },
+      { key: 'glossar', label: 'Glossar', icon: 'book-open', color: 'var(--cyan, #22D3EE)' },
+    ];
+
+    const TAB_ORDER = {
+      mietvertrag: ['risiken', 'fristen', 'checkliste', 'handlungen', 'glossar'],
+      befund: ['zusammenfassung', 'glossar', 'handlungen', 'checkliste'],
+      default: ['risiken', 'zusammenfassung', 'fristen', 'checkliste', 'handlungen', 'glossar'],
+    };
+
+    function getAvailableTabs(data, docType) {
+      const order = TAB_ORDER[docType] || TAB_ORDER.default;
+      return order
+        .map(key => TAB_CONFIG.find(t => t.key === key))
+        .filter(tab => {
+          const val = data[tab.key];
+          return val && (Array.isArray(val) ? val.length > 0 : Object.keys(val).length > 0);
+        });
+    }
+
+    function renderReportTabContent(key, data, container) {
+      container.innerHTML = '';
+      const tempDiv = document.createElement('div');
+      switch (key) {
+        case 'risiken': zeigeRisikoBlock(data.risiken, tempDiv); break;
+        case 'fristen': zeigeFristenBlock(data.fristen, tempDiv); break;
+        case 'zusammenfassung': zeigeZusammenfassungBlock(data.zusammenfassung, tempDiv); break;
+        case 'handlungen': zeigeHandlungenBlock(data.handlungen, tempDiv); break;
+        case 'glossar': zeigeGlossarBlock(data.glossar, tempDiv); break;
+        case 'checkliste': zeigeChecklisteBlock(data.checkliste, tempDiv); break;
+      }
+      while (tempDiv.firstChild) container.appendChild(tempDiv.firstChild);
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function zeigeReportView(data, fileName) {
+      const reportEl = document.getElementById('reportView');
+      const chatMessages = document.getElementById('chatMessages');
+      const chatEmpty = document.getElementById('chatEmpty');
+
+      chatEmpty.style.display = 'none';
+      chatMessages.style.display = 'none';
+      reportEl.style.display = '';
+
+      const docType = window._templateContext || 'default';
+      const tabs = getAvailableTabs(data, docType);
+
+      // Risk summary counts
+      let riskHtml = '';
+      if (data.risiken && data.risiken.length) {
+        const counts = { rot: 0, gelb: 0, gruen: 0 };
+        data.risiken.forEach(r => { if (counts[r.risiko] !== undefined) counts[r.risiko]++; });
+        const badges = [];
+        if (counts.rot) badges.push(`<span class="risk-badge rot">${counts.rot} hoch</span>`);
+        if (counts.gelb) badges.push(`<span class="risk-badge gelb">${counts.gelb} mittel</span>`);
+        if (counts.gruen) badges.push(`<span class="risk-badge gruen">${counts.gruen} gering</span>`);
+        riskHtml = `<div class="report-risk-summary">${badges.join('')}</div>`;
+      }
+
+      // Key facts from zusammenfassung
+      let factsHtml = '';
+      if (data.zusammenfassung) {
+        const z = data.zusammenfassung;
+        const facts = [];
+        if (z.dokumenttyp) facts.push({ label: 'Typ', value: z.dokumenttyp });
+        if (z.parteien?.length) facts.push({ label: 'Parteien', value: z.parteien.join(', ') });
+        if (z.laufzeit) facts.push({ label: 'Laufzeit', value: z.laufzeit });
+        if (z.kosten) facts.push({ label: 'Kosten', value: z.kosten });
+        if (facts.length) {
+          factsHtml = `<div class="report-key-facts">${facts.map(f =>
+            `<div class="report-fact"><span class="report-fact-label">${f.label}:</span><span class="report-fact-value">${escapeHtml(f.value)}</span></div>`
+          ).join('')}</div>`;
+        }
+      }
+
+      // Tabs HTML
+      const tabsHtml = tabs.length > 0 ? `
+        <div class="report-tabs">
+          ${tabs.map((tab, i) => `
+            <button class="report-tab${i === 0 ? ' active' : ''}" data-tab="${tab.key}" onclick="switchReportTab(this, '${tab.key}')">
+              <span class="report-tab-indicator" style="background:${tab.color};"></span>
+              ${tab.label}
+            </button>
+          `).join('')}
+        </div>
+        <div class="report-tab-content" id="reportTabContent"></div>
+      ` : '';
+
+      const displayName = fileName || 'Dokument';
+
+      reportEl.innerHTML = `
+        <div class="report-header">
+          <div class="report-title">
+            <i data-lucide="file-text" class="report-title-icon" style="width:20px;height:20px;"></i>
+            Report: ${escapeHtml(displayName)}
+          </div>
+          <div class="report-subtitle">Analyse abgeschlossen</div>
+        </div>
+        ${(factsHtml || riskHtml) ? `
+          <div class="report-overview">
+            <div class="report-overview-title">
+              <i data-lucide="info" style="width:14px;height:14px;"></i> Übersicht
+            </div>
+            ${factsHtml}
+            ${riskHtml}
+          </div>
+        ` : ''}
+        ${tabsHtml}
+        <div class="report-explanation">${marked.parse(data.explanation || '')}</div>
+        <div class="report-footer">
+          <button class="report-chat-btn" onclick="wechsleZuChatView()">
+            <i data-lucide="message-circle" style="width:16px;height:16px;"></i> Rückfrage stellen
+          </button>
+        </div>
+      `;
+
+      // Render first tab content
+      if (tabs.length > 0) {
+        renderReportTabContent(tabs[0].key, data, document.getElementById('reportTabContent'));
+      }
+
+      // Store data for tab switching
+      reportEl._reportData = data;
+
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      reportEl.scrollTop = 0;
+    }
+
+    function switchReportTab(btn, key) {
+      btn.closest('.report-tabs').querySelectorAll('.report-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      const content = document.getElementById('reportTabContent');
+      const data = document.getElementById('reportView')._reportData;
+      renderReportTabContent(key, data, content);
+    }
+
+    function wechsleZuChatView() {
+      document.getElementById('reportView').style.display = 'none';
+      document.getElementById('chatMessages').style.display = 'flex';
+      document.getElementById('chatInput').focus();
+    }
+
     // ── Alle Analyse-Blöcke rendern ──
     function zeigeAnalyseBlocks(data, container) {
       zeigeRisikoBlock(data.risiken, container);
