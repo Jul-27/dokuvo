@@ -1703,7 +1703,7 @@ body {
   top: 12px;
   left: 12px;
   z-index: 10;
-  background: rgba(6,11,24,0.85);
+  background: var(--bg-base);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--border-default);
@@ -1732,7 +1732,7 @@ body {
 .persistent-topbar-toggle {
   display: flex;
   flex-shrink: 0;
-  background: rgba(6,11,24,0.85);
+  background: var(--bg-base);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--border-default);
@@ -3681,7 +3681,7 @@ body {
 
 /* ── MOBILE HEADER ── */
 .app-header {
-  background: rgba(6, 11, 24, 0.95);
+  background: var(--bg-base);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-subtle);
