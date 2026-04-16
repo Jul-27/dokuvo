@@ -3587,11 +3587,13 @@ body {
   .persistent-topbar { display: none !important; }
 }
 
-/* Sidebar auf Mobile: fixed overlay */
+/* Sidebar auf Mobile: Full-Screen Session-Liste */
 @media (max-width: 768px) {
   .chat-sidebar {
     position: fixed;
-    top: 0; left: 0; bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100% !important;
+    min-width: 100% !important;
     z-index: 200;
     margin-left: 0;
     transform: translateX(-100%);
@@ -3693,6 +3695,23 @@ body {
   .app-header { display: flex !important; }
   .mobile-bottom-nav { display: block; }
   .erklaeren-layout { height: calc(100vh - 52px - 56px); }
+
+  /* Mobile sessions button + sidebar close */
+  .mobile-sessions-btn, .mobile-sidebar-close {
+    background: none;
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    color: var(--text-muted);
+    width: 34px;
+    height: 34px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    flex-shrink: 0;
+  }
+  .mobile-sessions-btn:active, .mobile-sidebar-close:active { opacity: 0.7; }
 
   /* Theme toggle icons in bottom nav */
   .mobile-nav-item .theme-icon-dark { display: none; }
