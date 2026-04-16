@@ -2939,6 +2939,7 @@
       addBubble('user', `📄 ${file.name}`);
       document.getElementById('chatEmpty').style.display = 'none';
       document.getElementById('chatMessages').style.display = 'flex';
+      document.getElementById('reportView').style.display = 'none';
       const loadingId = 'loading_' + Date.now();
       addBubble('assistant', '<span style="color:#48484A">Dokument wird analysiert...</span>', loadingId);
       try {
@@ -2957,7 +2958,7 @@
           { user_id: user.id, session_id: currentSessionId, role: 'user', message: `📄 ${file.name}` },
           { user_id: user.id, session_id: currentSessionId, role: 'assistant', message: buildMessageWithAnalyse(data.explanation, data) }
         ]);
-        await zeigeAntwortMitTypewriter(data.explanation, data.followUps, data.fristen || [], data);
+        zeigeReportView(data, file.name);
         if (isNewSession) { await ladeChatSessions(); aktualisiereAktiveSession(); }
         aktualisiereZaehlerNachAktion();
       } catch (err) {
@@ -2983,6 +2984,7 @@
       addBubble('user', '📸 Foto wird analysiert...');
       document.getElementById('chatEmpty').style.display = 'none';
       document.getElementById('chatMessages').style.display = 'flex';
+      document.getElementById('reportView').style.display = 'none';
       const loadingId = 'loading_' + Date.now();
       addBubble('assistant', '<span style="color:#48484A">Bild wird erkannt...</span>', loadingId);
       try {
@@ -3001,7 +3003,7 @@
           { user_id: user.id, session_id: currentSessionId, role: 'user', message: '📸 Foto analysiert' },
           { user_id: user.id, session_id: currentSessionId, role: 'assistant', message: buildMessageWithAnalyse(data.explanation, data) }
         ]);
-        await zeigeAntwortMitTypewriter(data.explanation, data.followUps, data.fristen || [], data);
+        zeigeReportView(data, 'Foto-Analyse');
         if (isNewSession) { await ladeChatSessions(); aktualisiereAktiveSession(); }
         aktualisiereZaehlerNachAktion();
       } catch (err) {
