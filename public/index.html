@@ -587,7 +587,13 @@
         today: 'heute',
         // Home
         homeTitle: 'Was darf ich für dich erklären?',
-        homeSubtitle: 'Lade ein Dokument hoch, stelle eine Frage oder mache ein Foto',
+        homeSubtitle: 'Lade ein Dokument hoch, vergleiche Verträge oder stelle eine Frage.',
+        homeActionAnalyze: 'Dokument analysieren',
+        homeActionAnalyzeDesc: 'PDF oder Foto hochladen',
+        homeActionCompare: 'Dokumente vergleichen',
+        homeActionCompareDesc: '2 Dokumente gegenüberstellen',
+        homeUsage: 'Analysen heute',
+        homeUpgrade: 'Upgraden',
         uploadPdf: 'PDF hochladen',
         takePhoto: 'Foto machen',
         compareDocs: 'Dokumente vergleichen',
@@ -680,7 +686,13 @@
         showAllChats: 'Show all {n} chats',
         today: 'today',
         homeTitle: 'What can I explain for you?',
-        homeSubtitle: 'Upload a document, ask a question, or take a photo',
+        homeSubtitle: 'Upload a document, compare contracts, or ask a question.',
+        homeActionAnalyze: 'Analyze document',
+        homeActionAnalyzeDesc: 'Upload PDF or photo',
+        homeActionCompare: 'Compare documents',
+        homeActionCompareDesc: 'Compare 2 documents side by side',
+        homeUsage: 'analyses today',
+        homeUpgrade: 'Upgrade',
         uploadPdf: 'Upload PDF',
         takePhoto: 'Take photo',
         compareDocs: 'Compare documents',
@@ -791,11 +803,20 @@
       if (homeTitle) homeTitle.textContent = t('homeTitle');
       if (homeSub) homeSub.textContent = t('homeSubtitle');
 
-      // Quick action buttons
-      const quickBtns = document.querySelectorAll('.quick-btn');
-      if (quickBtns[0]) quickBtns[0].innerHTML = '<i data-lucide="file-text" style="width:16px;height:16px;"></i> ' + t('uploadPdf');
-      if (quickBtns[1]) quickBtns[1].innerHTML = '<i data-lucide="camera" style="width:16px;height:16px;"></i> ' + t('takePhoto');
-      if (quickBtns[2]) quickBtns[2].innerHTML = '<i data-lucide="git-compare" style="width:16px;height:16px;"></i> ' + t('compareDocs');
+      // Action Cards
+      const actionCards = document.querySelectorAll('.action-card');
+      if (actionCards[0]) {
+        actionCards[0].querySelector('.action-card-title').textContent = t('homeActionAnalyze');
+        actionCards[0].querySelector('.action-card-desc').textContent = t('homeActionAnalyzeDesc');
+      }
+      if (actionCards[1]) {
+        actionCards[1].querySelector('.action-card-title').textContent = t('homeActionCompare');
+        actionCards[1].querySelector('.action-card-desc').textContent = t('homeActionCompareDesc');
+      }
+
+      // Home usage bar
+      const upgradeLink = document.querySelector('.home-upgrade-link');
+      if (upgradeLink) upgradeLink.textContent = t('homeUpgrade');
 
       // Depth
       const depthLabel = document.querySelector('.depth-label');
