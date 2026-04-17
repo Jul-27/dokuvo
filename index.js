@@ -688,8 +688,9 @@ app.post('/analyze-image', upload.single('image'), async (req, res) => {
 });
 
 // ── Checkout Session erstellen ────────────────────────────────────────────────
-app.post('/create-checkout', async (req, res) => {
-  const { user_id, email } = req.body;
+app.post('/create-checkout', verifyUser, async (req, res) => {
+  const user_id = req.authUser.id;
+  const email = req.authUser.email;
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
