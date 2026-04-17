@@ -1,4 +1,5 @@
 const express = require('express');
+const helmet = require('helmet');
 const Groq = require('groq-sdk');
 const { createClient } = require('@supabase/supabase-js');
 const Stripe = require('stripe');
@@ -26,6 +27,22 @@ const supabase = createClient(
   process.env.SUPABASE_SECRET_KEY
 );
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    useDefaults: true,
+    directives: {
+      "default-src": ["'self'"],
+      "script-src": ["'self'", "'unsafe-inline'", "https://js.stripe.com", "https://cdnjs.cloudflare.com"],
+      "style-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      "font-src": ["'self'", "https://fonts.gstatic.com", "data:"],
+      "img-src": ["'self'", "data:", "blob:", "https:"],
+      "connect-src": ["'self'", "https://*.supabase.co", "https://api.stripe.com"],
+      "frame-src": ["https://js.stripe.com", "https://hooks.stripe.com"]
+    }
+  },
+  crossOriginEmbedderPolicy: false
+}));
 
 // Webhook braucht raw body — muss VOR express.json() stehen
 app.use('/webhook', express.raw({ type: 'application/json' }));
