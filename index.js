@@ -875,7 +875,7 @@ async function erneuereGoogleToken() {
 }
 
 // ── Fristen-Alarm via Google Calendar ────────────────────────────────────────
-app.post('/kalender-alarm', async (req, res) => {
+app.post('/kalender-alarm', verifyUser, async (req, res) => {
   const { titel, datum, beschreibung } = req.body;
   try {
     const startDate = new Date(datum);
