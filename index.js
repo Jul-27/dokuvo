@@ -1155,7 +1155,8 @@ app.get('/chat/:user_id/:session_id', verifyUser, async (req, res) => {
       .select('role, message, created_at')
       .eq('user_id', user_id)
       .eq('session_id', session_id)
-      .order('created_at', { ascending: true });
+      .order('created_at', { ascending: true })
+      .limit(200);
 
     // Falls keine eigenen Nachrichten: prüfen ob über Team geteilt
     if (!data || data.length === 0) {
@@ -1179,7 +1180,8 @@ app.get('/chat/:user_id/:session_id', verifyUser, async (req, res) => {
             .select('role, message, created_at')
             .eq('user_id', share.shared_by)
             .eq('session_id', session_id)
-            .order('created_at', { ascending: true });
+            .order('created_at', { ascending: true })
+            .limit(200);
           data = sharedData || [];
         }
       }
