@@ -14,6 +14,7 @@ require('dotenv').config();
 
 const AVATAR_EXT_WHITELIST = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
 const isUuid = (v) => typeof v === 'string' && validator.isUUID(v);
+const APP_URL = process.env.APP_URL || '${APP_URL}';
 
 const upload = multer({ 
   storage: multer.memoryStorage(),
@@ -1753,7 +1754,7 @@ app.post('/teams/:id/invite', verifyUser, async (req, res) => {
               <div style="font-weight:600;font-size:1rem;">Team: ${teamName}</div>
               <div style="color:#6b7280;font-size:0.9rem;margin-top:6px;">Melde dich bei Dokuvo an, um dem Team beizutreten und gemeinsam Dokumente zu analysieren.</div>
             </div>
-            <a href="https://eli10-app-olxw.vercel.app/join-team/${req.params.id}/${encodeURIComponent(email)}" style="display:inline-block;background:#3B82F6;color:white;text-decoration:none;border-radius:8px;padding:12px 24px;font-weight:600;margin-top:8px;">Team beitreten</a>
+            <a href="${APP_URL}/join-team/${req.params.id}/${encodeURIComponent(email)}" style="display:inline-block;background:#3B82F6;color:white;text-decoration:none;border-radius:8px;padding:12px 24px;font-weight:600;margin-top:8px;">Team beitreten</a>
             <p style="color:#6b7280;font-size:0.85rem;margin-top:24px;">Diese Einladung wurde über Dokuvo versendet.</p>
           </div>
         `
@@ -1877,7 +1878,7 @@ app.get('/join-team/:teamId/:email', async (req, res) => {
         h2{color:#F87171;margin-top:0;}p{color:#7A7F88;line-height:1.6;}
         a{display:inline-block;margin-top:16px;background:#3B82F6;color:white;text-decoration:none;border-radius:8px;padding:12px 24px;font-weight:600;}</style></head>
         <body><div class="card"><h2>Einladung ungültig</h2><p>Diese Einladung ist ungültig oder abgelaufen. Bitte fordere eine neue Einladung an.</p>
-        <a href="https://eli10-app-olxw.vercel.app/app">Zur App</a></div></body></html>`);
+        <a href="${APP_URL}/app">Zur App</a></div></body></html>`);
     }
 
     // user_id zuweisen falls der User inzwischen einen Account hat
@@ -1891,7 +1892,7 @@ app.get('/join-team/:teamId/:email', async (req, res) => {
     }
 
     const teamName = member.teams?.name || 'dem Team';
-    res.redirect(`https://eli10-app-olxw.vercel.app/app?joined=${encodeURIComponent(teamName)}`);
+    res.redirect(`${APP_URL}/app?joined=${encodeURIComponent(teamName)}`);
   } catch (err) { res.status(500).send('Serverfehler'); }
 });
 
