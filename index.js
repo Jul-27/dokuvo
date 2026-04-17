@@ -1617,12 +1617,14 @@ app.post('/reminders/notify', async (req, res) => {
       .select('*')
       .lte('due_date', today)
       .eq('notified', false);
-    for (const r of (due || [])) {
+    await Promise.all((due || []).map(async r => {
       try {
         await sendReminderEmail(r.email, r.title, r.due_date, r.description);
         await supabase.from('reminders').update({ notified: true }).eq('id', r.id);
-      } catch(e) { console.error('E-Mail Fehler für Reminder', r.id, e.message); }
-    }
+      } catch (e) {
+        console.error('E-Mail Fehler für Reminder', r.id, e.message);
+      }
+    }));
     res.json({ notified: (due || []).length });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
