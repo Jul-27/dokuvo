@@ -45,6 +45,18 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false
 }));
 
+// ── Request Logger (Routen, keine statischen Assets) ───────────────────────
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    if (!req.path.startsWith('/public/') && !req.path.match(/\.(css|js|png|jpg|jpeg|svg|ico|woff2?)$/)) {
+      const ms = Date.now() - start;
+      console.log(`${req.method} ${req.path} ${res.statusCode} ${ms}ms`);
+    }
+  });
+  next();
+});
+
 // Webhook braucht raw body — muss VOR express.json() stehen
 app.use('/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json({ limit: '10mb' }));
