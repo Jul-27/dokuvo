@@ -103,17 +103,22 @@ app.post('/webhook', async (req, res) => {
   if (event.type === 'customer.subscription.created') {
     const subscription = event.data.object;
     const customerId = subscription.customer;
+    const metaUserId = subscription.metadata?.user_id;
     const customer = await stripe.customers.retrieve(customerId);
     const email = customer.email;
-    await supabase.from('users').upsert({ id: customerId, email, plan: 'premium' });
-    console.log(`Premium aktiviert für: ${email}`);
+    if (metaUserId) {
+      await supabase.from('users').upsert({ id: metaUserId, email, plan: 'premium', stripe_customer_id: customerId });
+      console.log(`Premium aktiviert für user_id ${metaUserId} (${email})`);
+    } else {
+      console.error('Webhook: subscription.created ohne metadata.user_id', customerId);
+    }
   }
 
   if (event.type === 'customer.subscription.deleted') {
     const subscription = event.data.object;
     const customerId = subscription.customer;
-    await supabase.from('users').update({ plan: 'free' }).eq('id', customerId);
-    console.log(`Premium deaktiviert für customer: ${customerId}`);
+    await supabase.from('users').update({ plan: 'free' }).eq('stripe_customer_id', customerId);
+    console.log(`Premium deaktiviert für stripe_customer ${customerId}`);
   }
 
   res.json({ received: true });
