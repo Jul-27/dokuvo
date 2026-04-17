@@ -10,6 +10,8 @@ const fs = require('fs');
 const escapeHtml = require('escape-html');
 require('dotenv').config();
 
+const AVATAR_EXT_WHITELIST = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
+
 const upload = multer({ 
   storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 }
@@ -1165,14 +1167,18 @@ app.get('/chat/:user_id/:session_id', verifyUser, async (req, res) => {
 // ── Profilbild hochladen ──────────────────────────────────────────────────────
 app.post('/upload-avatar', verifyUser, async (req, res) => {
   const { user_id, image_base64, file_ext } = req.body;
+  if (!file_ext || !AVATAR_EXT_WHITELIST.includes(String(file_ext).toLowerCase())) {
+    return res.status(400).json({ error: 'Ungültiges Dateiformat' });
+  }
+  const safeExt = String(file_ext).toLowerCase();
   try {
     const { data: userData } = await supabase.auth.admin.getUserById(user_id);
     const email = userData?.user?.email;
-    const fileName = `${user_id}.${file_ext}`;
+    const fileName = `${user_id}.${safeExt}`;
     const buffer = Buffer.from(image_base64, 'base64');
     const { error: uploadError } = await supabase.storage
       .from('avatars')
-      .upload(fileName, buffer, { contentType: `image/${file_ext}`, upsert: true });
+      .upload(fileName, buffer, { contentType: `image/${safeExt}`, upsert: true });
     if (uploadError) return res.status(500).json({ error: uploadError.message });
     const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(fileName);
     // Zuerst versuchen zu updaten, wenn 0 rows → insert
