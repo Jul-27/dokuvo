@@ -1688,22 +1688,31 @@ app.get('/teams/:user_id', verifyUser, async (req, res) => {
       }
     }
 
-    // Member- und Shared-Counts für jedes Team laden (per-team count queries)
-    const countResults = await Promise.all(teams.map(async t => {
-      const [memberRes, sharedRes] = await Promise.all([
-        supabase.from('team_members').select('*', { count: 'exact', head: true }).eq('team_id', t.id),
-        supabase.from('team_shares').select('*', { count: 'exact', head: true }).eq('team_id', t.id)
-      ]);
-      return { id: t.id, member_count: memberRes.count || 0, shared_count: sharedRes.count || 0 };
-    }));
-
-    const countMap = {};
-    for (const c of countResults) countMap[c.id] = c;
+    // Bulk member + shared counts in 2 queries statt 2N
+    const teamIds = teams.map(t => t.id);
+    const memberCountMap = {};
+    const sharedCountMap = {};
+    if (teamIds.length) {
+      const { data: memberRows } = await supabase
+        .from('team_members')
+        .select('team_id')
+        .in('team_id', teamIds);
+      for (const row of (memberRows || [])) {
+        memberCountMap[row.team_id] = (memberCountMap[row.team_id] || 0) + 1;
+      }
+      const { data: sharedRows } = await supabase
+        .from('team_shares')
+        .select('team_id')
+        .in('team_id', teamIds);
+      for (const row of (sharedRows || [])) {
+        sharedCountMap[row.team_id] = (sharedCountMap[row.team_id] || 0) + 1;
+      }
+    }
 
     const teamsWithCounts = teams.map(t => ({
       ...t,
-      member_count: countMap[t.id]?.member_count ?? 0,
-      shared_count: countMap[t.id]?.shared_count ?? 0
+      member_count: memberCountMap[t.id] || 0,
+      shared_count: sharedCountMap[t.id] || 0
     }));
 
     res.json(teamsWithCounts);
