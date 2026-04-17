@@ -7,6 +7,7 @@ const multer = require('multer');
 const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
+const escapeHtml = require('escape-html');
 require('dotenv').config();
 
 const upload = multer({ 
@@ -1299,7 +1300,7 @@ app.get('/shared/:id', async (req, res) => {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${data.title} – Dokuvo</title>
+        <title>${escapeHtml(data.title)} – Dokuvo</title>
         <meta name="description" content="Erklärung erstellt mit Dokuvo – Komplexe Dokumente einfach verstehen.">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1386,9 +1387,9 @@ app.get('/shared/:id', async (req, res) => {
           <a href="/app" class="share-cta">Selbst ausprobieren</a>
         </header>
         <main class="share-content">
-          <h1 class="share-title">${data.title}</h1>
+          <h1 class="share-title">${escapeHtml(data.title)}</h1>
           <div class="share-meta">Erstellt am ${date} mit Dokuvo</div>
-          <div class="share-body">${data.content}</div>
+          <div class="share-body">${escapeHtml(data.content).replace(/\n/g, '<br>')}</div>
         </main>
         <footer class="share-footer">
           <p>Erstellt mit <a href="/">Dokuvo</a> — Komplexe Dokumente einfach verstehen</p>
