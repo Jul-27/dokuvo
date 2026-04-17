@@ -8,9 +8,11 @@ const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
 const escapeHtml = require('escape-html');
+const validator = require('validator');
 require('dotenv').config();
 
 const AVATAR_EXT_WHITELIST = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
+const isUuid = (v) => typeof v === 'string' && validator.isUUID(v);
 
 const upload = multer({ 
   storage: multer.memoryStorage(),
@@ -34,6 +36,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 async function verifyUser(req, res, next) {
   const user_id = req.body.user_id || req.params.user_id || req.query.user_id || req.headers['x-user-id'];
   if (!user_id) return res.status(401).json({ error: 'Nicht autorisiert' });
+  if (!isUuid(user_id)) return res.status(400).json({ error: 'Ungültige user_id' });
   try {
     const { data, error } = await supabase.auth.admin.getUserById(user_id);
     if (error || !data?.user) return res.status(401).json({ error: 'Ungültige Sitzung' });
