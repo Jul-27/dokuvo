@@ -1,6 +1,5 @@
 const express = require('express');
 const helmet = require('helmet');
-const { createClient } = require('@supabase/supabase-js');
 const Stripe = require('stripe');
 const path = require('path');
 const multer = require('multer');
@@ -26,6 +25,7 @@ const {
   extrahiereAnnotationen,
   extractPdfText,
 } = require('./lib/llm');
+const { supabase } = require('./lib/db');
 
 const AVATAR_EXT_WHITELIST = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
 const isUuid = (v) => typeof v === 'string' && validator.isUUID(v);
@@ -37,10 +37,6 @@ const upload = multer({
 });
 
 const app = express();
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SECRET_KEY
-);
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 app.use(helmet({
