@@ -24,7 +24,7 @@ const {
   extractPdfText,
 } = require('./lib/llm');
 const { supabase } = require('./lib/db');
-const { AVATAR_EXT_WHITELIST, FREE_LIMIT, isUuid, verifyUser, checkAndCountUsage } = require('./lib/auth');
+const { isUuid, verifyUser, checkAndCountUsage } = require('./lib/auth');
 const { sendReminderEmail, sendTeamInviteEmail } = require('./lib/email');
 const { renderSharedNotFound, renderSharedPage, renderInviteInvalid } = require('./lib/share-template');
 
@@ -199,44 +199,6 @@ app.post('/upload-document', upload.single('document'), async (req, res) => {
   } catch (error) {
     console.error('Upload Fehler:', error.message);
     res.status(500).json({ error: 'Dokument konnte nicht verarbeitet werden.' });
-  }
-});
-
-// ── Status prüfen ─────────────────────────────────────────────────────────────
-app.post('/check-status', verifyUser, async (req, res) => {
-  const { user_id } = req.body;
-  const today = new Date().toISOString().split('T')[0];
-  const FREE_LIMIT = 5;
-
-  try {
-    const { data: sessionData } = await supabase.auth.admin.getUserById(user_id);
-    const userEmail = sessionData?.user?.email;
-
-    const { data: userData, error } = await supabase
-      .from('users')
-      .select('plan, created_at')
-      .eq('email', userEmail)
-      .single();
-
-    const isPremium = !error && userData?.plan === 'premium';
-
-    if (isPremium) {
-      return res.json({ remaining: 999, isPremium: true, premiumSince: userData.created_at });
-    }
-
-    const { data: usageData } = await supabase
-      .from('usage')
-      .select('count')
-      .eq('user_id', user_id)
-      .eq('date', today)
-      .single();
-
-    const remaining = FREE_LIMIT - (usageData?.count || 0);
-    res.json({ remaining, isPremium: false, premiumSince: null });
-
-  } catch (err) {
-    console.error('check-status Fehler:', err.message);
-    res.json({ remaining: 5, isPremium: false, premiumSince: null });
   }
 });
 
@@ -790,96 +752,6 @@ app.get('/chat/:user_id/:session_id', verifyUser, async (req, res) => {
 });
 
 // ── Profilbild hochladen ──────────────────────────────────────────────────────
-app.post('/upload-avatar', verifyUser, async (req, res) => {
-  const { user_id, image_base64, file_ext } = req.body;
-  if (!file_ext || !AVATAR_EXT_WHITELIST.includes(String(file_ext).toLowerCase())) {
-    return res.status(400).json({ error: 'Ungültiges Dateiformat' });
-  }
-  const safeExt = String(file_ext).toLowerCase();
-  try {
-    const { data: userData } = await supabase.auth.admin.getUserById(user_id);
-    const email = userData?.user?.email;
-    const fileName = `${user_id}.${safeExt}`;
-    const buffer = Buffer.from(image_base64, 'base64');
-    const { error: uploadError } = await supabase.storage
-      .from('avatars')
-      .upload(fileName, buffer, { contentType: `image/${safeExt}`, upsert: true });
-    if (uploadError) return res.status(500).json({ error: uploadError.message });
-    const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(fileName);
-    // Zuerst versuchen zu updaten, wenn 0 rows → insert
-    const { data: existing } = await supabase.from('users').select('id').eq('email', email).single();
-    if (existing) {
-      await supabase.from('users').update({ avatar_url: urlData.publicUrl }).eq('email', email);
-    } else {
-      await supabase.from('users').insert({ id: user_id, email, avatar_url: urlData.publicUrl, plan: 'free' });
-    }
-    res.json({ avatar_url: urlData.publicUrl });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// ── Anzeigename speichern ─────────────────────────────────────────────────────
-app.post('/update-profile', verifyUser, async (req, res) => {
-  const { user_id, display_name } = req.body;
-  try {
-    const { data: userData } = await supabase.auth.admin.getUserById(user_id);
-    const email = userData?.user?.email;
-    // Zuerst versuchen zu updaten, wenn 0 rows → insert
-    const { data: existing } = await supabase.from('users').select('id').eq('email', email).single();
-    if (existing) {
-      await supabase.from('users').update({ display_name }).eq('email', email);
-    } else {
-      await supabase.from('users').insert({ id: user_id, email, display_name, plan: 'free' });
-    }
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// ── Passwort ändern ───────────────────────────────────────────────────────────
-app.post('/change-password', verifyUser, async (req, res) => {
-  const { user_id, new_password } = req.body;
-  try {
-    const { error } = await supabase.auth.admin.updateUserById(user_id, { password: new_password });
-    if (error) return res.status(400).json({ error: error.message });
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// ── Account löschen ───────────────────────────────────────────────────────────
-app.post('/delete-account', verifyUser, async (req, res) => {
-  const { user_id } = req.body;
-  try {
-    const { data: userData } = await supabase.auth.admin.getUserById(user_id);
-    const email = userData?.user?.email;
-    await supabase.from('users').delete().eq('email', email);
-    await supabase.from('usage').delete().eq('user_id', user_id);
-    await supabase.from('history').delete().eq('user_id', user_id);
-    await supabase.from('chats').delete().eq('user_id', user_id);
-    await supabase.auth.admin.deleteUser(user_id);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// ── Profildaten laden ─────────────────────────────────────────────────────────
-app.post('/get-profile', verifyUser, async (req, res) => {
-  const { user_id } = req.body;
-  try {
-    const { data: userData } = await supabase.auth.admin.getUserById(user_id);
-    const email = userData?.user?.email;
-    const { data } = await supabase.from('users').select('display_name, avatar_url, plan, created_at').eq('email', email).single();
-    res.json(data || {});
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 // ── Erklärung teilen (Share erstellen) ───────────────────────────────────────
 app.post('/share', verifyUser, async (req, res) => {
   const { user_id, session_id, title, content } = req.body;
@@ -1351,6 +1223,8 @@ app.delete('/teams/:id', verifyUser, async (req, res) => {
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
+
+app.use(require('./routes/auth'));
 
 // ── 404 Handler (alle nicht gematchten Routen) ──────────────────────────────
 app.use((req, res) => {
