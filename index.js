@@ -26,7 +26,7 @@ const {
 const { supabase } = require('./lib/db');
 const { isUuid, verifyUser, checkAndCountUsage } = require('./lib/auth');
 const { sendReminderEmail, sendTeamInviteEmail } = require('./lib/email');
-const { renderSharedNotFound, renderSharedPage, renderInviteInvalid } = require('./lib/share-template');
+const { renderInviteInvalid } = require('./lib/share-template');
 
 const APP_URL = process.env.APP_URL || '${APP_URL}';
 
@@ -751,48 +751,6 @@ app.get('/chat/:user_id/:session_id', verifyUser, async (req, res) => {
   }
 });
 
-// ── Profilbild hochladen ──────────────────────────────────────────────────────
-// ── Erklärung teilen (Share erstellen) ───────────────────────────────────────
-app.post('/share', verifyUser, async (req, res) => {
-  const { user_id, session_id, title, content } = req.body;
-  if (!content) return res.status(400).json({ error: 'Kein Inhalt zum Teilen' });
-
-  try {
-    const { data, error } = await supabase
-      .from('shared_explanations')
-      .insert({ user_id, session_id, title: title || 'Dokuvo-Erklärung', content })
-      .select('id')
-      .single();
-
-    if (error) return res.status(500).json({ error: error.message });
-
-    const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
-    res.json({ shareUrl: `${baseUrl}/shared/${data.id}`, shareId: data.id });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// ── Geteilte Erklärung anzeigen (öffentlich) ─────────────────────────────────
-app.get('/shared/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    const { data, error } = await supabase
-      .from('shared_explanations')
-      .select('title, content, created_at')
-      .eq('id', id)
-      .single();
-
-    if (error || !data) {
-      return res.status(404).send(renderSharedNotFound());
-    }
-
-    res.send(renderSharedPage({ title: data.title, content: data.content, createdAt: data.created_at }));
-  } catch (err) {
-    res.status(500).send('Fehler beim Laden der Erklärung');
-  }
-});
-
 // Erinnerung erstellen
 app.post('/reminders', verifyUser, async (req, res) => {
   const { user_id, title, due_date, description, email } = req.body;
@@ -1131,6 +1089,7 @@ app.delete('/teams/:id', verifyUser, async (req, res) => {
 
 app.use(require('./routes/auth'));
 app.use(require('./routes/folders'));
+app.use(require('./routes/sharing'));
 
 // ── 404 Handler (alle nicht gematchten Routen) ──────────────────────────────
 app.use((req, res) => {
