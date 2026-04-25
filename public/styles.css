@@ -86,18 +86,8 @@
   --font-size-xl: 1.3rem;
   --font-size-2xl: 1.6rem;
   --font-size-3xl: 2rem;
-}
 
-body {
-  font-family: var(--font-family);
-  background: linear-gradient(160deg, var(--bg-base) 0%, var(--bg-surface) 50%, var(--bg-base) 100%);
-  min-height: 100vh;
-  color: var(--text-primary);
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ── LEGACY VARIABLE ALIASES (bridge to new tokens) ── */
-    :root {
+  /* Legacy variable aliases — bridge to new tokens */
   --primary: var(--text-primary);
   --gray-50: var(--bg-base);
   --gray-100: var(--bg-elevated);

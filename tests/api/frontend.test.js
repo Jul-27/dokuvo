@@ -27,10 +27,16 @@ describe('Frontend smoke (Milestone C)', () => {
     expect(res.text).toContain('id="appScreen"');
   });
 
-  test('styles.css declares the design tokens', async () => {
+  test('styles.css declares :root exactly once', async () => {
     const res = await request(BASE_URL).get('/styles.css');
-    // Baseline: 2 occurrences (legacy duplicate). Tightened to ===1 in Task 2.
     const matches = res.text.match(/^:root\s*{/gm) || [];
-    expect(matches.length).toBeGreaterThanOrEqual(1);
+    expect(matches.length).toBe(1);
+  });
+
+  test('styles.css declares body exactly once at top of file', async () => {
+    const res = await request(BASE_URL).get('/styles.css');
+    // Match top-level "body { ... }" rule (not nested selectors like ".foo body").
+    const matches = res.text.match(/^body\s*{/gm) || [];
+    expect(matches.length).toBe(1);
   });
 });
