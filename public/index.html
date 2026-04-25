@@ -9,7 +9,6 @@
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -796,6 +795,24 @@
       if (window.lucide) window.lucide.createIcons();
 
       return { overlay, modal, close };
+    }
+
+    // ── jsPDF lazy loader ──
+    // jsPDF (~300 KB) wird nur on-demand geladen, wenn der User
+    // einen PDF-Export auslöst. Cached die Promise, sodass parallele
+    // Klicks nicht mehrfach laden.
+    let _jspdfPromise = null;
+    function loadJsPDF() {
+      if (window.jspdf) return Promise.resolve(window.jspdf);
+      if (_jspdfPromise) return _jspdfPromise;
+      _jspdfPromise = new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+        s.onload = () => resolve(window.jspdf);
+        s.onerror = () => { _jspdfPromise = null; reject(new Error('jsPDF konnte nicht geladen werden')); };
+        document.head.appendChild(s);
+      });
+      return _jspdfPromise;
     }
 
     function setLanguage(lang) {
@@ -2527,7 +2544,8 @@
       lucide.createIcons();
 
       try {
-        const { jsPDF } = window.jspdf;
+        const jspdf = await loadJsPDF();
+        const { jsPDF } = jspdf;
         const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
         // Dokuvo Header

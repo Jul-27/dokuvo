@@ -57,6 +57,12 @@ describe('Frontend smoke (Milestone C)', () => {
     expect(res.text).not.toMatch(/data:image\/png;base64/);
   });
 
+  test('app HTML does not eager-load jsPDF', async () => {
+    const res = await request(BASE_URL).get('/app');
+    expect(res.text).not.toMatch(/<script[^>]+jspdf\.umd\.min\.js/);
+    expect(res.text).toMatch(/function loadJsPDF/);
+  });
+
   test('extracted logo assets serve 200 with image/png', async () => {
     const small = await request(BASE_URL).get('/assets/dokuvo-logo.png');
     const big = await request(BASE_URL).get('/assets/dokuvo-logo-large.png');
