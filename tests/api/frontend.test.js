@@ -51,4 +51,21 @@ describe('Frontend smoke (Milestone C)', () => {
     expect(res.text).toMatch(/setAttribute\(['"]role['"],\s*['"]dialog['"]\)/);
     expect(res.text).toMatch(/setAttribute\(['"]aria-modal['"],\s*['"]true['"]\)/);
   });
+
+  test('app HTML contains no inline base64 images', async () => {
+    const res = await request(BASE_URL).get('/app');
+    expect(res.text).not.toMatch(/data:image\/png;base64/);
+  });
+
+  test('extracted logo assets serve 200 with image/png', async () => {
+    const small = await request(BASE_URL).get('/assets/dokuvo-logo.png');
+    const big = await request(BASE_URL).get('/assets/dokuvo-logo-large.png');
+    const topbar = await request(BASE_URL).get('/assets/dokuvo-logo-topbar.png');
+    expect(small.status).toBe(200);
+    expect(big.status).toBe(200);
+    expect(topbar.status).toBe(200);
+    expect(small.headers['content-type']).toMatch(/image\/png/);
+    expect(big.headers['content-type']).toMatch(/image\/png/);
+    expect(topbar.headers['content-type']).toMatch(/image\/png/);
+  });
 });
