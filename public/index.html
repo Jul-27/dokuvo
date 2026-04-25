@@ -758,6 +758,46 @@
       return (i18n[currentLang] && i18n[currentLang][key]) || i18n.de[key] || key;
     }
 
+    // ── Modal-Factory ──
+    // Erstellt ein Standard-Overlay mit role="dialog", aria-modal,
+    // Backdrop-Click + ESC zum Schliessen. Wenn opts.title gesetzt:
+    // automatisches <h3> + aria-labelledby. Ansonsten kommt opts.html
+    // unverändert in den .share-modal.
+    function createModalOverlay(opts = {}) {
+      document.querySelectorAll('.share-modal-overlay').forEach(el => el.remove());
+
+      const overlay = document.createElement('div');
+      overlay.className = 'share-modal-overlay';
+
+      const modal = document.createElement('div');
+      modal.className = 'share-modal' + (opts.modalClass ? ' ' + opts.modalClass : '');
+      if (opts.modalStyle) modal.style.cssText = opts.modalStyle;
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-modal', 'true');
+
+      if (opts.title) {
+        const titleId = 'modal-title-' + Math.random().toString(36).slice(2, 9);
+        modal.setAttribute('aria-labelledby', titleId);
+        modal.innerHTML = `<h3 id="${titleId}">${opts.title}</h3>` + (opts.html || '');
+      } else {
+        modal.innerHTML = opts.html || '';
+      }
+
+      function close() {
+        overlay.remove();
+        document.removeEventListener('keydown', onKey);
+      }
+      function onKey(e) { if (e.key === 'Escape') close(); }
+      overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+      document.addEventListener('keydown', onKey);
+
+      overlay.appendChild(modal);
+      document.body.appendChild(overlay);
+      if (window.lucide) window.lucide.createIcons();
+
+      return { overlay, modal, close };
+    }
+
     function setLanguage(lang) {
       currentLang = lang;
       localStorage.setItem('dokuvo_lang', lang);
@@ -1231,12 +1271,9 @@
     }
 
     async function erstelleTeam() {
-      const overlay = document.createElement('div');
-      overlay.className = 'share-modal-overlay';
-      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-      overlay.innerHTML = `
-        <div class="share-modal">
-          <h3>Team erstellen</h3>
+      const { modal, close } = createModalOverlay({
+        title: 'Team erstellen',
+        html: `
           <p>Gib deinem Team einen Namen, um gemeinsam an Dokumenten zu arbeiten.</p>
           <div style="margin-bottom:16px;">
             <input type="text" class="share-link-input" id="teamNameInput" placeholder="z.B. Marketing, Rechtsabteilung …" maxlength="50" style="width:100%;border-radius:8px;">
@@ -1245,16 +1282,15 @@
             <button class="share-close-btn" id="teamCreateCancelBtn">Abbrechen</button>
             <button class="share-copy-btn" id="teamCreateConfirmBtn">Erstellen</button>
           </div>
-        </div>
-      `;
-      document.body.appendChild(overlay);
-      const input = overlay.querySelector('#teamNameInput');
+        `,
+      });
+      const input = modal.querySelector('#teamNameInput');
       input.focus();
-      overlay.querySelector('#teamCreateCancelBtn').onclick = () => overlay.remove();
-      overlay.querySelector('#teamCreateConfirmBtn').onclick = async () => {
+      modal.querySelector('#teamCreateCancelBtn').onclick = close;
+      modal.querySelector('#teamCreateConfirmBtn').onclick = async () => {
         const name = input.value.trim();
         if (!name) return;
-        overlay.remove();
+        close();
         const { data: { session } } = await supabaseClient.auth.getSession();
         const user = session?.user;
         if (!user) return;
@@ -1268,8 +1304,7 @@
         ladeTeams();
       };
       input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') overlay.querySelector('#teamCreateConfirmBtn').click();
-        if (e.key === 'Escape') overlay.remove();
+        if (e.key === 'Enter') modal.querySelector('#teamCreateConfirmBtn').click();
       });
     }
 
@@ -1375,22 +1410,19 @@
       const teamId = btn.dataset.teamId;
       const memberId = btn.dataset.memberId;
       const memberLabel = btn.dataset.label;
-      const overlay = document.createElement('div');
-      overlay.className = 'share-modal-overlay';
-      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-      overlay.innerHTML = `
-        <div class="share-modal">
-          <h3>Mitglied entfernen</h3>
+      const { modal, close } = createModalOverlay({
+        title: 'Mitglied entfernen',
+        html: `
           <p>Möchtest du <strong>${escapeHtml(memberLabel)}</strong> wirklich aus dem Team entfernen?</p>
           <div class="share-modal-footer" style="gap:10px;">
             <button class="share-close-btn" id="removeCancelBtn">Abbrechen</button>
             <button id="removeConfirmBtn" style="background:var(--danger);color:white;border:none;border-radius:8px;padding:9px 20px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;">Entfernen</button>
           </div>
-        </div>`;
-      document.body.appendChild(overlay);
-      overlay.querySelector('#removeCancelBtn').onclick = () => overlay.remove();
-      overlay.querySelector('#removeConfirmBtn').onclick = async () => {
-        overlay.remove();
+        `,
+      });
+      modal.querySelector('#removeCancelBtn').onclick = close;
+      modal.querySelector('#removeConfirmBtn').onclick = async () => {
+        close();
         const { data: { session } } = await supabaseClient.auth.getSession();
         const user = session?.user;
         const res = await fetch(`/teams/${teamId}/members/${memberId}?user_id=${user.id}`, {
@@ -1418,12 +1450,9 @@
     }
 
     async function ladeTeamMitgliederEinladen(teamId) {
-      const overlay = document.createElement('div');
-      overlay.className = 'share-modal-overlay';
-      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-      overlay.innerHTML = `
-        <div class="share-modal">
-          <h3>Mitglied einladen</h3>
+      const { modal, close } = createModalOverlay({
+        title: 'Mitglied einladen',
+        html: `
           <p>Gib die E-Mail-Adresse der Person ein, die du ins Team einladen möchtest.</p>
           <div style="margin-bottom:16px;">
             <input type="email" class="share-link-input" id="inviteEmailInput" placeholder="name@beispiel.de" style="width:100%;border-radius:8px;">
@@ -1432,16 +1461,15 @@
             <button class="share-close-btn" id="inviteCancelBtn">Abbrechen</button>
             <button class="share-copy-btn" id="inviteConfirmBtn">Einladen</button>
           </div>
-        </div>
-      `;
-      document.body.appendChild(overlay);
-      const input = overlay.querySelector('#inviteEmailInput');
+        `,
+      });
+      const input = modal.querySelector('#inviteEmailInput');
       input.focus();
-      overlay.querySelector('#inviteCancelBtn').onclick = () => overlay.remove();
-      overlay.querySelector('#inviteConfirmBtn').onclick = async () => {
+      modal.querySelector('#inviteCancelBtn').onclick = close;
+      modal.querySelector('#inviteConfirmBtn').onclick = async () => {
         const email = input.value.trim();
         if (!email) return;
-        const confirmBtn = overlay.querySelector('#inviteConfirmBtn');
+        const confirmBtn = modal.querySelector('#inviteConfirmBtn');
         confirmBtn.disabled = true;
         confirmBtn.textContent = 'Wird eingeladen…';
         const { data: { session } } = await supabaseClient.auth.getSession();
@@ -1455,14 +1483,12 @@
         if (data.error) {
           confirmBtn.disabled = false;
           confirmBtn.textContent = 'Einladen';
-          const modal = overlay.querySelector('.share-modal');
           let errEl = modal.querySelector('.invite-error-msg');
           if (!errEl) { errEl = document.createElement('p'); errEl.className = 'invite-error-msg'; errEl.style.cssText = 'color:#F87171;font-size:0.82rem;margin:0 0 12px;'; modal.insertBefore(errEl, modal.querySelector('.share-modal-footer')); }
           errEl.textContent = data.error;
           return;
         }
         // Erfolg im Modal anzeigen
-        const modal = overlay.querySelector('.share-modal');
         modal.innerHTML = `
           <div style="text-align:center;padding:12px 0 4px;">
             <div style="width:48px;height:48px;border-radius:50%;background:rgba(52,211,153,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
@@ -1470,13 +1496,13 @@
             </div>
             <h3 style="color:var(--text-primary);font-size:1.05rem;font-weight:700;margin-bottom:8px;">Einladung gesendet</h3>
             <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:20px;">${escapeHtml(data.email)} wurde eingeladen.</p>
-            <button class="share-copy-btn" onclick="this.closest('.share-modal-overlay').remove()" style="width:100%;">Schließen</button>
+            <button class="share-copy-btn" id="inviteSuccessCloseBtn" style="width:100%;">Schließen</button>
           </div>`;
+        modal.querySelector('#inviteSuccessCloseBtn').onclick = close;
         ladeTeamMitglieder(teamId);
       };
       input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') overlay.querySelector('#inviteConfirmBtn').click();
-        if (e.key === 'Escape') overlay.remove();
+        if (e.key === 'Enter') modal.querySelector('#inviteConfirmBtn').click();
       });
     }
 
@@ -1523,11 +1549,9 @@
     }
 
     async function loescheTeam(teamId, teamName) {
-      const overlay = document.createElement('div');
-      overlay.className = 'share-modal-overlay';
-      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-      overlay.innerHTML = `
-        <div class="share-modal" style="text-align:center;">
+      const { modal, close } = createModalOverlay({
+        modalStyle: 'text-align:center;',
+        html: `
           <div style="width:56px;height:56px;border-radius:50%;background:rgba(248,113,113,0.10);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
           </div>
@@ -1537,11 +1561,11 @@
             <button class="share-close-btn" id="teamDeleteCancelBtn">Abbrechen</button>
             <button id="teamDeleteConfirmBtn" style="background:var(--danger);color:white;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Endgültig löschen</button>
           </div>
-        </div>`;
-      document.body.appendChild(overlay);
-      overlay.querySelector('#teamDeleteCancelBtn').onclick = () => overlay.remove();
-      overlay.querySelector('#teamDeleteConfirmBtn').onclick = async () => {
-        const btn = overlay.querySelector('#teamDeleteConfirmBtn');
+        `,
+      });
+      modal.querySelector('#teamDeleteCancelBtn').onclick = close;
+      modal.querySelector('#teamDeleteConfirmBtn').onclick = async () => {
+        const btn = modal.querySelector('#teamDeleteConfirmBtn');
         btn.textContent = 'Löscht...';
         btn.disabled = true;
         try {
@@ -1555,7 +1579,7 @@
           });
           const result = await res.json();
           if (result.error) { alert(result.error); return; }
-          overlay.remove();
+          close();
           ladeTeams();
         } catch (err) {
           alert('Fehler beim Löschen');
@@ -1574,12 +1598,9 @@
       const teams = await res.json();
       if (!teams.length) { alert('Du bist noch in keinem Team. Erstelle zuerst ein Team.'); return; }
 
-      const overlay = document.createElement('div');
-      overlay.className = 'share-modal-overlay';
-      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-      overlay.innerHTML = `
-        <div class="share-modal">
-          <h3>Mit Team teilen</h3>
+      const { modal, close } = createModalOverlay({
+        title: 'Mit Team teilen',
+        html: `
           <p>Wähle das Team, mit dem du diesen Chat teilen möchtest.</p>
           <div style="margin-bottom:12px;">
             <select id="teamSelectInput" style="width:100%;background:#111214;border:1px solid #2A2D32;border-radius:8px;color:#E8EAED;padding:10px 12px;font-size:0.9rem;font-family:inherit;outline:none;cursor:pointer;">
@@ -1593,14 +1614,13 @@
             <button class="share-close-btn" id="teamShareCancelBtn">Abbrechen</button>
             <button class="share-copy-btn" id="teamShareConfirmBtn">Teilen</button>
           </div>
-        </div>
-      `;
-      document.body.appendChild(overlay);
-      overlay.querySelector('#teamShareCancelBtn').onclick = () => overlay.remove();
-      overlay.querySelector('#teamShareConfirmBtn').onclick = async () => {
-        const teamId = overlay.querySelector('#teamSelectInput').value;
-        const note = overlay.querySelector('#teamShareNoteInput').value.trim();
-        const confirmBtn = overlay.querySelector('#teamShareConfirmBtn');
+        `,
+      });
+      modal.querySelector('#teamShareCancelBtn').onclick = close;
+      modal.querySelector('#teamShareConfirmBtn').onclick = async () => {
+        const teamId = modal.querySelector('#teamSelectInput').value;
+        const note = modal.querySelector('#teamShareNoteInput').value.trim();
+        const confirmBtn = modal.querySelector('#teamShareConfirmBtn');
         confirmBtn.disabled = true;
         confirmBtn.textContent = 'Wird geteilt…';
         const shareRes = await fetch(`/teams/${teamId}/share`, {
@@ -1612,14 +1632,12 @@
         if (data.error) {
           confirmBtn.disabled = false;
           confirmBtn.textContent = 'Teilen';
-          const modal = overlay.querySelector('.share-modal');
           let errEl = modal.querySelector('.share-error-msg');
           if (!errEl) { errEl = document.createElement('p'); errEl.className = 'share-error-msg'; errEl.style.cssText = 'color:#F87171;font-size:0.82rem;margin:0 0 12px;'; modal.insertBefore(errEl, modal.querySelector('.share-modal-footer')); }
           errEl.textContent = data.error;
           return;
         }
-        const selectedTeamName = overlay.querySelector('#teamSelectInput').options[overlay.querySelector('#teamSelectInput').selectedIndex]?.text || 'Team';
-        const modal = overlay.querySelector('.share-modal');
+        const selectedTeamName = modal.querySelector('#teamSelectInput').options[modal.querySelector('#teamSelectInput').selectedIndex]?.text || 'Team';
         modal.innerHTML = `
           <div style="text-align:center;padding:12px 0 4px;">
             <div style="width:48px;height:48px;border-radius:50%;background:rgba(52,211,153,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
@@ -1627,8 +1645,9 @@
             </div>
             <h3 style="color:#E8EAED;font-size:1.05rem;font-weight:700;margin-bottom:8px;">Erfolgreich geteilt</h3>
             <p style="color:#7A7F88;font-size:0.85rem;margin-bottom:20px;">Dieser Chat wurde mit <strong style="color:#E8EAED;">${escapeHtml(selectedTeamName)}</strong> geteilt.</p>
-            <button class="share-copy-btn" onclick="this.closest('.share-modal-overlay').remove()" style="width:100%;">Schließen</button>
+            <button class="share-copy-btn" id="teamShareSuccessCloseBtn" style="width:100%;">Schließen</button>
           </div>`;
+        modal.querySelector('#teamShareSuccessCloseBtn').onclick = close;
         const btn = event.target.closest('.session-share-btn');
         if (btn) { btn.style.color = '#34D399'; setTimeout(() => { btn.style.color = ''; }, 2000); }
       };
@@ -1740,19 +1759,18 @@
       const joinedParam = new URLSearchParams(window.location.search).get('joined');
       if (joinedParam) {
         history.replaceState(null, '', window.location.pathname);
-        const overlay = document.createElement('div');
-        overlay.className = 'share-modal-overlay';
-        overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-        overlay.innerHTML = `
-          <div class="share-modal" style="text-align:center;">
+        const { modal, close } = createModalOverlay({
+          modalStyle: 'text-align:center;',
+          html: `
             <div style="width:56px;height:56px;border-radius:50%;background:rgba(59,130,246,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <h3 style="color:#E8EAED;font-size:1.1rem;font-weight:700;margin-bottom:8px;">Team beigetreten!</h3>
             <p style="color:#7A7F88;font-size:0.88rem;margin-bottom:22px;">Du bist jetzt Mitglied im Team '${decodeURIComponent(joinedParam).replace(/'/g, '&#39;').replace(/</g, '&lt;')}'.</p>
-            <button class="share-copy-btn" onclick="this.closest('.share-modal-overlay').remove()" style="width:100%;">Los geht's</button>
-          </div>`;
-        document.body.appendChild(overlay);
+            <button class="share-copy-btn" id="joinedTeamCloseBtn" style="width:100%;">Los geht's</button>
+          `,
+        });
+        modal.querySelector('#joinedTeamCloseBtn').onclick = close;
       }
 
       // ── Drag & Drop für Dateien ──
@@ -2471,28 +2489,20 @@
     }
 
     function zeigeShareModal(url) {
-      // Altes Modal entfernen falls vorhanden
-      document.querySelectorAll('.share-modal-overlay').forEach(el => el.remove());
-
-      const overlay = document.createElement('div');
-      overlay.className = 'share-modal-overlay';
-      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-
-      overlay.innerHTML = `
-        <div class="share-modal">
-          <h3>${t('shareTitle')}</h3>
+      const { modal, close } = createModalOverlay({
+        title: t('shareTitle'),
+        html: `
           <p>${t('shareDesc')}</p>
           <div class="share-link-row">
             <input type="text" class="share-link-input" id="shareLinkInput" value="${url}" readonly onclick="this.select()">
             <button class="share-copy-btn" onclick="copyShareLink(this)">${t('copy')}</button>
           </div>
           <div class="share-modal-footer">
-            <button class="share-close-btn" onclick="this.closest('.share-modal-overlay').remove()">${t('close')}</button>
+            <button class="share-close-btn" id="shareCloseBtn">${t('close')}</button>
           </div>
-        </div>
-      `;
-
-      document.body.appendChild(overlay);
+        `,
+      });
+      modal.querySelector('#shareCloseBtn').onclick = close;
     }
 
     function copyShareLink(btn) {

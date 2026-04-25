@@ -39,4 +39,16 @@ describe('Frontend smoke (Milestone C)', () => {
     const matches = res.text.match(/^body\s*{/gm) || [];
     expect(matches.length).toBe(1);
   });
+
+  test('app HTML defines a single modal factory', async () => {
+    const res = await request(BASE_URL).get('/app');
+    const matches = res.text.match(/function createModalOverlay\s*\(/g) || [];
+    expect(matches.length).toBe(1);
+  });
+
+  test('app HTML modal factory sets role="dialog" and aria-modal', async () => {
+    const res = await request(BASE_URL).get('/app');
+    expect(res.text).toMatch(/setAttribute\(['"]role['"],\s*['"]dialog['"]\)/);
+    expect(res.text).toMatch(/setAttribute\(['"]aria-modal['"],\s*['"]true['"]\)/);
+  });
 });
