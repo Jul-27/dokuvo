@@ -63,6 +63,23 @@ describe('Frontend smoke (Milestone C)', () => {
     expect(res.text).toMatch(/function loadJsPDF/);
   });
 
+  test('app HTML i18n covers Milestone C keys for both DE and EN', async () => {
+    const res = await request(BASE_URL).get('/app');
+    const requiredKeys = [
+      'loading', 'errorDelete', 'noTeamYet',
+      'speechUnsupported', 'micDenied', 'confirmDeleteAccount', 'searchError',
+      'recognizedDeadlines', 'addToCalendar', 'savedShort', 'remindMe',
+      'reminderSet', 'riskTrafficLight', 'docStats', 'recommendations',
+      'glossary', 'checklist', 'highlightedPassages',
+    ];
+    for (const k of requiredKeys) {
+      const re = new RegExp(`\\b${k}\\s*:`, 'g');
+      const matches = res.text.match(re) || [];
+      // Each key should appear at least twice (once in i18n.de, once in i18n.en).
+      expect(matches.length).toBeGreaterThanOrEqual(2);
+    }
+  });
+
   test('extracted logo assets serve 200 with image/png', async () => {
     const small = await request(BASE_URL).get('/assets/dokuvo-logo.png');
     const big = await request(BASE_URL).get('/assets/dokuvo-logo-large.png');
