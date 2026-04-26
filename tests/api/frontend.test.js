@@ -90,6 +90,15 @@ describe('Frontend smoke (Milestone C)', () => {
     expect(res.text).toMatch(/aria-label="Spracheingabe"/);
   });
 
+  test('app HTML migrated icon-sizing inline styles to .icon-* classes', async () => {
+    const html = await request(BASE_URL).get('/app');
+    const css = await request(BASE_URL).get('/styles.css');
+    const pureMatches = html.text.match(/style="width:\d+px;height:\d+px;?"/g) || [];
+    expect(pureMatches.length).toBeLessThan(5);
+    expect(html.text).toMatch(/class="icon-16"/);
+    expect(css.text).toMatch(/\.icon-12\s*{\s*width:\s*12px/);
+  });
+
   test('app HTML has live regions for status messages', async () => {
     const res = await request(BASE_URL).get('/app');
     const liveMatches = res.text.match(/aria-live="polite"/g) || [];

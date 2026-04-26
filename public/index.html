@@ -15,7 +15,7 @@
 
   <!-- AUTH SCREEN -->
   <div id="authScreen">
-    <div class="auth-logo"><img src="/assets/dokuvo-logo-large.png" style="width:100px;height:100px;"></div>
+    <div class="auth-logo"><img src="/assets/dokuvo-logo-large.png" class="icon-100"></div>
     <h1 class="auth-title">Dokuvo</h1>
     <p class="auth-subtitle">Dein KI-Assistent für komplexe Dokumente und Fragen</p>
 
@@ -47,14 +47,14 @@
     <div class="app-header">
       <div class="header-top">
         <button onclick="toggleSidebar()" class="mobile-only mobile-sessions-btn" title="Sessions" aria-label="Sessions öffnen">
-          <i data-lucide="menu" style="width:18px;height:18px;"></i>
+          <i data-lucide="menu" class="icon-18"></i>
         </button>
         <div class="header-logo" onclick="switchTab('home')" style="cursor:pointer;" title="Zum Erklären-Tab" role="button" tabindex="0" aria-label="Zur Startseite">
           <img src="/assets/dokuvo-logo.png" style="width:24px;height:24px;vertical-align:middle;"> Dokuvo
         </div>
         <div style="display:flex;align-items:center;gap:6px;">
           <span class="remaining-badge" id="remainingBadge">
-            <i data-lucide="zap" style="width:12px;height:12px;"></i> <span id="remainingCount">5</span> heute
+            <i data-lucide="zap" class="icon-12"></i> <span id="remainingCount">5</span> heute
           </span>
           <button onclick="neuerChat()" class="mobile-only" style="background:#3B82F6;border:none;border-radius:8px;color:white;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;" aria-label="Neuer Chat">+ Neu</button>
         </div>
@@ -63,16 +63,16 @@
       <!-- TAB BAR (nur Desktop) -->
       <div class="tab-bar mobile-hidden">
         <button class="tab-item active" onclick="switchTab('home')">
-          <span class="tab-icon"><i data-lucide="wand-2" style="width:16px;height:16px;"></i></span>Erklären
+          <span class="tab-icon"><i data-lucide="wand-2" class="icon-16"></i></span>Erklären
         </button>
         <button class="tab-item" onclick="switchTab('premium')">
-          <span class="tab-icon"><i data-lucide="zap" style="width:16px;height:16px;"></i></span>Premium
+          <span class="tab-icon"><i data-lucide="zap" class="icon-16"></i></span>Premium
         </button>
         <button class="tab-item" onclick="switchTab('profile')">
-          <span class="tab-icon"><i data-lucide="user" style="width:16px;height:16px;"></i></span>Profil
+          <span class="tab-icon"><i data-lucide="user" class="icon-16"></i></span>Profil
         </button>
         <button class="tab-item" onclick="switchTab('about')">
-          <span class="tab-icon"><i data-lucide="info" style="width:16px;height:16px;"></i></span>Über
+          <span class="tab-icon"><i data-lucide="info" class="icon-16"></i></span>Über
         </button>
       </div>
     </div>
@@ -92,10 +92,10 @@
         </div>
         <div style="display:flex;gap:8px;">
           <button class="mobile-only mobile-sidebar-close" onclick="closeSidebar()" aria-label="Sidebar schließen">
-            <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
+            <i data-lucide="arrow-left" class="icon-18"></i>
           </button>
           <button class="new-chat-btn" onclick="neuerChat()" style="flex:1;">
-            <i data-lucide="plus" style="width:15px;height:15px;"></i> Neuer Chat
+            <i data-lucide="plus" class="icon-15"></i> Neuer Chat
           </button>
           <button class="sidebar-toggle-btn" id="sidebarCollapseBtn" onclick="toggleSidebar()" title="Sidebar einklappen" aria-label="Sidebar einklappen">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><polyline points="15 9 12 12 15 15"/></svg>
@@ -104,19 +104,19 @@
       </div>
       <div class="sidebar-nav">
         <button class="nav-item active" id="nav-home" onclick="switchTab('home')">
-          <i data-lucide="wand-2" style="width:16px;height:16px;"></i> <span data-i18n="explain">Erklären</span>
+          <i data-lucide="wand-2" class="icon-16"></i> <span data-i18n="explain">Erklären</span>
         </button>
         <button class="nav-item" id="nav-templates" onclick="switchTab('templates')">
-          <i data-lucide="file-search" style="width:16px;height:16px;"></i> <span data-i18n="templates">Assistent</span>
+          <i data-lucide="file-search" class="icon-16"></i> <span data-i18n="templates">Assistent</span>
         </button>
         <button class="nav-item" id="nav-premium" onclick="switchTab('premium')">
-          <i data-lucide="zap" style="width:16px;height:16px;"></i> <span data-i18n="premium">Premium</span>
+          <i data-lucide="zap" class="icon-16"></i> <span data-i18n="premium">Premium</span>
         </button>
         <button class="nav-item" id="nav-team" onclick="switchTab('team')">
-          <i data-lucide="users" style="width:16px;height:16px;"></i> Team
+          <i data-lucide="users" class="icon-16"></i> Team
         </button>
         <button class="nav-item" id="nav-about" onclick="switchTab('about')">
-          <i data-lucide="info" style="width:16px;height:16px;"></i> Über Dokuvo
+          <i data-lucide="info" class="icon-16"></i> Über Dokuvo
         </button>
       </div>
       <div class="sidebar-sessions-title">Chats</div>
@@ -202,7 +202,7 @@
             <span id="topbarCount">5</span> heute
           </span>
           <button class="new-chat-btn persistent-topbar-new" onclick="neuerChat()">
-            <i data-lucide="plus" style="width:15px;height:15px;"></i> Neu
+            <i data-lucide="plus" class="icon-15"></i> Neu
           </button>
         </div>
       </div>
@@ -216,12 +216,12 @@
 
             <div class="action-cards-row">
               <button class="action-card" onclick="document.getElementById('pdfInput').click()">
-                <div class="action-card-icon"><i data-lucide="file-text" style="width:28px;height:28px;"></i></div>
+                <div class="action-card-icon"><i data-lucide="file-text" class="icon-28"></i></div>
                 <div class="action-card-title">Dokument analysieren</div>
                 <div class="action-card-desc">PDF oder Foto hochladen</div>
               </button>
               <button class="action-card" onclick="starteVergleich()">
-                <div class="action-card-icon"><i data-lucide="git-compare" style="width:28px;height:28px;"></i></div>
+                <div class="action-card-icon"><i data-lucide="git-compare" class="icon-28"></i></div>
                 <div class="action-card-title">Dokumente vergleichen</div>
                 <div class="action-card-desc">2 Dokumente gegenüberstellen</div>
               </button>
@@ -272,19 +272,19 @@
                 </div>
                 <div style="display:flex; align-items:flex-end; gap:10px;">
                   <button class="attach-btn" onclick="document.getElementById('pdfInput').click()" aria-label="PDF hochladen">
-                    <i data-lucide="paperclip" style="width:18px;height:18px;"></i>
+                    <i data-lucide="paperclip" class="icon-18"></i>
                   </button>
                   <button class="attach-btn" onclick="document.getElementById('fotoInput').click()" aria-label="Foto hochladen">
-                    <i data-lucide="camera" style="width:18px;height:18px;"></i>
+                    <i data-lucide="camera" class="icon-18"></i>
                   </button>
                   <button class="mic-btn" id="micBtn" onclick="toggleVoiceInput()" title="Spracheingabe" aria-label="Spracheingabe">
-                    <i data-lucide="mic" style="width:18px;height:18px;"></i>
+                    <i data-lucide="mic" class="icon-18"></i>
                   </button>
                   <textarea id="chatInput" class="chat-textarea" placeholder="Stelle eine Frage oder füge Text ein..." rows="1"
                     onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();sendChatMessage()}"
                     oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
                   <button class="send-btn" onclick="sendChatMessage()" id="sendBtn" aria-label="Nachricht senden">
-                    <i data-lucide="send" style="width:18px;height:18px;"></i>
+                    <i data-lucide="send" class="icon-18"></i>
                   </button>
                 </div>
               </div>
@@ -299,7 +299,7 @@
         <p class="section-title" data-i18n="templatesTitle">Dokument-Assistent</p>
         <p class="section-subtitle" data-i18n="templatesSubtitle">Wähle eine Dokumentart — Dokuvo analysiert dein Dokument mit einem spezialisierten Assistenten.</p>
         <div class="templates-intro">
-          <div class="templates-intro-icon"><i data-lucide="sparkles" style="width:18px;height:18px;"></i></div>
+          <div class="templates-intro-icon"><i data-lucide="sparkles" class="icon-18"></i></div>
           <div class="templates-intro-text">Jede Dokumentart hat einen eigenen, optimierten KI-Assistenten. Wähle die passende Kategorie, lade dein Dokument hoch oder stelle eine Frage — und erhalte eine Analyse, die genau auf diesen Dokumenttyp zugeschnitten ist.</div>
         </div>
         <div class="templates-grid" id="templatesGrid"></div>
@@ -389,7 +389,7 @@
                   <img id="profileAvatarImg" src="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
                   <div id="profileAvatarInitial" style="font-size:1.2rem;font-weight:700;color:white;">?</div>
                   <div class="avatar-overlay">
-                    <i data-lucide="camera" style="width:16px;height:16px;"></i>
+                    <i data-lucide="camera" class="icon-16"></i>
                   </div>
                 </div>
                 <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="avatarHochladen()">
@@ -514,7 +514,7 @@
           <div class="teams-overview-header">
             <div class="teams-overview-title">Teams</div>
             <button class="teams-create-btn" onclick="erstelleTeam()">
-              <i data-lucide="plus" style="width:14px;height:14px;"></i> Neues Team
+              <i data-lucide="plus" class="icon-14"></i> Neues Team
             </button>
           </div>
           <div class="teams-grid" id="teamListe"></div>
@@ -530,16 +530,16 @@
   <nav class="mobile-bottom-nav">
     <div class="mobile-bottom-nav-inner">
       <button class="mobile-nav-item" id="mobile-nav-profile" onclick="switchTab('profile')">
-        <i data-lucide="settings" style="width:20px;height:20px;"></i>
+        <i data-lucide="settings" class="icon-20"></i>
         <span data-i18n="nav-profile">Einstellungen</span>
       </button>
       <button class="mobile-nav-item" id="mobile-nav-premium" onclick="switchTab('premium')">
-        <i data-lucide="zap" style="width:20px;height:20px;"></i>
+        <i data-lucide="zap" class="icon-20"></i>
         Premium
       </button>
       <button class="mobile-nav-item" id="mobile-nav-theme" onclick="toggleTheme()">
-        <i data-lucide="sun" style="width:20px;height:20px;" class="theme-icon-light"></i>
-        <i data-lucide="moon" style="width:20px;height:20px;" class="theme-icon-dark"></i>
+        <i data-lucide="sun" class="theme-icon-light icon-20"></i>
+        <i data-lucide="moon" class="theme-icon-dark icon-20"></i>
         <span data-i18n="nav-theme">Modus</span>
       </button>
     </div>
@@ -880,12 +880,12 @@
 
       // Sidebar
       const newChatBtn = document.querySelector('.new-chat-btn');
-      if (newChatBtn) newChatBtn.innerHTML = '<i data-lucide="plus" style="width:15px;height:15px;"></i> ' + t('newChat');
-      document.getElementById('nav-home').innerHTML = '<i data-lucide="wand-2" style="width:16px;height:16px;"></i> ' + t('explain');
-      document.getElementById('nav-templates').innerHTML = '<i data-lucide="file-search" style="width:16px;height:16px;"></i> ' + t('templates');
-      document.getElementById('nav-premium').innerHTML = '<i data-lucide="zap" style="width:16px;height:16px;"></i> ' + t('premium');
-      document.getElementById('nav-team').innerHTML = '<i data-lucide="users" style="width:16px;height:16px;"></i> ' + t('team');
-      document.getElementById('nav-about').innerHTML = '<i data-lucide="info" style="width:16px;height:16px;"></i> ' + t('aboutDokuvo');
+      if (newChatBtn) newChatBtn.innerHTML = '<i data-lucide="plus" class="icon-15"></i> ' + t('newChat');
+      document.getElementById('nav-home').innerHTML = '<i data-lucide="wand-2" class="icon-16"></i> ' + t('explain');
+      document.getElementById('nav-templates').innerHTML = '<i data-lucide="file-search" class="icon-16"></i> ' + t('templates');
+      document.getElementById('nav-premium').innerHTML = '<i data-lucide="zap" class="icon-16"></i> ' + t('premium');
+      document.getElementById('nav-team').innerHTML = '<i data-lucide="users" class="icon-16"></i> ' + t('team');
+      document.getElementById('nav-about').innerHTML = '<i data-lucide="info" class="icon-16"></i> ' + t('aboutDokuvo');
       // Vorlagen-Tab neu rendern bei Sprachwechsel
       const templatesTitle = document.querySelector('#tab-templates .section-title');
       if (templatesTitle) templatesTitle.textContent = t('templatesTitle');
@@ -1309,7 +1309,7 @@
         const roleLabel = t.role === 'owner' ? 'Owner' : 'Mitglied';
         return `
           <div class="team-overview-card" onclick="zeigeTeamDetail('${t.id}', '${escapeHtml(t.name)}')">
-            ${t.role === 'owner' ? `<button class="team-card-delete" onclick="event.stopPropagation();loescheTeam('${t.id}','${escapeHtml(t.name)}')" title="Team löschen" aria-label="Team löschen"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>` : ''}
+            ${t.role === 'owner' ? `<button class="team-card-delete" onclick="event.stopPropagation();loescheTeam('${t.id}','${escapeHtml(t.name)}')" title="Team löschen" aria-label="Team löschen"><i data-lucide="trash-2" class="icon-14"></i></button>` : ''}
             <div class="team-overview-card-header">
               <div class="team-overview-icon">${initial}</div>
               <div>
@@ -1375,7 +1375,7 @@
       const initial = teamName.charAt(0).toUpperCase();
       detailEl.innerHTML = `
         <button class="team-detail-back" onclick="ladeTeams()">
-          <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Alle Teams
+          <i data-lucide="arrow-left" class="icon-14"></i> Alle Teams
         </button>
         <div class="team-detail-header">
           <div class="team-detail-icon">${initial}</div>
@@ -1441,10 +1441,10 @@
             const roleClass = m.role === 'owner' ? 'role-owner' : (isPending ? 'role-pending' : 'role-member');
             const roleLabel = m.role === 'owner' ? 'Owner' : (isPending ? 'Eingeladen' : 'Mitglied');
             const deleteBtn = (isOwner && m.role !== 'owner')
-              ? `<button class="member-remove-btn" onclick="event.stopPropagation();entferneMitglied(this)" data-team-id="${teamId}" data-member-id="${m.id}" data-label="${escapeHtml(label)}" title="Mitglied entfernen" aria-label="Mitglied entfernen"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>`
+              ? `<button class="member-remove-btn" onclick="event.stopPropagation();entferneMitglied(this)" data-team-id="${teamId}" data-member-id="${m.id}" data-label="${escapeHtml(label)}" title="Mitglied entfernen" aria-label="Mitglied entfernen"><i data-lucide="trash-2" class="icon-14"></i></button>`
               : '';
             const inviteToggle = (isOwner && m.role !== 'owner' && !isPending)
-              ? `<button class="member-invite-toggle ${m.can_invite ? 'active' : ''}" onclick="event.stopPropagation();toggleCanInvite('${teamId}','${m.id}',${!m.can_invite})" title="${m.can_invite ? 'Einladerecht entziehen' : 'Darf einladen'}" aria-label="${m.can_invite ? 'Einladerecht entziehen' : 'Einladerecht erteilen'}"><i data-lucide="user-plus" style="width:13px;height:13px;"></i></button>`
+              ? `<button class="member-invite-toggle ${m.can_invite ? 'active' : ''}" onclick="event.stopPropagation();toggleCanInvite('${teamId}','${m.id}',${!m.can_invite})" title="${m.can_invite ? 'Einladerecht entziehen' : 'Darf einladen'}" aria-label="${m.can_invite ? 'Einladerecht entziehen' : 'Einladerecht erteilen'}"><i data-lucide="user-plus" class="icon-13"></i></button>`
               : '';
             return `
               <div class="member-row">
@@ -1593,7 +1593,7 @@
           </div>
           ${shares.map(s => `
             <div class="shared-doc-row" onclick="ladeSession('${s.session_id}')">
-              <span class="shared-doc-icon"><i data-lucide="file-text" style="width:14px;height:14px;"></i></span>
+              <span class="shared-doc-icon"><i data-lucide="file-text" class="icon-14"></i></span>
               <div style="flex:1;min-width:0;">
                 <div class="shared-doc-name">${escapeHtml(s.title)}</div>
                 ${s.note ? `<div class="shared-doc-note">${escapeHtml(s.note)}</div>` : ''}
@@ -2055,26 +2055,26 @@
 
         const btn = document.createElement('button');
         btn.className = 'frist-export-btn';
-        btn.innerHTML = `<i data-lucide="calendar-plus" style="width:12px;height:12px;"></i> ${t('addToCalendar')}`;
+        btn.innerHTML = `<i data-lucide="calendar-plus" class="icon-12"></i> ${t('addToCalendar')}`;
         btn.addEventListener('click', async () => {
           btn.disabled = true;
-          btn.innerHTML = `<i data-lucide="loader" style="width:12px;height:12px;"></i> ...`;
+          btn.innerHTML = `<i data-lucide="loader" class="icon-12"></i> ...`;
           lucide.createIcons();
           try {
             const result = await fristInGoogleKalender(f.titel, f.datum, f.beschreibung);
             if (result.success) {
-              btn.innerHTML = `<i data-lucide="check" style="width:12px;height:12px;"></i> ${t('savedShort')}`;
+              btn.innerHTML = `<i data-lucide="check" class="icon-12"></i> ${t('savedShort')}`;
               btn.style.borderColor = '#34D399';
               btn.style.color = '#34D399';
             } else {
               // Fallback: ICS Download
               generiereICS(f.titel, f.datum, f.beschreibung);
-              btn.innerHTML = `<i data-lucide="calendar-plus" style="width:12px;height:12px;"></i> ${t('addToCalendar')}`;
+              btn.innerHTML = `<i data-lucide="calendar-plus" class="icon-12"></i> ${t('addToCalendar')}`;
               btn.disabled = false;
             }
           } catch(e) {
             generiereICS(f.titel, f.datum, f.beschreibung);
-            btn.innerHTML = `<i data-lucide="calendar-plus" style="width:12px;height:12px;"></i> ${t('addToCalendar')}`;
+            btn.innerHTML = `<i data-lucide="calendar-plus" class="icon-12"></i> ${t('addToCalendar')}`;
             btn.disabled = false;
           }
           lucide.createIcons();
@@ -2082,7 +2082,7 @@
 
         const remindBtn = document.createElement('button');
         remindBtn.className = 'frist-remind-btn';
-        remindBtn.innerHTML = `<i data-lucide="bell" style="width:12px;height:12px;"></i> ${t('remindMe')}`;
+        remindBtn.innerHTML = `<i data-lucide="bell" class="icon-12"></i> ${t('remindMe')}`;
 
         const popup = document.createElement('div');
         popup.className = 'remind-popup';
@@ -2109,7 +2109,7 @@
             const tage = parseInt(dayBtn.dataset.days);
             popup.style.display = 'none';
             remindBtn.disabled = true;
-            remindBtn.innerHTML = `<i data-lucide="loader" style="width:12px;height:12px;"></i> ...`;
+            remindBtn.innerHTML = `<i data-lucide="loader" class="icon-12"></i> ...`;
             lucide.createIcons();
             try {
               const { data: { session } } = await supabaseClient.auth.getSession();
@@ -2128,13 +2128,13 @@
 
               if (resp.ok) {
                 remindBtn.className = 'frist-remind-btn set';
-                remindBtn.innerHTML = `<i data-lucide="check" style="width:12px;height:12px;"></i> ${t('reminderSet')}`;
+                remindBtn.innerHTML = `<i data-lucide="check" class="icon-12"></i> ${t('reminderSet')}`;
               } else {
-                remindBtn.innerHTML = `<i data-lucide="bell" style="width:12px;height:12px;"></i> ${t('remindMe')}`;
+                remindBtn.innerHTML = `<i data-lucide="bell" class="icon-12"></i> ${t('remindMe')}`;
                 remindBtn.disabled = false;
               }
             } catch(err) {
-              remindBtn.innerHTML = `<i data-lucide="bell" style="width:12px;height:12px;"></i> ${t('remindMe')}`;
+              remindBtn.innerHTML = `<i data-lucide="bell" class="icon-12"></i> ${t('remindMe')}`;
               remindBtn.disabled = false;
             }
             lucide.createIcons();
@@ -2413,7 +2413,7 @@
       reportEl.innerHTML = `
         <div class="report-header">
           <div class="report-title">
-            <i data-lucide="file-text" class="report-title-icon" style="width:20px;height:20px;"></i>
+            <i data-lucide="file-text" class="report-title-icon icon-20"></i>
             Report: ${escapeHtml(displayName)}
           </div>
           <div class="report-subtitle">Analyse abgeschlossen</div>
@@ -2421,7 +2421,7 @@
         ${(factsHtml || riskHtml) ? `
           <div class="report-overview">
             <div class="report-overview-title">
-              <i data-lucide="info" style="width:14px;height:14px;"></i> Übersicht
+              <i data-lucide="info" class="icon-14"></i> Übersicht
             </div>
             ${factsHtml}
             ${riskHtml}
@@ -2431,7 +2431,7 @@
         <div class="report-explanation">${marked.parse(data.explanation || '')}</div>
         <div class="report-footer">
           <button class="report-chat-btn" onclick="wechsleZuChatView()">
-            <i data-lucide="message-circle" style="width:16px;height:16px;"></i> Rückfrage stellen
+            <i data-lucide="message-circle" class="icon-16"></i> Rückfrage stellen
           </button>
         </div>
       `;
@@ -2511,7 +2511,7 @@
       if (!user) return;
 
       btn.disabled = true;
-      btn.innerHTML = '<i data-lucide="loader" style="width:13px;height:13px;"></i> ...';
+      btn.innerHTML = '<i data-lucide="loader" class="icon-13"></i> ...';
       lucide.createIcons();
 
       try {
@@ -2540,7 +2540,7 @@
       }
 
       btn.disabled = false;
-      btn.innerHTML = '<i data-lucide="share-2" style="width:13px;height:13px;"></i> Teilen';
+      btn.innerHTML = '<i data-lucide="share-2" class="icon-13"></i> Teilen';
       lucide.createIcons();
     }
 
@@ -2579,7 +2579,7 @@
       if (!resultText) return;
 
       btn.disabled = true;
-      btn.innerHTML = '<i data-lucide="loader" style="width:13px;height:13px;"></i> ...';
+      btn.innerHTML = '<i data-lucide="loader" class="icon-13"></i> ...';
       lucide.createIcons();
 
       try {
@@ -2628,7 +2628,7 @@
         doc.save(`Dokuvo_Erklärung_${new Date().toLocaleDateString('de-DE').replace(/\./g, '-')}.pdf`);
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '<i data-lucide="download" style="width:13px;height:13px;"></i> PDF';
+        btn.innerHTML = '<i data-lucide="download" class="icon-13"></i> PDF';
         lucide.createIcons();
       }
     }
@@ -2872,17 +2872,17 @@
         feedbackRow.innerHTML = `
           <span class="feedback-label">Hilfreich?</span>
           <button class="feedback-btn" onclick="sendFeedback(this, 'up', ${JSON.stringify(fullText)})">
-            <i data-lucide="thumbs-up" style="width:13px;height:13px;"></i> Ja
+            <i data-lucide="thumbs-up" class="icon-13"></i> Ja
           </button>
           <button class="feedback-btn" onclick="sendFeedback(this, 'down', ${JSON.stringify(fullText)})">
-            <i data-lucide="thumbs-down" style="width:13px;height:13px;"></i> Nein
+            <i data-lucide="thumbs-down" class="icon-13"></i> Nein
           </button>
           <span style="flex:1;"></span>
           <button class="feedback-btn" onclick="teileErklaerung(this)">
-            <i data-lucide="share-2" style="width:13px;height:13px;"></i> Teilen
+            <i data-lucide="share-2" class="icon-13"></i> Teilen
           </button>
           <button class="feedback-btn" onclick="exportierePDF(this)">
-            <i data-lucide="download" style="width:13px;height:13px;"></i> PDF
+            <i data-lucide="download" class="icon-13"></i> PDF
           </button>
         `;
         bubble.appendChild(feedbackRow);
@@ -3000,17 +3000,17 @@
       feedbackRow.innerHTML = `
         <span class="feedback-label">Hilfreich?</span>
         <button class="feedback-btn" id="btn-up-${Date.now()}" onclick="sendFeedback(this, 'up', \`${text.replace(/`/g, "'")}\`)">
-          <i data-lucide="thumbs-up" style="width:13px;height:13px;"></i> Ja
+          <i data-lucide="thumbs-up" class="icon-13"></i> Ja
         </button>
         <button class="feedback-btn" id="btn-down-${Date.now()}" onclick="sendFeedback(this, 'down', \`${text.replace(/`/g, "'")}\`)">
-          <i data-lucide="thumbs-down" style="width:13px;height:13px;"></i> Nein
+          <i data-lucide="thumbs-down" class="icon-13"></i> Nein
         </button>
         <span style="flex:1;"></span>
         <button class="feedback-btn" onclick="teileErklaerung(this)">
-          <i data-lucide="share-2" style="width:13px;height:13px;"></i> Teilen
+          <i data-lucide="share-2" class="icon-13"></i> Teilen
         </button>
         <button class="feedback-btn" onclick="exportierePDF(this)">
-          <i data-lucide="download" style="width:13px;height:13px;"></i> PDF
+          <i data-lucide="download" class="icon-13"></i> PDF
         </button>
       `;
       bubble.appendChild(feedbackRow);
