@@ -3441,6 +3441,7 @@ body {
 .share-modal-footer {
   display: flex;
   justify-content: flex-end;
+  gap: 10px;
 }
 .share-close-btn {
   background: transparent;
@@ -4279,4 +4280,144 @@ body {
 .icon-24 { width: 24px; height: 24px; }
 .icon-28 { width: 28px; height: 28px; }
 .icon-100 { width: 100px; height: 100px; }
+
+/* ── Layout / Color Utilities (Milestone C, Task 8b) ── */
+.u-flex-1 { flex: 1; }
+.u-flex-1-min0 { flex: 1; min-width: 0; }
+.u-w-full { width: 100%; }
+.u-cursor-pointer { cursor: pointer; }
+.u-text-center { text-align: center; }
+.u-mb-12 { margin-bottom: 12px; }
+.u-mb-16 { margin-bottom: 16px; }
+
+/* Inline-icon helpers (used inside text where vertical-align matters) */
+.icon-inline-14-mr { width: 14px; height: 14px; display: inline; vertical-align: middle; margin-right: 4px; }
+.icon-inline-16-mr { width: 16px; height: 16px; display: inline; vertical-align: middle; margin-right: 6px; color: #3B82F6; }
+.icon-logo-20 { width: 20px; height: 20px; vertical-align: middle; }
+.icon-logo-24 { width: 24px; height: 24px; vertical-align: middle; }
+.icon-vergleich-24 { width: 24px; height: 24px; color: #48484A; }
+
+/* Header / nav layout */
+.header-actions-row { display: flex; align-items: center; gap: 6px; }
+.flex-row-gap-8 { display: flex; gap: 8px; }
+.mobile-cta-btn {
+  background: #3B82F6;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Sidebar bits */
+.sidebar-badge-pill {
+  margin-left: auto;
+  font-size: 0.7rem;
+  background: #2C2C2E;
+  color: #636366;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* Chat input area */
+.chat-input-col { display: flex; flex-direction: column; flex: 1; gap: 0; }
+.chat-input-row { display: flex; align-items: flex-end; gap: 10px; }
+
+/* Profile / settings */
+.profile-msg-padding { padding: 0 20px 8px; }
+.profile-meta-text { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); }
+.profile-meta-sub { font-size: 0.75rem; color: var(--text-muted); }
+.profile-avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.profile-avatar-initial { font-size: 1.2rem; font-weight: 700; color: white; }
+.section-h2 { font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+.section-text-muted-lg { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+.text-success-strong { color: var(--success); font-weight: 600; }
+.text-primary-strong { color: var(--text-primary); font-weight: 600; }
+.text-premium-gold { color: var(--premium-gold); }
+.premium-icon-success { width: 40px; height: 40px; color: var(--success); margin-bottom: 12px; }
+.premium-active-row-last { border-bottom: none; }
+
+/* Modal helpers */
+.modal-icon-header { text-align: center; padding: 12px 0 4px; }
+.modal-success-icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(52, 211, 153, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.modal-danger-icon-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(248, 113, 113, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px;
+}
+.modal-info-icon-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px;
+}
+.modal-h3-primary { color: var(--text-primary); font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.modal-h3-primary-lg { color: var(--text-primary); font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+.modal-text-secondary { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 20px; }
+.modal-text-secondary-lh { color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 22px; line-height: 1.5; }
+.modal-input-fullwidth { width: 100%; border-radius: 8px; }
+.btn-danger-confirm {
+  background: var(--danger);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-danger-confirm-lg {
+  background: var(--danger);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.modal-team-select {
+  width: 100%;
+  background: #111214;
+  border: 1px solid #2A2D32;
+  border-radius: 8px;
+  color: #E8EAED;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Empty / loading states */
+.empty-state-padded { padding: 20px; color: var(--text-muted); font-size: 13px; }
+.padding-md { padding: 20px; }
+
+/* Loading bubble color */
+.bubble-loading { color: #48484A; }
+
 

@@ -90,6 +90,12 @@ describe('Frontend smoke (Milestone C)', () => {
     expect(res.text).toMatch(/aria-label="Spracheingabe"/);
   });
 
+  test('app HTML has fewer than 30 inline style attributes', async () => {
+    const res = await request(BASE_URL).get('/app');
+    const matches = res.text.match(/style="[^"]+"/g) || [];
+    expect(matches.length).toBeLessThan(30);
+  });
+
   test('app HTML migrated icon-sizing inline styles to .icon-* classes', async () => {
     const html = await request(BASE_URL).get('/app');
     const css = await request(BASE_URL).get('/styles.css');

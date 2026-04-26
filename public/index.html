@@ -49,14 +49,14 @@
         <button onclick="toggleSidebar()" class="mobile-only mobile-sessions-btn" title="Sessions" aria-label="Sessions öffnen">
           <i data-lucide="menu" class="icon-18"></i>
         </button>
-        <div class="header-logo" onclick="switchTab('home')" style="cursor:pointer;" title="Zum Erklären-Tab" role="button" tabindex="0" aria-label="Zur Startseite">
-          <img src="/assets/dokuvo-logo.png" style="width:24px;height:24px;vertical-align:middle;"> Dokuvo
+        <div class="header-logo u-cursor-pointer" onclick="switchTab('home')" title="Zum Erklären-Tab" role="button" tabindex="0" aria-label="Zur Startseite">
+          <img src="/assets/dokuvo-logo.png" class="icon-logo-24"> Dokuvo
         </div>
-        <div style="display:flex;align-items:center;gap:6px;">
+        <div class="header-actions-row">
           <span class="remaining-badge" id="remainingBadge">
             <i data-lucide="zap" class="icon-12"></i> <span id="remainingCount">5</span> heute
           </span>
-          <button onclick="neuerChat()" class="mobile-only" style="background:#3B82F6;border:none;border-radius:8px;color:white;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;" aria-label="Neuer Chat">+ Neu</button>
+          <button onclick="neuerChat()" class="mobile-only mobile-cta-btn" aria-label="Neuer Chat">+ Neu</button>
         </div>
       </div>
 
@@ -85,16 +85,16 @@
     <div class="chat-sidebar" id="chatSidebar">
       <div class="sidebar-header">
         <div class="sidebar-logo">
-          <a class="sidebar-logo-link" onclick="switchTab('home')" title="Zum Erklären-Tab"><img src="/assets/dokuvo-logo.png" style="width:20px;height:20px;vertical-align:middle;"> Dokuvo</a>
-          <span id="sidebarBadge" style="margin-left:auto;font-size:0.7rem;background:#2C2C2E;color:#636366;padding:2px 8px;border-radius:20px;font-weight:600;">
+          <a class="sidebar-logo-link" onclick="switchTab('home')" title="Zum Erklären-Tab"><img src="/assets/dokuvo-logo.png" class="icon-logo-20"> Dokuvo</a>
+          <span id="sidebarBadge" class="sidebar-badge-pill">
             <span id="sidebarCount">5</span> heute
           </span>
         </div>
-        <div style="display:flex;gap:8px;">
+        <div class="flex-row-gap-8">
           <button class="mobile-only mobile-sidebar-close" onclick="closeSidebar()" aria-label="Sidebar schließen">
             <i data-lucide="arrow-left" class="icon-18"></i>
           </button>
-          <button class="new-chat-btn" onclick="neuerChat()" style="flex:1;">
+          <button class="new-chat-btn u-flex-1" onclick="neuerChat()">
             <i data-lucide="plus" class="icon-15"></i> Neuer Chat
           </button>
           <button class="sidebar-toggle-btn" id="sidebarCollapseBtn" onclick="toggleSidebar()" title="Sidebar einklappen" aria-label="Sidebar einklappen">
@@ -196,7 +196,7 @@
         </button>
         <div class="persistent-topbar-box">
           <div class="persistent-topbar-logo" onclick="switchTab('home')" title="Zum Erklären-Tab">
-            <img src="/assets/dokuvo-logo-topbar.png" style="width:20px;height:20px;vertical-align:middle;"> Dokuvo
+            <img src="/assets/dokuvo-logo-topbar.png" class="icon-logo-20"> Dokuvo
         </div>
           <span class="persistent-topbar-badge" id="topbarBadge">
             <span id="topbarCount">5</span> heute
@@ -261,7 +261,7 @@
           <input type="file" id="fotoInput" accept="image/*" capture="environment" style="display:none" onchange="fotoAnalysieren()">
           <div class="chat-input-wrapper">
             <div class="chat-input-row">
-              <div style="display:flex; flex-direction:column; flex:1; gap:0;">
+              <div class="chat-input-col">
                 <div class="depth-slider-row">
                   <span class="depth-label">Erklärungstiefe:</span>
                   <div class="depth-steps">
@@ -270,7 +270,7 @@
                     <button class="depth-step" onclick="setDepth(3, this)">Experte</button>
                   </div>
                 </div>
-                <div style="display:flex; align-items:flex-end; gap:10px;">
+                <div class="chat-input-row">
                   <button class="attach-btn" onclick="document.getElementById('pdfInput').click()" aria-label="PDF hochladen">
                     <i data-lucide="paperclip" class="icon-18"></i>
                   </button>
@@ -308,25 +308,25 @@
       <!-- PREMIUM TAB -->
       <div class="tab-panel" id="tab-premium">
         <div id="premiumActiveBox" class="premium-active-box" style="display:none;">
-          <i data-lucide="shield-check" style="width:40px;height:40px;color:var(--success);margin-bottom:12px;"></i>
-          <h2 style="font-size:1.4rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;">Premium aktiv</h2>
-          <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:20px;">Du genießt unbegrenzten Zugang zu allen Features.</p>
+          <i data-lucide="shield-check" class="premium-icon-success"></i>
+          <h2 class="section-h2">Premium aktiv</h2>
+          <p class="section-text-muted-lg">Du genießt unbegrenzten Zugang zu allen Features.</p>
           <div class="premium-active-details">
             <div class="premium-active-row">
               <span>Status</span>
-              <span style="color:var(--success);font-weight:600;"><i data-lucide="check-circle" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Aktiv</span>
+              <span class="text-success-strong"><i data-lucide="check-circle" class="icon-inline-14-mr"></i>Aktiv</span>
             </div>
             <div class="premium-active-row">
               <span>Plan</span>
-              <span style="color:var(--text-primary);font-weight:600;">Dokuvo Premium</span>
+              <span class="text-primary-strong">Dokuvo Premium</span>
             </div>
             <div class="premium-active-row">
               <span>Preis</span>
-              <span style="color:var(--text-primary);font-weight:600;">9,99€ / Monat</span>
+              <span class="text-primary-strong">9,99€ / Monat</span>
             </div>
-            <div class="premium-active-row" style="border-bottom:none;">
+            <div class="premium-active-row premium-active-row-last">
               <span>Aktiv seit</span>
-              <span style="color:var(--text-primary);font-weight:600;" id="premiumSinceDate">—</span>
+              <span class="text-primary-strong" id="premiumSinceDate">—</span>
             </div>
           </div>
         </div>
@@ -353,7 +353,7 @@
               <button class="plan-btn plan-btn-current">Aktueller Plan</button>
             </div>
             <div class="plan-card plan-card-premium">
-              <div class="plan-name" style="color:var(--premium-gold);">Premium</div>
+              <div class="plan-name text-premium-gold">Premium</div>
               <div class="plan-price">9,99€ <span>/ Monat</span></div>
               <div class="plan-period">Jederzeit kündbar</div>
               <ul class="plan-features">
@@ -386,16 +386,16 @@
             <div class="settings-card">
               <div class="settings-row">
                 <div class="profile-avatar-upload" onclick="document.getElementById('avatarInput').click()">
-                  <img id="profileAvatarImg" src="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
-                  <div id="profileAvatarInitial" style="font-size:1.2rem;font-weight:700;color:white;">?</div>
+                  <img id="profileAvatarImg" src="" class="profile-avatar-img" style="display:none">
+                  <div id="profileAvatarInitial" class="profile-avatar-initial">?</div>
                   <div class="avatar-overlay">
                     <i data-lucide="camera" class="icon-16"></i>
                   </div>
                 </div>
                 <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="avatarHochladen()">
-                <div style="flex:1;">
-                  <div style="font-size:0.95rem;font-weight:600;color:var(--text-primary);" id="profileEmailDisplay">—</div>
-                  <div style="font-size:0.75rem;color:var(--text-muted);" id="profilePlanDisplay">—</div>
+                <div class="u-flex-1">
+                  <div class="profile-meta-text" id="profileEmailDisplay">—</div>
+                  <div class="profile-meta-sub" id="profilePlanDisplay">—</div>
                 </div>
               </div>
               <div class="settings-row">
@@ -405,7 +405,7 @@
                 </div>
                 <button class="settings-row-action" onclick="speichereAnzeigename()">Speichern</button>
               </div>
-              <div id="displayNameMsg" class="profile-msg" style="padding:0 20px 8px;"></div>
+              <div id="displayNameMsg" class="profile-msg profile-msg-padding"></div>
             </div>
           </div>
 
@@ -426,7 +426,7 @@
                 </div>
                 <button class="settings-row-action" onclick="aenderePasswort()">Ändern</button>
               </div>
-              <div id="passwordMsg" class="profile-msg" style="padding:0 20px 8px;"></div>
+              <div id="passwordMsg" class="profile-msg profile-msg-padding"></div>
             </div>
           </div>
 
@@ -456,7 +456,7 @@
             <div class="settings-card settings-card-danger">
               <div class="settings-row">
                 <div class="settings-row-label">Account löschen</div>
-                <div class="settings-row-value" style="font-size:0.75rem;color:var(--text-muted);">Alle Daten werden unwiderruflich gelöscht</div>
+                <div class="settings-row-value profile-meta-sub">Alle Daten werden unwiderruflich gelöscht</div>
                 <button class="settings-row-action settings-action-danger" onclick="accountLoeschen()">Löschen</button>
               </div>
             </div>
@@ -1331,10 +1331,10 @@
         title: 'Team erstellen',
         html: `
           <p>Gib deinem Team einen Namen, um gemeinsam an Dokumenten zu arbeiten.</p>
-          <div style="margin-bottom:16px;">
-            <input type="text" class="share-link-input" id="teamNameInput" placeholder="z.B. Marketing, Rechtsabteilung …" maxlength="50" style="width:100%;border-radius:8px;">
+          <div class="u-mb-16">
+            <input type="text" class="share-link-input modal-input-fullwidth" id="teamNameInput" placeholder="z.B. Marketing, Rechtsabteilung …" maxlength="50">
           </div>
-          <div class="share-modal-footer" style="gap:10px;">
+          <div class="share-modal-footer">
             <button class="share-close-btn" id="teamCreateCancelBtn">Abbrechen</button>
             <button class="share-copy-btn" id="teamCreateConfirmBtn">Erstellen</button>
           </div>
@@ -1389,7 +1389,7 @@
             <div class="team-card-header">
               <span class="team-card-label">Mitglieder</span>
             </div>
-            <div class="teams-loading" style="padding:20px;">Lädt...</div>
+            <div class="teams-loading padding-md">Lädt...</div>
           </div>
         </div>
         <div id="teamDocsCard">
@@ -1397,7 +1397,7 @@
             <div class="team-card-header">
               <span class="team-card-label">Geteilte Dokumente</span>
             </div>
-            <div class="teams-loading" style="padding:20px;">Lädt...</div>
+            <div class="teams-loading padding-md">Lädt...</div>
           </div>
         </div>`;
       if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -1417,7 +1417,7 @@
             <div class="team-card-header">
               <span class="team-card-label">Mitglieder</span>
             </div>
-            <div style="padding:20px;color:var(--text-muted);font-size:13px;">Keine Mitglieder.</div>
+            <div class="empty-state-padded">Keine Mitglieder.</div>
           </div>`;
         return;
       }
@@ -1470,9 +1470,9 @@
         title: 'Mitglied entfernen',
         html: `
           <p>Möchtest du <strong>${escapeHtml(memberLabel)}</strong> wirklich aus dem Team entfernen?</p>
-          <div class="share-modal-footer" style="gap:10px;">
+          <div class="share-modal-footer">
             <button class="share-close-btn" id="removeCancelBtn">Abbrechen</button>
-            <button id="removeConfirmBtn" style="background:var(--danger);color:white;border:none;border-radius:8px;padding:9px 20px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;">Entfernen</button>
+            <button id="removeConfirmBtn" class="btn-danger-confirm">Entfernen</button>
           </div>
         `,
       });
@@ -1510,10 +1510,10 @@
         title: 'Mitglied einladen',
         html: `
           <p>Gib die E-Mail-Adresse der Person ein, die du ins Team einladen möchtest.</p>
-          <div style="margin-bottom:16px;">
-            <input type="email" class="share-link-input" id="inviteEmailInput" placeholder="name@beispiel.de" style="width:100%;border-radius:8px;">
+          <div class="u-mb-16">
+            <input type="email" class="share-link-input modal-input-fullwidth" id="inviteEmailInput" placeholder="name@beispiel.de">
           </div>
-          <div class="share-modal-footer" style="gap:10px;">
+          <div class="share-modal-footer">
             <button class="share-close-btn" id="inviteCancelBtn">Abbrechen</button>
             <button class="share-copy-btn" id="inviteConfirmBtn">Einladen</button>
           </div>
@@ -1546,13 +1546,13 @@
         }
         // Erfolg im Modal anzeigen
         modal.innerHTML = `
-          <div style="text-align:center;padding:12px 0 4px;">
-            <div style="width:48px;height:48px;border-radius:50%;background:rgba(52,211,153,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+          <div class="modal-icon-header">
+            <div class="modal-success-icon-circle">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
-            <h3 style="color:var(--text-primary);font-size:1.05rem;font-weight:700;margin-bottom:8px;">Einladung gesendet</h3>
-            <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:20px;">${escapeHtml(data.email)} wurde eingeladen.</p>
-            <button class="share-copy-btn" id="inviteSuccessCloseBtn" style="width:100%;">Schließen</button>
+            <h3 class="modal-h3-primary">Einladung gesendet</h3>
+            <p class="modal-text-secondary">${escapeHtml(data.email)} wurde eingeladen.</p>
+            <button class="share-copy-btn u-w-full" id="inviteSuccessCloseBtn">Schließen</button>
           </div>`;
         modal.querySelector('#inviteSuccessCloseBtn').onclick = close;
         ladeTeamMitglieder(teamId);
@@ -1574,7 +1574,7 @@
             <div class="team-card-header">
               <span class="team-card-label">Geteilte Dokumente</span>
             </div>
-            <div style="padding:20px;color:var(--text-muted);font-size:13px;">Noch keine geteilten Dokumente.</div>
+            <div class="empty-state-padded">Noch keine geteilten Dokumente.</div>
           </div>`;
         const subtitle = document.getElementById('teamDetailSubtitle');
         if (subtitle && !subtitle.textContent.includes('Dokument')) {
@@ -1594,7 +1594,7 @@
           ${shares.map(s => `
             <div class="shared-doc-row" onclick="ladeSession('${s.session_id}')">
               <span class="shared-doc-icon"><i data-lucide="file-text" class="icon-14"></i></span>
-              <div style="flex:1;min-width:0;">
+              <div class="u-flex-1-min0">
                 <div class="shared-doc-name">${escapeHtml(s.title)}</div>
                 ${s.note ? `<div class="shared-doc-note">${escapeHtml(s.note)}</div>` : ''}
               </div>
@@ -1608,14 +1608,14 @@
       const { modal, close } = createModalOverlay({
         modalStyle: 'text-align:center;',
         html: `
-          <div style="width:56px;height:56px;border-radius:50%;background:rgba(248,113,113,0.10);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+          <div class="modal-danger-icon-circle">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
           </div>
-          <h3 style="color:var(--text-primary);font-size:1.1rem;font-weight:700;margin-bottom:8px;">Team löschen</h3>
-          <p style="color:var(--text-secondary);font-size:0.88rem;margin-bottom:22px;line-height:1.5;">Möchtest du das Team '${escapeHtml(teamName)}' wirklich löschen? Alle Mitglieder und geteilten Dokumente werden entfernt. Diese Aktion kann nicht rückgängig gemacht werden.</p>
-          <div class="share-modal-footer" style="gap:10px;">
+          <h3 class="modal-h3-primary-lg">Team löschen</h3>
+          <p class="modal-text-secondary-lh">Möchtest du das Team '${escapeHtml(teamName)}' wirklich löschen? Alle Mitglieder und geteilten Dokumente werden entfernt. Diese Aktion kann nicht rückgängig gemacht werden.</p>
+          <div class="share-modal-footer">
             <button class="share-close-btn" id="teamDeleteCancelBtn">Abbrechen</button>
-            <button id="teamDeleteConfirmBtn" style="background:var(--danger);color:white;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Endgültig löschen</button>
+            <button id="teamDeleteConfirmBtn" class="btn-danger-confirm-lg">Endgültig löschen</button>
           </div>
         `,
       });
@@ -1658,15 +1658,15 @@
         title: 'Mit Team teilen',
         html: `
           <p>Wähle das Team, mit dem du diesen Chat teilen möchtest.</p>
-          <div style="margin-bottom:12px;">
-            <select id="teamSelectInput" style="width:100%;background:#111214;border:1px solid #2A2D32;border-radius:8px;color:#E8EAED;padding:10px 12px;font-size:0.9rem;font-family:inherit;outline:none;cursor:pointer;">
+          <div class="u-mb-12">
+            <select id="teamSelectInput" class="modal-team-select">
               ${teams.map(t => `<option value="${t.id}">${escapeHtml(t.name)}</option>`).join('')}
             </select>
           </div>
-          <div style="margin-bottom:16px;">
-            <input type="text" class="share-link-input" id="teamShareNoteInput" placeholder="Optionale Notiz …" style="width:100%;border-radius:8px;">
+          <div class="u-mb-16">
+            <input type="text" class="share-link-input modal-input-fullwidth" id="teamShareNoteInput" placeholder="Optionale Notiz …">
           </div>
-          <div class="share-modal-footer" style="gap:10px;">
+          <div class="share-modal-footer">
             <button class="share-close-btn" id="teamShareCancelBtn">Abbrechen</button>
             <button class="share-copy-btn" id="teamShareConfirmBtn">Teilen</button>
           </div>
@@ -1695,13 +1695,13 @@
         }
         const selectedTeamName = modal.querySelector('#teamSelectInput').options[modal.querySelector('#teamSelectInput').selectedIndex]?.text || 'Team';
         modal.innerHTML = `
-          <div style="text-align:center;padding:12px 0 4px;">
-            <div style="width:48px;height:48px;border-radius:50%;background:rgba(52,211,153,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+          <div class="modal-icon-header">
+            <div class="modal-success-icon-circle">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
-            <h3 style="color:#E8EAED;font-size:1.05rem;font-weight:700;margin-bottom:8px;">Erfolgreich geteilt</h3>
-            <p style="color:#7A7F88;font-size:0.85rem;margin-bottom:20px;">Dieser Chat wurde mit <strong style="color:#E8EAED;">${escapeHtml(selectedTeamName)}</strong> geteilt.</p>
-            <button class="share-copy-btn" id="teamShareSuccessCloseBtn" style="width:100%;">Schließen</button>
+            <h3 class="modal-h3-primary">Erfolgreich geteilt</h3>
+            <p class="modal-text-secondary">Dieser Chat wurde mit <strong style="color:#E8EAED;">${escapeHtml(selectedTeamName)}</strong> geteilt.</p>
+            <button class="share-copy-btn u-w-full" id="teamShareSuccessCloseBtn">Schließen</button>
           </div>`;
         modal.querySelector('#teamShareSuccessCloseBtn').onclick = close;
         const btn = event.target.closest('.session-share-btn');
@@ -1714,7 +1714,7 @@
       if (!grid) return;
       const lang = currentLang || 'de';
       grid.innerHTML = TEMPLATES.map(tpl => `
-        <div class="template-card" onclick="useTemplate('${tpl.key}')" style="cursor:pointer;">
+        <div class="template-card u-cursor-pointer" onclick="useTemplate('${tpl.key}')">
           <div class="template-card-header">
             <div class="template-card-icon" style="background:${tpl.color}18;color:${tpl.color};">
               <i data-lucide="${tpl.icon}" style="width:17px;height:17px;stroke:${tpl.color};"></i>
@@ -1759,7 +1759,7 @@
       banner.style.cssText = 'display:flex;align-items:center;gap:10px;padding:12px 16px;margin:8px 12px 0;border-radius:10px;font-size:13px;color:#E8EAED;background:' + tpl.color + '14;border:1px solid ' + tpl.color + '30;';
       banner.innerHTML = `
         <i data-lucide="${tpl.icon}" style="width:16px;height:16px;stroke:${tpl.color};flex-shrink:0;"></i>
-        <div style="flex:1;min-width:0;">
+        <div class="u-flex-1-min0">
           <span style="font-weight:600;color:${tpl.color};">${tpl.title[lang] || tpl.title.de}</span>
           <span style="color:#7A7F88;"> — ${lang === 'de' ? 'Spezialisierter Assistent aktiv. Lade dein Dokument hoch oder stelle eine Frage.' : 'Specialized assistant active. Upload your document or ask a question.'}</span>
         </div>
@@ -1818,12 +1818,12 @@
         const { modal, close } = createModalOverlay({
           modalStyle: 'text-align:center;',
           html: `
-            <div style="width:56px;height:56px;border-radius:50%;background:rgba(59,130,246,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+            <div class="modal-info-icon-circle">
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
-            <h3 style="color:#E8EAED;font-size:1.1rem;font-weight:700;margin-bottom:8px;">Team beigetreten!</h3>
-            <p style="color:#7A7F88;font-size:0.88rem;margin-bottom:22px;">Du bist jetzt Mitglied im Team '${decodeURIComponent(joinedParam).replace(/'/g, '&#39;').replace(/</g, '&lt;')}'.</p>
-            <button class="share-copy-btn" id="joinedTeamCloseBtn" style="width:100%;">Los geht's</button>
+            <h3 class="modal-h3-primary-lg">Team beigetreten!</h3>
+            <p class="modal-text-secondary-lh">Du bist jetzt Mitglied im Team '${decodeURIComponent(joinedParam).replace(/'/g, '&#39;').replace(/</g, '&lt;')}'.</p>
+            <button class="share-copy-btn u-w-full" id="joinedTeamCloseBtn">Los geht's</button>
           `,
         });
         modal.querySelector('#joinedTeamCloseBtn').onclick = close;
@@ -2877,7 +2877,7 @@
           <button class="feedback-btn" onclick="sendFeedback(this, 'down', ${JSON.stringify(fullText)})">
             <i data-lucide="thumbs-down" class="icon-13"></i> Nein
           </button>
-          <span style="flex:1;"></span>
+          <span class="u-flex-1"></span>
           <button class="feedback-btn" onclick="teileErklaerung(this)">
             <i data-lucide="share-2" class="icon-13"></i> Teilen
           </button>
@@ -3005,7 +3005,7 @@
         <button class="feedback-btn" id="btn-down-${Date.now()}" onclick="sendFeedback(this, 'down', \`${text.replace(/`/g, "'")}\`)">
           <i data-lucide="thumbs-down" class="icon-13"></i> Nein
         </button>
-        <span style="flex:1;"></span>
+        <span class="u-flex-1"></span>
         <button class="feedback-btn" onclick="teileErklaerung(this)">
           <i data-lucide="share-2" class="icon-13"></i> Teilen
         </button>
@@ -3037,7 +3037,7 @@
       document.getElementById('chatMessages').style.display = 'flex';
       document.getElementById('reportView').style.display = 'none';
       const loadingId = 'loading_' + Date.now();
-      addBubble('assistant', '<span style="color:#48484A">Dokument wird analysiert...</span>', loadingId);
+      addBubble('assistant', '<span class="bubble-loading">Dokument wird analysiert...</span>', loadingId);
       try {
         const res = await fetch('/upload-document', { method: 'POST', body: formData });
         const data = await res.json();
@@ -3083,7 +3083,7 @@
       document.getElementById('chatMessages').style.display = 'flex';
       document.getElementById('reportView').style.display = 'none';
       const loadingId = 'loading_' + Date.now();
-      addBubble('assistant', '<span style="color:#48484A">Bild wird erkannt...</span>', loadingId);
+      addBubble('assistant', '<span class="bubble-loading">Bild wird erkannt...</span>', loadingId);
       try {
         const res = await fetch('/analyze-image', { method: 'POST', body: formData });
         const data = await res.json();
@@ -3148,16 +3148,16 @@
       overlay.id = 'vergleichOverlay';
       overlay.innerHTML = `
         <div class="vergleich-modal">
-          <div class="vergleich-title"><i data-lucide="git-compare" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:6px;color:#3B82F6;"></i>Dokumente vergleichen</div>
+          <div class="vergleich-title"><i data-lucide="git-compare" class="icon-inline-16-mr"></i>Dokumente vergleichen</div>
           <div class="vergleich-subtitle">Lade zwei Dokumente hoch — Dokuvo erklärt die wichtigsten Unterschiede.</div>
           <div class="vergleich-slots">
             <div class="vergleich-slot" id="slot1" onclick="waehleVergleichDatei(1)">
-              <i data-lucide="file-plus" style="width:24px;height:24px;color:#48484A;"></i>
+              <i data-lucide="file-plus" class="icon-vergleich-24"></i>
               <div class="vergleich-slot-label">Dokument 1</div>
               <div class="vergleich-slot-name" id="slot1Name">Datei wählen</div>
             </div>
             <div class="vergleich-slot" id="slot2" onclick="waehleVergleichDatei(2)">
-              <i data-lucide="file-plus" style="width:24px;height:24px;color:#48484A;"></i>
+              <i data-lucide="file-plus" class="icon-vergleich-24"></i>
               <div class="vergleich-slot-label">Dokument 2</div>
               <div class="vergleich-slot-name" id="slot2Name">Datei wählen</div>
             </div>
@@ -3217,7 +3217,7 @@
       addBubble('user', `📄 ${vergleichDatei1.name} vs. 📄 ${vergleichDatei2.name}`);
 
       const loadingId = 'loading_' + Date.now();
-      addBubble('assistant', '<span style="color:#48484A">Dokumente werden verglichen...</span>', loadingId);
+      addBubble('assistant', '<span class="bubble-loading">Dokumente werden verglichen...</span>', loadingId);
 
       const formData = new FormData();
       formData.append('doc1', vergleichDatei1);
@@ -3523,8 +3523,8 @@
         avatarImg.src = data.avatar_url + '?t=' + Date.now();
         avatarImg.style.display = 'block';
         avatarInitial.style.display = 'none';
-        sidebarAvatar.innerHTML = `<img src="${data.avatar_url}?t=${Date.now()}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-        document.getElementById('popoverAvatar').innerHTML = `<img src="${data.avatar_url}?t=${Date.now()}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+        sidebarAvatar.innerHTML = `<img src="${data.avatar_url}?t=${Date.now()}" class="profile-avatar-img">`;
+        document.getElementById('popoverAvatar').innerHTML = `<img src="${data.avatar_url}?t=${Date.now()}" class="profile-avatar-img">`;
       } else {
         avatarImg.src = '';
         avatarImg.style.display = 'none';
@@ -3591,8 +3591,8 @@
             document.getElementById('profileAvatarImg').src = data.avatar_url + '?t=' + Date.now();
             document.getElementById('profileAvatarImg').style.display = 'block';
             document.getElementById('profileAvatarInitial').style.display = 'none';
-            document.getElementById('sidebarAvatar').innerHTML = `<img src="${data.avatar_url}?t=${Date.now()}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-            document.getElementById('popoverAvatar').innerHTML = `<img src="${data.avatar_url}?t=${Date.now()}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+            document.getElementById('sidebarAvatar').innerHTML = `<img src="${data.avatar_url}?t=${Date.now()}" class="profile-avatar-img">`;
+            document.getElementById('popoverAvatar').innerHTML = `<img src="${data.avatar_url}?t=${Date.now()}" class="profile-avatar-img">`;
           }
         };
         img.src = e.target.result;
