@@ -34,7 +34,7 @@
         <input type="password" id="passwordInput" class="input-field" placeholder="••••••••" />
       </div>
 
-      <div id="authMessage" class="auth-message"></div>
+      <div id="authMessage" class="auth-message" role="status" aria-live="polite"></div>
       <button class="btn-primary" id="authBtn" onclick="handleAuth()">Anmelden</button>
       <div id="forgotPasswordLink" class="forgot-password-link" onclick="passwortVergessen()">Passwort vergessen?</div>
     </div>
@@ -46,17 +46,17 @@
     <!-- HEADER -->
     <div class="app-header">
       <div class="header-top">
-        <button onclick="toggleSidebar()" class="mobile-only mobile-sessions-btn" title="Sessions">
+        <button onclick="toggleSidebar()" class="mobile-only mobile-sessions-btn" title="Sessions" aria-label="Sessions öffnen">
           <i data-lucide="menu" style="width:18px;height:18px;"></i>
         </button>
-        <div class="header-logo" onclick="switchTab('home')" style="cursor:pointer;" title="Zum Erklären-Tab">
+        <div class="header-logo" onclick="switchTab('home')" style="cursor:pointer;" title="Zum Erklären-Tab" role="button" tabindex="0" aria-label="Zur Startseite">
           <img src="/assets/dokuvo-logo.png" style="width:24px;height:24px;vertical-align:middle;"> Dokuvo
         </div>
         <div style="display:flex;align-items:center;gap:6px;">
           <span class="remaining-badge" id="remainingBadge">
             <i data-lucide="zap" style="width:12px;height:12px;"></i> <span id="remainingCount">5</span> heute
           </span>
-          <button onclick="neuerChat()" class="mobile-only" style="background:#3B82F6;border:none;border-radius:8px;color:white;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">+ Neu</button>
+          <button onclick="neuerChat()" class="mobile-only" style="background:#3B82F6;border:none;border-radius:8px;color:white;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;" aria-label="Neuer Chat">+ Neu</button>
         </div>
       </div>
 
@@ -91,13 +91,13 @@
           </span>
         </div>
         <div style="display:flex;gap:8px;">
-          <button class="mobile-only mobile-sidebar-close" onclick="closeSidebar()">
+          <button class="mobile-only mobile-sidebar-close" onclick="closeSidebar()" aria-label="Sidebar schließen">
             <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
           </button>
           <button class="new-chat-btn" onclick="neuerChat()" style="flex:1;">
             <i data-lucide="plus" style="width:15px;height:15px;"></i> Neuer Chat
           </button>
-          <button class="sidebar-toggle-btn" id="sidebarCollapseBtn" onclick="toggleSidebar()" title="Sidebar einklappen">
+          <button class="sidebar-toggle-btn" id="sidebarCollapseBtn" onclick="toggleSidebar()" title="Sidebar einklappen" aria-label="Sidebar einklappen">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><polyline points="15 9 12 12 15 15"/></svg>
           </button>
         </div>
@@ -123,7 +123,7 @@
       <div class="sidebar-search">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sidebar-search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" id="chatSearchInput" class="sidebar-search-input" placeholder="Chats durchsuchen..." oninput="debouncedChatSuche(this.value)">
-        <button id="chatSearchClear" class="sidebar-search-clear" onclick="clearChatSearch()" style="display:none;">
+        <button id="chatSearchClear" class="sidebar-search-clear" onclick="clearChatSearch()" style="display:none;" aria-label="Suche zurücksetzen">
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
@@ -142,7 +142,7 @@
           <button class="lang-btn active" id="langDE" onclick="setLanguage('de')">DE</button>
           <button class="lang-btn" id="langEN" onclick="setLanguage('en')">EN</button>
         </div>
-        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Design wechseln">
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Design wechseln" aria-label="Design wechseln">
           <svg id="themeIconSun" class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
           <svg id="themeIconMoon" class="theme-icon" style="display:none" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
@@ -191,7 +191,7 @@
     <!-- Rechte Seite: alle Tabs -->
     <div class="chat-main">
       <div class="persistent-topbar" id="persistentTopbar">
-        <button class="persistent-topbar-toggle" id="sidebarOpenBtn" onclick="toggleSidebar()" title="Sidebar öffnen">
+        <button class="persistent-topbar-toggle" id="sidebarOpenBtn" onclick="toggleSidebar()" title="Sidebar öffnen" aria-label="Sidebar öffnen">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><polyline points="12 9 15 12 12 15"/></svg>
         </button>
         <div class="persistent-topbar-box">
@@ -248,7 +248,7 @@
         </div>
         <div id="chatMessages" class="chat-messages" style="display:none;"></div>
         <div id="reportView" class="report-view" style="display:none;"></div>
-        <div id="limitBanner" class="limit-banner">
+        <div id="limitBanner" class="limit-banner" role="status" aria-live="polite">
           <div class="limit-banner-icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           </div>
@@ -271,19 +271,19 @@
                   </div>
                 </div>
                 <div style="display:flex; align-items:flex-end; gap:10px;">
-                  <button class="attach-btn" onclick="document.getElementById('pdfInput').click()">
+                  <button class="attach-btn" onclick="document.getElementById('pdfInput').click()" aria-label="PDF hochladen">
                     <i data-lucide="paperclip" style="width:18px;height:18px;"></i>
                   </button>
-                  <button class="attach-btn" onclick="document.getElementById('fotoInput').click()">
+                  <button class="attach-btn" onclick="document.getElementById('fotoInput').click()" aria-label="Foto hochladen">
                     <i data-lucide="camera" style="width:18px;height:18px;"></i>
                   </button>
-                  <button class="mic-btn" id="micBtn" onclick="toggleVoiceInput()" title="Spracheingabe">
+                  <button class="mic-btn" id="micBtn" onclick="toggleVoiceInput()" title="Spracheingabe" aria-label="Spracheingabe">
                     <i data-lucide="mic" style="width:18px;height:18px;"></i>
                   </button>
                   <textarea id="chatInput" class="chat-textarea" placeholder="Stelle eine Frage oder füge Text ein..." rows="1"
                     onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();sendChatMessage()}"
                     oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
-                  <button class="send-btn" onclick="sendChatMessage()" id="sendBtn">
+                  <button class="send-btn" onclick="sendChatMessage()" id="sendBtn" aria-label="Nachricht senden">
                     <i data-lucide="send" style="width:18px;height:18px;"></i>
                   </button>
                 </div>
@@ -1309,7 +1309,7 @@
         const roleLabel = t.role === 'owner' ? 'Owner' : 'Mitglied';
         return `
           <div class="team-overview-card" onclick="zeigeTeamDetail('${t.id}', '${escapeHtml(t.name)}')">
-            ${t.role === 'owner' ? `<button class="team-card-delete" onclick="event.stopPropagation();loescheTeam('${t.id}','${escapeHtml(t.name)}')" title="Team löschen"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>` : ''}
+            ${t.role === 'owner' ? `<button class="team-card-delete" onclick="event.stopPropagation();loescheTeam('${t.id}','${escapeHtml(t.name)}')" title="Team löschen" aria-label="Team löschen"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>` : ''}
             <div class="team-overview-card-header">
               <div class="team-overview-icon">${initial}</div>
               <div>
@@ -1441,10 +1441,10 @@
             const roleClass = m.role === 'owner' ? 'role-owner' : (isPending ? 'role-pending' : 'role-member');
             const roleLabel = m.role === 'owner' ? 'Owner' : (isPending ? 'Eingeladen' : 'Mitglied');
             const deleteBtn = (isOwner && m.role !== 'owner')
-              ? `<button class="member-remove-btn" onclick="event.stopPropagation();entferneMitglied(this)" data-team-id="${teamId}" data-member-id="${m.id}" data-label="${escapeHtml(label)}" title="Mitglied entfernen"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>`
+              ? `<button class="member-remove-btn" onclick="event.stopPropagation();entferneMitglied(this)" data-team-id="${teamId}" data-member-id="${m.id}" data-label="${escapeHtml(label)}" title="Mitglied entfernen" aria-label="Mitglied entfernen"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>`
               : '';
             const inviteToggle = (isOwner && m.role !== 'owner' && !isPending)
-              ? `<button class="member-invite-toggle ${m.can_invite ? 'active' : ''}" onclick="event.stopPropagation();toggleCanInvite('${teamId}','${m.id}',${!m.can_invite})" title="${m.can_invite ? 'Einladerecht entziehen' : 'Darf einladen'}"><i data-lucide="user-plus" style="width:13px;height:13px;"></i></button>`
+              ? `<button class="member-invite-toggle ${m.can_invite ? 'active' : ''}" onclick="event.stopPropagation();toggleCanInvite('${teamId}','${m.id}',${!m.can_invite})" title="${m.can_invite ? 'Einladerecht entziehen' : 'Darf einladen'}" aria-label="${m.can_invite ? 'Einladerecht entziehen' : 'Einladerecht erteilen'}"><i data-lucide="user-plus" style="width:13px;height:13px;"></i></button>`
               : '';
             return `
               <div class="member-row">

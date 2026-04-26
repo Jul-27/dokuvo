@@ -80,6 +80,23 @@ describe('Frontend smoke (Milestone C)', () => {
     }
   });
 
+  test('app HTML has aria-labels on icon-only buttons', async () => {
+    const res = await request(BASE_URL).get('/app');
+    expect(res.text).toMatch(/aria-label="Sessions öffnen"/);
+    expect(res.text).toMatch(/aria-label="Sidebar öffnen"/);
+    expect(res.text).toMatch(/aria-label="Sidebar einklappen"/);
+    expect(res.text).toMatch(/aria-label="Design wechseln"/);
+    expect(res.text).toMatch(/aria-label="Nachricht senden"/);
+    expect(res.text).toMatch(/aria-label="Spracheingabe"/);
+  });
+
+  test('app HTML has live regions for status messages', async () => {
+    const res = await request(BASE_URL).get('/app');
+    const liveMatches = res.text.match(/aria-live="polite"/g) || [];
+    expect(liveMatches.length).toBeGreaterThanOrEqual(2);
+    expect(res.text).toMatch(/role="status"/);
+  });
+
   test('extracted logo assets serve 200 with image/png', async () => {
     const small = await request(BASE_URL).get('/assets/dokuvo-logo.png');
     const big = await request(BASE_URL).get('/assets/dokuvo-logo-large.png');
