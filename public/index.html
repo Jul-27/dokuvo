@@ -1700,7 +1700,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <h3 class="modal-h3-primary">Erfolgreich geteilt</h3>
-            <p class="modal-text-secondary">Dieser Chat wurde mit <strong style="color:#E8EAED;">${escapeHtml(selectedTeamName)}</strong> geteilt.</p>
+            <p class="modal-text-secondary">Dieser Chat wurde mit <strong class="text-primary-color">${escapeHtml(selectedTeamName)}</strong> geteilt.</p>
             <button class="share-copy-btn u-w-full" id="teamShareSuccessCloseBtn">Schließen</button>
           </div>`;
         modal.querySelector('#teamShareSuccessCloseBtn').onclick = close;
@@ -1761,9 +1761,9 @@
         <i data-lucide="${tpl.icon}" style="width:16px;height:16px;stroke:${tpl.color};flex-shrink:0;"></i>
         <div class="u-flex-1-min0">
           <span style="font-weight:600;color:${tpl.color};">${tpl.title[lang] || tpl.title.de}</span>
-          <span style="color:#7A7F88;"> — ${lang === 'de' ? 'Spezialisierter Assistent aktiv. Lade dein Dokument hoch oder stelle eine Frage.' : 'Specialized assistant active. Upload your document or ask a question.'}</span>
+          <span class="text-secondary-color"> — ${lang === 'de' ? 'Spezialisierter Assistent aktiv. Lade dein Dokument hoch oder stelle eine Frage.' : 'Specialized assistant active. Upload your document or ask a question.'}</span>
         </div>
-        <button onclick="clearTemplate()" style="background:none;border:none;color:#636366;cursor:pointer;padding:4px;flex-shrink:0;" title="${lang === 'de' ? 'Assistent deaktivieren' : 'Deactivate assistant'}">
+        <button onclick="clearTemplate()" class="btn-icon-clear" title="${lang === 'de' ? 'Assistent deaktivieren' : 'Deactivate assistant'}">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>`;
       lucide.createIcons();
@@ -2032,7 +2032,7 @@
 
       const title = document.createElement('div');
       title.className = 'fristen-title';
-      title.innerHTML = `<i data-lucide="calendar-clock" style="width:14px;height:14px;color:#3B82F6;"></i> ${t('recognizedDeadlines')}`;
+      title.innerHTML = `<i data-lucide="calendar-clock" class="icon-inline-blue-14"></i> ${t('recognizedDeadlines')}`;
       block.appendChild(title);
 
       fristen.forEach(f => {
@@ -2307,8 +2307,8 @@
           const cfg = typConfig[a.typ] || typConfig.wichtig;
           return `<div style="background:${cfg.farbe};border-left:3px solid ${cfg.border};border-radius:6px;padding:8px 12px;margin-bottom:8px;">
             <div style="font-size:12px;font-weight:600;color:${cfg.border};margin-bottom:3px;text-transform:uppercase;letter-spacing:0.04em;">${cfg.label}</div>
-            <div style="font-size:13px;color:#1C1C1E;font-style:italic;margin-bottom:4px;">&ldquo;${escapeHtml(a.stelle)}&rdquo;</div>
-            <div style="font-size:12px;color:#48484A;">${escapeHtml(a.kommentar)}</div>
+            <div class="annotation-quote">&ldquo;${escapeHtml(a.stelle)}&rdquo;</div>
+            <div class="annotation-comment">${escapeHtml(a.kommentar)}</div>
           </div>`;
         }).join('');
       container.appendChild(block);

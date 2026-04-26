@@ -4417,6 +4417,21 @@ body {
 .empty-state-padded { padding: 20px; color: var(--text-muted); font-size: 13px; }
 .padding-md { padding: 20px; }
 
+/* Final-sweep one-off classes (Task 8c) */
+.text-primary-color { color: var(--text-primary); }
+.text-secondary-color { color: var(--text-secondary); }
+.btn-icon-clear {
+  background: none;
+  border: none;
+  color: #636366;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+}
+.icon-inline-blue-14 { width: 14px; height: 14px; color: #3B82F6; }
+.annotation-quote { font-size: 13px; color: #1C1C1E; font-style: italic; margin-bottom: 4px; }
+.annotation-comment { font-size: 12px; color: #48484A; }
+
 /* Loading bubble color */
 .bubble-loading { color: #48484A; }
 
