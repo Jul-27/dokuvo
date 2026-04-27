@@ -21,8 +21,8 @@
 
     <div class="auth-card">
       <div class="auth-tabs">
-        <button class="auth-tab active" onclick="switchAuthTab('login')">Anmelden</button>
-        <button class="auth-tab" onclick="switchAuthTab('register')">Registrieren</button>
+        <button class="auth-tab active" data-action-click="switchAuthTab" data-arg="login">Anmelden</button>
+        <button class="auth-tab" data-action-click="switchAuthTab" data-arg="register">Registrieren</button>
       </div>
 
       <div class="input-group">
@@ -35,8 +35,8 @@
       </div>
 
       <div id="authMessage" class="auth-message" role="status" aria-live="polite"></div>
-      <button class="btn-primary" id="authBtn" onclick="handleAuth()">Anmelden</button>
-      <div id="forgotPasswordLink" class="forgot-password-link" onclick="passwortVergessen()">Passwort vergessen?</div>
+      <button class="btn-primary" id="authBtn" data-action-click="handleAuth">Anmelden</button>
+      <div id="forgotPasswordLink" class="forgot-password-link" data-action-click="passwortVergessen">Passwort vergessen?</div>
     </div>
   </div>
 
@@ -3712,10 +3712,10 @@
     // Wird in Tasks 5-10 erweitert. Funktionen müssen oben im Script
     // bereits definiert sein, sonst ReferenceError.
     [
-      // Task 5 (Auth-Screen):
-      // ['switchAuthTab', switchAuthTab],
-      // ['handleAuth', handleAuth],
-      // ['passwortVergessen', passwortVergessen],
+      // Task 5 — Auth-Screen
+      ['switchAuthTab', switchAuthTab],
+      ['handleAuth', handleAuth],
+      ['passwortVergessen', passwortVergessen],
     ].forEach(([name, fn]) => registerAction(name, fn));
 
 </script>
