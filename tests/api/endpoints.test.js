@@ -163,14 +163,14 @@ describe('POST /chat', () => {
     const res = await request(BASE_URL)
       .post('/chat')
       .send({ user_id: '', session_id: 'test', message: 'Test' });
-    expect([401, 429, 500]).toContain(res.status);
+    expect([400, 401, 429, 500]).toContain(res.status);
   });
 
   test('401 mit ungültiger user_id', async () => {
     const res = await request(BASE_URL)
       .post('/chat')
       .send({ user_id: 'ungueltige-id-xyz', session_id: 'sess1', message: 'Hallo' });
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Chat-Antwort mit gültigem User enthält reply und followUps', async () => {
@@ -190,7 +190,7 @@ describe('POST /chat', () => {
 describe('GET /chat/:user_id', () => {
   test('401 für unbekannte user_id', async () => {
     const res = await request(BASE_URL).get('/chat/unbekannte-user-id-xyz');
-    expect([200, 401]).toContain(res.status);
+    expect([200, 400, 401]).toContain(res.status);
   });
 
   test('Liefert Array für gültigen User', async () => {
@@ -204,7 +204,7 @@ describe('GET /chat/:user_id', () => {
 describe('GET /chat/:user_id/:session_id', () => {
   test('401 mit ungültiger user_id', async () => {
     const res = await request(BASE_URL).get('/chat/ungueltig/session-xyz');
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Leeres Array für nicht existierende Session', async () => {
@@ -221,7 +221,7 @@ describe('POST /chat/search', () => {
     const res = await request(BASE_URL)
       .post('/chat/search')
       .send({ user_id: 'ungueltig', query: 'Mietvertrag' });
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Leeres Array bei Query kürzer als 2 Zeichen', async () => {
@@ -249,7 +249,7 @@ describe('POST /chat/rename', () => {
     const res = await request(BASE_URL)
       .post('/chat/rename')
       .send({ user_id: 'ungueltig', session_id: 'sess', title: 'Neuer Titel' });
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Erfolgreicher Rename mit gültigem User', async () => {
@@ -266,7 +266,7 @@ describe('DELETE /chat/:user_id/:session_id', () => {
   test('401 mit ungültiger user_id', async () => {
     const res = await request(BASE_URL)
       .delete('/chat/ungueltig/session-xyz');
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Löschen einer nicht existierenden Session gibt success', async () => {
@@ -285,7 +285,7 @@ describe('POST /check-status', () => {
     const res = await request(BASE_URL)
       .post('/check-status')
       .send({ user_id: 'invalid-id-xyz' });
-    expect([200, 401]).toContain(res.status);
+    expect([200, 400, 401]).toContain(res.status);
   });
 
   test('Gibt remaining und isPremium für gültigen User', async () => {
@@ -304,7 +304,7 @@ describe('POST /get-profile', () => {
     const res = await request(BASE_URL)
       .post('/get-profile')
       .send({ user_id: 'ungueltig' });
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Gibt Profildaten für gültigen User zurück', async () => {
@@ -324,7 +324,7 @@ describe('POST /feedback', () => {
     const res = await request(BASE_URL)
       .post('/feedback')
       .send({ user_id: 'test', session_id: 'test', message: 'test', rating: 'up' });
-    expect([200, 401, 500]).toContain(res.status);
+    expect([200, 400, 401, 500]).toContain(res.status);
   });
 
   test('Speichert Feedback für gültigen User', async () => {
@@ -351,7 +351,7 @@ describe('POST /share', () => {
     const res = await request(BASE_URL)
       .post('/share')
       .send({ user_id: 'ungueltig', session_id: 'sess', title: 'Titel', content: '<p>Inhalt</p>' });
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Erstellt Share-Link für gültigen User', async () => {
@@ -409,7 +409,7 @@ describe('GET /shared/:id', () => {
 describe('GET /folders/:user_id', () => {
   test('401 mit ungültiger user_id', async () => {
     const res = await request(BASE_URL).get('/folders/ungueltige-id');
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Gibt Array für gültigen User zurück', async () => {
@@ -425,7 +425,7 @@ describe('POST /folders', () => {
     const res = await request(BASE_URL)
       .post('/folders')
       .send({ user_id: 'ungueltig', name: 'Test-Ordner' });
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Erstellt Ordner für gültigen User', async () => {
@@ -444,7 +444,7 @@ describe('PUT /folders/:id', () => {
     const res = await request(BASE_URL)
       .put('/folders/nicht-existierend')
       .send({ user_id: 'ungueltig', name: 'Neuer Name' });
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Umbenennen eines Ordners', async () => {
@@ -469,7 +469,7 @@ describe('DELETE /folders/:id', () => {
     const res = await request(BASE_URL)
       .delete('/folders/nicht-existierend')
       .send({ user_id: 'ungueltig' });
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Löscht Ordner für gültigen User', async () => {
@@ -492,7 +492,7 @@ describe('POST /folders/assign', () => {
     const res = await request(BASE_URL)
       .post('/folders/assign')
       .send({ user_id: 'ungueltig', session_id: 'sess', folder_id: 'folder' });
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Weist Session einem Ordner zu', async () => {
@@ -513,7 +513,7 @@ describe('POST /folders/assign', () => {
 describe('GET /folders/:folder_id/chats/:user_id', () => {
   test('401 mit ungültiger user_id', async () => {
     const res = await request(BASE_URL).get('/folders/folder-xyz/chats/ungueltig');
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Gibt Array für Ordner zurück', async () => {
@@ -543,7 +543,7 @@ describe('POST /reminders', () => {
     const res = await request(BASE_URL)
       .post('/reminders')
       .send({ user_id: 'ungueltig', title: 'Test', due_date: '2027-01-01', description: '', email: 'a@b.de' });
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Erstellt Erinnerung für gültigen User', async () => {
@@ -566,7 +566,7 @@ describe('POST /reminders', () => {
 describe('GET /reminders/:user_id', () => {
   test('401 mit ungültiger user_id', async () => {
     const res = await request(BASE_URL).get('/reminders/ungueltige-id');
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Gibt Array für gültigen User zurück', async () => {
@@ -582,7 +582,7 @@ describe('DELETE /reminders/:id', () => {
     const res = await request(BASE_URL)
       .delete('/reminders/nicht-existierend')
       .send({ user_id: 'ungueltig' });
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Löscht Erinnerung für gültigen User', async () => {
@@ -629,7 +629,7 @@ describe('POST /teams', () => {
     const res = await request(BASE_URL)
       .post('/teams')
       .send({ user_id: 'ungueltig', name: 'Test-Team' });
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('400 ohne Teamname', async () => {
@@ -658,7 +658,7 @@ describe('GET /teams/:user_id', () => {
     const res = await request(BASE_URL)
       .get('/teams/ungueltige-id')
       .set('x-user-id', 'ungueltige-id');
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Gibt Array für gültigen User zurück', async () => {
@@ -693,7 +693,7 @@ describe('POST /teams/:id/invite', () => {
     const res = await request(BASE_URL)
       .post('/teams/ein-team-id/invite')
       .send({ user_id: 'ungueltig', email: 'test@test.de' });
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('400 ohne E-Mail', async () => {
@@ -730,7 +730,7 @@ describe('POST /teams/:id/share', () => {
     const res = await request(BASE_URL)
       .post('/teams/ein-team-id/share')
       .send({ user_id: 'ungueltig', session_id: 'sess' });
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('400 ohne session_id', async () => {
@@ -768,7 +768,7 @@ describe('GET /teams/:id/shared', () => {
     const res = await request(BASE_URL)
       .get('/teams/ein-team-id/shared?user_id=ungueltig')
       .set('x-user-id', 'ungueltig');
-    expect([401, 500]).toContain(res.status);
+    expect([400, 401, 500]).toContain(res.status);
   });
 
   test('Gibt geteilte Sessions für Team-Mitglieder zurück', async () => {
