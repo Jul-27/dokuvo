@@ -554,6 +554,42 @@
       'sb_publishable_bVb-24sFpnG6sPxDvmwqfw_F4_F9Mcw'
     );
 
+    // ── Event-Delegation (ersetzt inline onclick/onchange/oninput) ──
+    // CSP `script-src-attr 'none'` blockiert inline Event-Handler-Attribute.
+    // Statt <button onclick="foo('x')"> → <button data-action-click="foo" data-arg="x">.
+    // Funktionen werden via registerAction(name, fn) registriert (am Ende des Scripts).
+    const ACTIONS = {};
+    function registerAction(name, fn) { ACTIONS[name] = fn; }
+    function escapeHtmlAttr(s) {
+      return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    function dispatchAction(eventType, evt) {
+      const el = evt.target.closest(`[data-action-${eventType}]`);
+      if (!el) return;
+      const name = el.getAttribute(`data-action-${eventType}`);
+      const fn = ACTIONS[name];
+      if (typeof fn !== 'function') {
+        console.warn('[action] unknown:', name, eventType);
+        return;
+      }
+      const args = [];
+      if (el.hasAttribute('data-pass-value')) args.push(el.value);
+      else if (el.hasAttribute('data-pass-element')) args.push(el);
+      else if (el.hasAttribute('data-pass-event')) args.push(evt);
+      else {
+        for (let i = 0; el.hasAttribute(`data-arg-${i}`); i++) {
+          args.push(el.getAttribute(`data-arg-${i}`));
+        }
+        if (args.length === 0 && el.hasAttribute('data-arg')) args.push(el.getAttribute('data-arg'));
+      }
+      return fn.apply(el, args);
+    }
+    document.body.addEventListener('click',    e => dispatchAction('click', e));
+    document.body.addEventListener('change',   e => dispatchAction('change', e));
+    document.body.addEventListener('input',    e => dispatchAction('input', e));
+    document.body.addEventListener('dblclick', e => dispatchAction('dblclick', e));
+    document.body.addEventListener('keydown',  e => dispatchAction('keydown', e));
+
     let currentAuthMode = 'login';
 
     // ── Mehrsprachigkeit (i18n) ──
@@ -3671,6 +3707,16 @@
         alert('Fehler beim Löschen: ' + data.error);
       }
     }
+
+    // ── Action-Registry ──
+    // Wird in Tasks 5-10 erweitert. Funktionen müssen oben im Script
+    // bereits definiert sein, sonst ReferenceError.
+    [
+      // Task 5 (Auth-Screen):
+      // ['switchAuthTab', switchAuthTab],
+      // ['handleAuth', handleAuth],
+      // ['passwortVergessen', passwortVergessen],
+    ].forEach(([name, fn]) => registerAction(name, fn));
 
 </script>
 
