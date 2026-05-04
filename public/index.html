@@ -365,7 +365,7 @@
                 <li><span class="plan-gold">✓</span> Prioritäts-Verarbeitung</li>
                 <li><span class="plan-gold">✓</span> Team & Sharing</li>
               </ul>
-              <button class="plan-btn plan-btn-upgrade" onclick="upgrade()">Jetzt upgraden</button>
+              <button class="plan-btn plan-btn-upgrade" data-action-click="upgrade">Jetzt upgraden</button>
             </div>
           </div>
           <div class="premium-footer-info">
@@ -385,14 +385,14 @@
             <div class="settings-section-label">Konto</div>
             <div class="settings-card">
               <div class="settings-row">
-                <div class="profile-avatar-upload" onclick="document.getElementById('avatarInput').click()">
+                <div class="profile-avatar-upload" data-action-click="triggerFileInput" data-arg="avatarInput">
                   <img id="profileAvatarImg" src="" class="profile-avatar-img" style="display:none">
                   <div id="profileAvatarInitial" class="profile-avatar-initial">?</div>
                   <div class="avatar-overlay">
                     <i data-lucide="camera" class="icon-16"></i>
                   </div>
                 </div>
-                <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="avatarHochladen()">
+                <input type="file" id="avatarInput" accept="image/*" style="display:none" data-action-change="avatarHochladen">
                 <div class="u-flex-1">
                   <div class="profile-meta-text" id="profileEmailDisplay">—</div>
                   <div class="profile-meta-sub" id="profilePlanDisplay">—</div>
@@ -403,7 +403,7 @@
                 <div class="settings-row-value">
                   <input type="text" id="displayNameInput" class="settings-inline-input" placeholder="Dein Name (optional)">
                 </div>
-                <button class="settings-row-action" onclick="speichereAnzeigename()">Speichern</button>
+                <button class="settings-row-action" data-action-click="speichereAnzeigename">Speichern</button>
               </div>
               <div id="displayNameMsg" class="profile-msg profile-msg-padding"></div>
             </div>
@@ -424,7 +424,7 @@
                 <div class="settings-row-value">
                   <input type="password" id="newPasswordConfirm" class="settings-inline-input" placeholder="Passwort bestätigen">
                 </div>
-                <button class="settings-row-action" onclick="aenderePasswort()">Ändern</button>
+                <button class="settings-row-action" data-action-click="aenderePasswort">Ändern</button>
               </div>
               <div id="passwordMsg" class="profile-msg profile-msg-padding"></div>
             </div>
@@ -437,7 +437,7 @@
               <div class="settings-row">
                 <div class="settings-row-label">Aktueller Plan</div>
                 <div class="settings-row-value" id="profilePlanInfo">—</div>
-                <button class="settings-row-action" id="profileUpgradeBtn" onclick="switchTab('premium')" style="display:none;">Upgraden</button>
+                <button class="settings-row-action" id="profileUpgradeBtn" data-action-click="switchTab" data-arg="premium" style="display:none;">Upgraden</button>
               </div>
               <div class="settings-row" id="premiumSinceRow" style="display:none;">
                 <div class="settings-row-label">Aktiv seit</div>
@@ -457,7 +457,7 @@
               <div class="settings-row">
                 <div class="settings-row-label">Account löschen</div>
                 <div class="settings-row-value profile-meta-sub">Alle Daten werden unwiderruflich gelöscht</div>
-                <button class="settings-row-action settings-action-danger" onclick="accountLoeschen()">Löschen</button>
+                <button class="settings-row-action settings-action-danger" data-action-click="accountLoeschen">Löschen</button>
               </div>
             </div>
           </div>
@@ -513,7 +513,7 @@
         <div class="teams-overview" id="teamsOverview">
           <div class="teams-overview-header">
             <div class="teams-overview-title">Teams</div>
-            <button class="teams-create-btn" onclick="erstelleTeam()">
+            <button class="teams-create-btn" data-action-click="erstelleTeam">
               <i data-lucide="plus" class="icon-14"></i> Neues Team
             </button>
           </div>
@@ -3754,6 +3754,12 @@
       ['chatInputEnterKeydown', chatInputEnterKeydown],
       ['chatInputAutoResize', chatInputAutoResize],
       ['sendChatMessage', sendChatMessage],
+      // Task 8 — Modals & Dialoge / Settings
+      ['avatarHochladen', avatarHochladen],
+      ['speichereAnzeigename', speichereAnzeigename],
+      ['aenderePasswort', aenderePasswort],
+      ['accountLoeschen', accountLoeschen],
+      ['erstelleTeam', erstelleTeam],
     ].forEach(([name, fn]) => registerAction(name, fn));
 
 </script>
