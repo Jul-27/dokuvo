@@ -215,12 +215,12 @@
             <p>Lade ein Dokument hoch, vergleiche Verträge oder stelle eine Frage.</p>
 
             <div class="action-cards-row">
-              <button class="action-card" onclick="document.getElementById('pdfInput').click()">
+              <button class="action-card" data-action-click="triggerFileInput" data-arg="pdfInput">
                 <div class="action-card-icon"><i data-lucide="file-text" class="icon-28"></i></div>
                 <div class="action-card-title">Dokument analysieren</div>
                 <div class="action-card-desc">PDF oder Foto hochladen</div>
               </button>
-              <button class="action-card" onclick="starteVergleich()">
+              <button class="action-card" data-action-click="starteVergleich">
                 <div class="action-card-icon"><i data-lucide="git-compare" class="icon-28"></i></div>
                 <div class="action-card-title">Dokumente vergleichen</div>
                 <div class="action-card-desc">2 Dokumente gegenüberstellen</div>
@@ -228,17 +228,17 @@
             </div>
 
             <div class="template-shortcuts">
-              <button class="template-chip" onclick="starteTemplateAnalyse('mietvertrag')">Mietvertrag</button>
-              <button class="template-chip" onclick="starteTemplateAnalyse('arbeitsvertrag')">Arbeitsvertrag</button>
-              <button class="template-chip" onclick="starteTemplateAnalyse('befund')">Befund</button>
-              <button class="template-chip" onclick="starteTemplateAnalyse('versicherung')">Versicherung</button>
-              <button class="template-chip" onclick="switchTab('templates')">Mehr&hellip;</button>
+              <button class="template-chip" data-action-click="starteTemplateAnalyse" data-arg="mietvertrag">Mietvertrag</button>
+              <button class="template-chip" data-action-click="starteTemplateAnalyse" data-arg="arbeitsvertrag">Arbeitsvertrag</button>
+              <button class="template-chip" data-action-click="starteTemplateAnalyse" data-arg="befund">Befund</button>
+              <button class="template-chip" data-action-click="starteTemplateAnalyse" data-arg="versicherung">Versicherung</button>
+              <button class="template-chip" data-action-click="switchTab" data-arg="templates">Mehr&hellip;</button>
             </div>
 
             <div class="home-usage-bar" id="homeUsageBar">
               <span class="home-usage-text"><span id="homeUsageCount">5</span>/5 Analysen heute</span>
               <span class="home-usage-separator">&middot;</span>
-              <button class="home-upgrade-link" onclick="switchTab('premium')">Upgraden</button>
+              <button class="home-upgrade-link" data-action-click="switchTab" data-arg="premium">Upgraden</button>
             </div>
           </div>
 
@@ -254,36 +254,36 @@
           </div>
           <div class="limit-banner-text" id="limitText">Tageslimit erreicht</div>
           <div class="limit-banner-sub">Du hast heute alle 5 kostenlosen Erklärungen verbraucht.<br>Morgen stehen dir wieder 5 zur Verfügung.</div>
-          <button onclick="upgrade()" class="limit-upgrade-btn">Jetzt auf Premium upgraden</button>
+          <button data-action-click="upgrade" class="limit-upgrade-btn">Jetzt auf Premium upgraden</button>
         </div>
         <div class="chat-input-area">
-          <input type="file" id="pdfInput" accept=".pdf" style="display:none" onchange="dokumentHochladen()">
-          <input type="file" id="fotoInput" accept="image/*" capture="environment" style="display:none" onchange="fotoAnalysieren()">
+          <input type="file" id="pdfInput" accept=".pdf" style="display:none" data-action-change="dokumentHochladen">
+          <input type="file" id="fotoInput" accept="image/*" capture="environment" style="display:none" data-action-change="fotoAnalysieren">
           <div class="chat-input-wrapper">
             <div class="chat-input-row">
               <div class="chat-input-col">
                 <div class="depth-slider-row">
                   <span class="depth-label">Erklärungstiefe:</span>
                   <div class="depth-steps">
-                    <button class="depth-step active" onclick="setDepth(1, this)">Einfach</button>
-                    <button class="depth-step" onclick="setDepth(2, this)">Normal</button>
-                    <button class="depth-step" onclick="setDepth(3, this)">Experte</button>
+                    <button class="depth-step active" data-action-click="setDepth" data-arg="1">Einfach</button>
+                    <button class="depth-step" data-action-click="setDepth" data-arg="2">Normal</button>
+                    <button class="depth-step" data-action-click="setDepth" data-arg="3">Experte</button>
                   </div>
                 </div>
                 <div class="chat-input-row">
-                  <button class="attach-btn" onclick="document.getElementById('pdfInput').click()" aria-label="PDF hochladen">
+                  <button class="attach-btn" data-action-click="triggerFileInput" data-arg="pdfInput" aria-label="PDF hochladen">
                     <i data-lucide="paperclip" class="icon-18"></i>
                   </button>
-                  <button class="attach-btn" onclick="document.getElementById('fotoInput').click()" aria-label="Foto hochladen">
+                  <button class="attach-btn" data-action-click="triggerFileInput" data-arg="fotoInput" aria-label="Foto hochladen">
                     <i data-lucide="camera" class="icon-18"></i>
                   </button>
-                  <button class="mic-btn" id="micBtn" onclick="toggleVoiceInput()" title="Spracheingabe" aria-label="Spracheingabe">
+                  <button class="mic-btn" id="micBtn" data-action-click="toggleVoiceInput" title="Spracheingabe" aria-label="Spracheingabe">
                     <i data-lucide="mic" class="icon-18"></i>
                   </button>
                   <textarea id="chatInput" class="chat-textarea" placeholder="Stelle eine Frage oder füge Text ein..." rows="1"
-                    onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();sendChatMessage()}"
-                    oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
-                  <button class="send-btn" onclick="sendChatMessage()" id="sendBtn" aria-label="Nachricht senden">
+                    data-action-keydown="chatInputEnterKeydown" data-pass-event
+                    data-action-input="chatInputAutoResize"></textarea>
+                  <button class="send-btn" data-action-click="sendChatMessage" id="sendBtn" aria-label="Nachricht senden">
                     <i data-lucide="send" class="icon-18"></i>
                   </button>
                 </div>
@@ -562,6 +562,18 @@
     function registerAction(name, fn) { ACTIONS[name] = fn; }
     function escapeHtmlAttr(s) {
       return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    // Task 7 — Helper für Home / Chat-Composer (ersetzen Inline-Snippets)
+    function triggerFileInput(id) { document.getElementById(id).click(); }
+    function chatInputEnterKeydown(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendChatMessage();
+      }
+    }
+    function chatInputAutoResize() {
+      this.style.height = 'auto';
+      this.style.height = this.scrollHeight + 'px';
     }
     function dispatchAction(eventType, evt) {
       const el = evt.target.closest(`[data-action-${eventType}]`);
@@ -2012,10 +2024,12 @@
 
     let currentDepth = 1;
 
-    function setDepth(level, btn) {
-      currentDepth = level;
+    function setDepth(level) {
+      // `level` kommt via data-arg als String → in Number casten;
+      // `this` ist via dispatchAction der geklickte Button (apply(el, args)).
+      currentDepth = Number(level);
       document.querySelectorAll('.depth-step').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      this.classList.add('active');
     }
 
     function getDepthLevel() {
@@ -3728,6 +3742,18 @@
       ['logout', logout],
       ['clearChatSearch', clearChatSearch],
       ['debouncedChatSuche', debouncedChatSuche],
+      // Task 7 — Home / Action Cards / Chat-Composer
+      ['triggerFileInput', triggerFileInput],
+      ['starteVergleich', starteVergleich],
+      ['starteTemplateAnalyse', starteTemplateAnalyse],
+      ['upgrade', upgrade],
+      ['dokumentHochladen', dokumentHochladen],
+      ['fotoAnalysieren', fotoAnalysieren],
+      ['setDepth', setDepth],
+      ['toggleVoiceInput', toggleVoiceInput],
+      ['chatInputEnterKeydown', chatInputEnterKeydown],
+      ['chatInputAutoResize', chatInputAutoResize],
+      ['sendChatMessage', sendChatMessage],
     ].forEach(([name, fn]) => registerAction(name, fn));
 
 </script>
