@@ -1494,7 +1494,7 @@
             const roleClass = m.role === 'owner' ? 'role-owner' : (isPending ? 'role-pending' : 'role-member');
             const roleLabel = m.role === 'owner' ? 'Owner' : (isPending ? 'Eingeladen' : 'Mitglied');
             const deleteBtn = (isOwner && m.role !== 'owner')
-              ? `<button class="member-remove-btn" data-action-click="entferneMitglied" data-team-id="${teamId}" data-member-id="${m.id}" data-label="${escapeHtml(label)}" title="Mitglied entfernen" aria-label="Mitglied entfernen"><i data-lucide="trash-2" class="icon-14"></i></button>`
+              ? `<button class="member-remove-btn" data-action-click="entferneMitglied" data-team-id="${escapeHtmlAttr(teamId)}" data-member-id="${escapeHtmlAttr(m.id)}" data-label="${escapeHtmlAttr(label)}" title="Mitglied entfernen" aria-label="Mitglied entfernen"><i data-lucide="trash-2" class="icon-14"></i></button>`
               : '';
             const inviteToggle = (isOwner && m.role !== 'owner' && !isPending)
               ? `<button class="member-invite-toggle ${m.can_invite ? 'active' : ''}" data-action-click="toggleCanInvite" data-arg-0="${escapeHtmlAttr(teamId)}" data-arg-1="${escapeHtmlAttr(m.id)}" data-arg-2="${!m.can_invite}" title="${m.can_invite ? 'Einladerecht entziehen' : 'Darf einladen'}" aria-label="${m.can_invite ? 'Einladerecht entziehen' : 'Einladerecht erteilen'}"><i data-lucide="user-plus" class="icon-13"></i></button>`
@@ -3781,7 +3781,7 @@
       ['ladeTeams', ladeTeams],
       ['ladeTeamMitgliederEinladen', ladeTeamMitgliederEinladen],
       ['entferneMitglied', function() { entferneMitglied(this); }],
-      ['toggleCanInvite', toggleCanInvite],
+      ['toggleCanInvite', function(teamId, memberId, val) { toggleCanInvite(teamId, memberId, val === 'true'); }],
       ['ladeSession', ladeSession],
       // Templates
       ['useTemplate', useTemplate],
