@@ -1362,6 +1362,7 @@
         const roleLabel = t.role === 'owner' ? 'Owner' : 'Mitglied';
         return `
           <div class="team-overview-card" data-action-click="zeigeTeamDetail" data-arg-0="${escapeHtmlAttr(t.id)}" data-arg-1="${escapeHtmlAttr(t.name)}">
+            ${/* delete-Btn schattiert per closest() den Karten-Click der Delegation — kein stopPropagation nötig. */ ''}
             ${t.role === 'owner' ? `<button class="team-card-delete" data-action-click="loescheTeam" data-arg-0="${escapeHtmlAttr(t.id)}" data-arg-1="${escapeHtmlAttr(t.name)}" title="Team löschen" aria-label="Team löschen"><i data-lucide="trash-2" class="icon-14"></i></button>` : ''}
             <div class="team-overview-card-header">
               <div class="team-overview-icon">${initial}</div>
@@ -3309,7 +3310,7 @@
 
     function starteRename(session_id, labelEl, event) {
       // Task 9: event optional — mit Delegation entfällt stopPropagation.
-      // labelEl: wird bei Direktaufruf übergeben, bei Delegation ist this das Element.
+      // labelEl: bei Direktaufruf explizit übergeben, bei Delegation ist this das Element.
       event?.stopPropagation();
       const el = labelEl || this;
       const currentTitle = el.textContent;
@@ -3466,9 +3467,7 @@
       });
     }
 
-    async function loescheSession(session_id, event) {
-      // Task 9: event optional — mit Delegation entfällt stopPropagation
-      event?.stopPropagation();
+    async function loescheSession(session_id) {
       const { data: { session } } = await supabaseClient.auth.getSession();
       const user = session?.user;
       if (!user) return;
@@ -3805,8 +3804,9 @@
       ['vergleicheDokumente', vergleicheDokumente],
       // Sessions (Sidebar)
       ['teileSessionMitTeam', function(id) { teileSessionMitTeam(id, this); }],
-      ['loescheSession', function(id) { loescheSession(id); }],
+      ['loescheSession', loescheSession],
       ['starteRename', function(id) { starteRename(id, this); }],
+      // Alias auf ladeChatSessions(true) — keine Funktion mit diesem Namen.
       ['ladeAlleChats', function() { ladeChatSessions(true); }],
       // Suche
       ['ladeSessionAusSuche', function(id) { ladeSession(id); clearChatSearch(); }],
