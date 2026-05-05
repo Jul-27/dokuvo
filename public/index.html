@@ -3168,10 +3168,12 @@
 
     async function sendFeedback(btn, rating, message) {
       const row = btn.closest('.feedback-row');
-      // Beide Buttons deaktivieren
+      // Beide Buttons deaktivieren — bei data-action-Delegation reicht
+      // b.onclick=null nicht; wir entfernen das Attribut, damit der
+      // body-Listener den Button nicht mehr matcht.
       row.querySelectorAll('.feedback-btn').forEach(b => {
         b.classList.remove('active-up', 'active-down');
-        b.onclick = null;
+        b.removeAttribute('data-action-click');
       });
       btn.classList.add(rating === 'up' ? 'active-up' : 'active-down');
 
